@@ -13,7 +13,7 @@ export default function CreateHomecellPage() {
       </div>
 
       <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6">
-        <HomecellForm />
+        <HomecellForm mode="create" initialData={{}} />
       </div>
     </div>
   );

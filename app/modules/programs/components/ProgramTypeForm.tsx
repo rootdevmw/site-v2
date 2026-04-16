@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useCreateProgramType } from "../hooks/useCreateProgramType";
+import { BaseForm } from "@/components/ui/BaseForm";
 
 type FormValues = {
   name: string;
@@ -21,7 +22,12 @@ export function ProgramTypeForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md">
+    <BaseForm
+      mode="create"
+      isLoading={isPending}
+      onSubmit={handleSubmit(onSubmit)}
+      title="Create Program Type"
+    >
       <div>
         <label className="text-sm text-[var(--text-secondary)]">Name</label>
         <input
@@ -29,14 +35,6 @@ export function ProgramTypeForm({
           className="w-full mt-1 px-3 py-2 rounded-lg bg-[var(--card-elevated)] border border-[var(--border-soft)]"
         />
       </div>
-
-      <button
-        type="submit"
-        disabled={isPending}
-        className="px-4 py-2 rounded-lg bg-[var(--main-gold)] text-black"
-      >
-        {isPending ? "Saving..." : "Create"}
-      </button>
-    </form>
+    </BaseForm>
   );
 }

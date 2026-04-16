@@ -2,12 +2,11 @@
 
 import { useRouter } from "next/navigation";
 
+import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
+import { Table } from "@/components/ui/Table";
+import { TableLayout } from "@/components/ui/TableLayout";
 import { useProgramTemplates } from "@/app/modules/programTemplates/hooks/useProgramTemplates";
 import { useDeleteProgramTemplate } from "@/app/modules/programTemplates/hooks/useDeleteProgramTemplate";
-
-import { TableLayout } from "@/components/ui/TableLayout";
-import { Table } from "@/components/ui/Table";
-import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
 import { ProgramTemplate } from "@/app/modules/programTemplates/types/programTemplate.types";
 
 export default function TemplatesPage() {
@@ -52,17 +51,15 @@ export default function TemplatesPage() {
             >
               Edit
             </button>
-            <button
-              onClick={async () => {
-                const confirmed = confirm(`Delete ${t.name}?`);
-                if (!confirmed) return;
-
-                await deleteProgramTemplate(t.id);
-              }}
-              className="text-red-400"
-            >
-              Delete
-            </button>
+            <DeleteConfirmButton
+              triggerLabel="Delete"
+              title="Delete template"
+              description={`Are you sure you want to delete "${t.name}"? This action cannot be undone.`}
+              confirmLabel="Delete"
+              cancelLabel="Cancel"
+              onConfirm={() => deleteProgramTemplate(t.id)}
+              className="text-red-400 hover:bg-red-500/20"
+            />
           </>
         )}
       />

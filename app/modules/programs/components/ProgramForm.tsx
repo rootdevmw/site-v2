@@ -13,6 +13,7 @@ import { useCreateProgramTemplate } from "../../programTemplates/hooks/useCreate
 import { ProgramTemplate } from "@/app/modules/programTemplates/types/programTemplate.types";
 
 import { DateInput } from "@/components/ui/DateInput";
+import { BaseForm } from "@/components/ui/BaseForm";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { SearchableSelect } from "@/components/ui/SearchableSelect";
@@ -68,10 +69,12 @@ function SortableItem({
 // ---------------- MAIN FORM ----------------
 export function ProgramForm({
   initialData,
-  id,
+  mode = "create",
+  onDelete,
 }: {
   initialData?: any;
-  id?: string;
+  mode?: "create" | "edit" | "view";
+  onDelete?: () => void;
 }) {
   const router = useRouter();
 
@@ -79,7 +82,8 @@ export function ProgramForm({
   const updateMutation = useUpdateProgram();
   const createTemplateMutation = useCreateProgramTemplate();
 
-  const isEdit = !!id;
+  const isEdit = mode === "edit";
+  const isView = mode === "view";
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const { data: membersData } = useMembers({ page: 1, limit: 100 });
@@ -207,7 +211,7 @@ export function ProgramForm({
 
     if (isEdit) {
       updateMutation.mutate(
-        { id: id!, data: payload },
+        { id: initialData.id, data: payload },
         {
           onSuccess: () => {
             dismissToast(toastId);
@@ -229,16 +233,25 @@ export function ProgramForm({
 
   // ---------------- UI ----------------
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <BaseForm
+      mode={mode}
+      isLoading={isPending}
+      onSubmit={handleSubmit(onSubmit)}
+      onDelete={onDelete}
+      title={
+        isEdit ? "Edit Program" : isView ? "View Program" : "Create Program"
+      }
+    >
       {/* Top */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <DateInput
           label="Date"
           value={watch("date") || ""}
           onValueChange={(value) => setValue("date", value)}
+          disabled={isView}
         />
 
-        <Select label="Program Type" {...register("typeId")}>
+        <Select label="Program Type" {...register("typeId")} disabled={isView}>
           <option value="">Select type</option>
           {types.map((t: any) => (
             <option key={t.id} value={t.id}>
@@ -252,6 +265,7 @@ export function ProgramForm({
       <Select
         label="Use Template"
         onChange={(e) => applyTemplate(e.target.value)}
+        disabled={isView}
       >
         <option value="">Select template</option>
         {templates.map((t: any) => (
@@ -274,12 +288,17 @@ export function ProgramForm({
             {fields.map((field, index) => (
               <SortableItem key={field.id} id={field.id}>
                 <div className="p-4 rounded-xl border space-y-3">
-                  <Input label="Title" {...register(`items.${index}.title`)} />
+                  <Input
+                    label="Title"
+                    {...register(`items.${index}.title`)}
+                    disabled={isView}
+                  />
 
                   <Input
                     label="Time"
                     type="time"
                     {...register(`items.${index}.time`)}
+                    disabled={isView}
                   />
 
                   <SearchableSelect
@@ -289,32 +308,26 @@ export function ProgramForm({
                     onChange={(val) =>
                       setValue(`items.${index}.responsibleId`, val)
                     }
+                    disabled={isView}
                   />
 
-                  <button onClick={() => remove(index)} type="button">
-                    Remove
-                  </button>
+                  {!isView && (
+                    <button onClick={() => remove(index)} type="button">
+                      Remove
+                    </button>
+                  )}
                 </div>
               </SortableItem>
             ))}
           </SortableContext>
         </DndContext>
 
-        <button type="button" onClick={() => append({ title: "" })}>
-          + Add Activity
-        </button>
+        {!isView && (
+          <button type="button" onClick={() => append({ title: "" })}>
+            + Add Activity
+          </button>
+        )}
       </div>
-
-      {/* Actions */}
-      <div className="flex justify-between">
-        <button type="button" onClick={handleSaveAsTemplate}>
-          Save as Template
-        </button>
-
-        <button type="submit">
-          {isEdit ? "Update Program" : "Create Program"}
-        </button>
-      </div>
-    </form>
+    </BaseForm>
   );
 }

@@ -70,7 +70,10 @@ export default function HomecellDetailsPage() {
 
         {/* Create Program */}
         <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-4">
-          <ProgramForm initialData={{ homecellId: homecell.id }} />
+          <ProgramForm
+            mode="create"
+            initialData={{ homecellId: homecell.id }}
+          />
         </div>
 
         {/* Programs List */}
@@ -84,6 +87,7 @@ export default function HomecellDetailsPage() {
               { header: "Items", render: (p) => p.items?.length },
             ]}
             onRowClick={(p) => router.push(`/programs/${p.id}`)}
+            emptyMessage="No programs scheduled"
             actions={(p) => (
               <>
                 <button

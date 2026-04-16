@@ -11,7 +11,7 @@ export default function CreateMinistryPage() {
       </div>
 
       <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6">
-        <MinistryForm />
+        <MinistryForm mode="create" initialData={{}} />
       </div>
     </div>
   );

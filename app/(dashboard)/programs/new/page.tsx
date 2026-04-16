@@ -55,7 +55,7 @@ export default function NewProgramPage() {
 
       {/* Manual form */}
       <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6">
-        <ProgramForm />
+        <ProgramForm mode="create" initialData={{}} />
       </div>
 
       {/* Template Modal */}

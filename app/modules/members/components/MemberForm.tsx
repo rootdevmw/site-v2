@@ -10,21 +10,25 @@ import { useMinistries } from "../hooks/useMinistries";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
+import { BaseForm } from "@/components/ui/BaseForm";
 import { dismissToast, showLoading } from "@/lib/toast";
 
 export function MemberForm({
+  mode = "create",
   initialData,
-  id,
+  onDelete,
 }: {
-  initialData?: Partial<MemberFormValues>;
-  id?: string;
+  mode?: "create" | "edit" | "view";
+  initialData?: Partial<MemberFormValues> & { id?: string };
+  onDelete?: () => void;
 }) {
   const router = useRouter();
 
   const createMutation = useCreateMember();
   const updateMutation = useUpdateMember();
 
-  const isEdit = !!id;
+  const isEdit = mode === "edit";
+  const isView = mode === "view";
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const { data: homecells } = useHomecells();
@@ -42,9 +46,9 @@ export function MemberForm({
       isEdit ? "Updating member..." : "Creating member...",
     );
 
-    if (isEdit) {
+    if (isEdit && initialData?.id) {
       updateMutation.mutate(
-        { id: id!, data },
+        { id: initialData.id, data },
         {
           onSuccess: () => {
             dismissToast(toastId);
@@ -72,34 +76,48 @@ export function MemberForm({
   const homecellList = homecells?.data || [];
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <BaseForm
+      mode={mode}
+      isLoading={isPending}
+      onSubmit={form.handleSubmit(onSubmit)}
+      onDelete={onDelete}
+      title={isEdit ? "Edit Member" : isView ? "View Member" : "Create Member"}
+    >
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label="First Name"
           {...form.register("firstName")}
           error={form.formState.errors.firstName?.message}
+          disabled={isView}
         />
 
         <Input
           label="Last Name"
           {...form.register("lastName")}
           error={form.formState.errors.lastName?.message}
+          disabled={isView}
         />
 
         <Input
           label="Phone"
           {...form.register("phone")}
           error={form.formState.errors.phone?.message}
+          disabled={isView}
         />
 
-        <Input label="Location" {...form.register("location")} />
+        <Input
+          label="Location"
+          {...form.register("location")}
+          disabled={isView}
+        />
 
         {/* Status */}
         <Select
           label="Status"
           {...form.register("status")}
           error={form.formState.errors.status?.message}
+          disabled={isView}
         >
           <option value="">Select status</option>
           <option value="Visitor">Visitor</option>
@@ -112,6 +130,7 @@ export function MemberForm({
           label="Homecell"
           {...form.register("homecellId")}
           error={form.formState.errors.homecellId?.message}
+          disabled={isView}
         >
           <option value="">Select homecell</option>
           {homecellList.map((hc: { id: string; name: string }) => (
@@ -129,55 +148,41 @@ export function MemberForm({
         </label>
 
         <div className="flex flex-wrap gap-2">
-          {ministryList.map((m: { id: string; name: string }, index: number) => {
-            const selected = form.watch("ministryIds")?.includes(m.id);
+          {ministryList.map(
+            (m: { id: string; name: string }, index: number) => {
+              const selected = form.watch("ministryIds")?.includes(m.id);
 
-            return (
-              <button
-                key={m.id ?? index}
-                type="button"
-                onClick={() => {
-                  const current = form.getValues("ministryIds") || [];
+              return (
+                <button
+                  key={m.id ?? index}
+                  type="button"
+                  disabled={isView}
+                  onClick={() => {
+                    const current = form.getValues("ministryIds") || [];
 
-                  if (selected) {
-                    form.setValue(
-                      "ministryIds",
-                      current.filter((id) => id !== m.id),
-                    );
-                  } else {
-                    form.setValue("ministryIds", [...current, m.id]);
-                  }
-                }}
-                className={`px-3 py-1 rounded-full text-sm border transition-all duration-200
+                    if (selected) {
+                      form.setValue(
+                        "ministryIds",
+                        current.filter((id) => id !== m.id),
+                      );
+                    } else {
+                      form.setValue("ministryIds", [...current, m.id]);
+                    }
+                  }}
+                  className={`px-3 py-1 rounded-full text-sm border transition-all duration-200
                   ${
                     selected
                       ? "bg-[var(--main-gold)] text-black border-[var(--gold-dark)]"
                       : "bg-[var(--card-elevated)] text-[var(--text-secondary)] border-[var(--border-soft)] hover:bg-[var(--hover-soft)]"
-                  }`}
-              >
-                {m.name}
-              </button>
-            );
-          })}
+                  } ${isView ? "opacity-60 cursor-not-allowed" : ""}`}
+                >
+                  {m.name}
+                </button>
+              );
+            },
+          )}
         </div>
       </div>
-
-      {/* Submit */}
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] transition-all duration-200 disabled:opacity-60"
-        >
-          {isPending
-            ? isEdit
-              ? "Updating..."
-              : "Creating..."
-            : isEdit
-              ? "Update Member"
-              : "Create Member"}
-        </button>
-      </div>
-    </form>
+    </BaseForm>
   );
 }

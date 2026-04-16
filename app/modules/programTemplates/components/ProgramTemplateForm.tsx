@@ -9,6 +9,7 @@ import { useProgramTypes } from "@/app/modules/programs/hooks/useProgramTypes";
 import { useCreateProgramType } from "@/app/modules/programs/hooks/useCreateProgramType";
 
 import { Select } from "@/components/ui/Select";
+import { BaseForm } from "@/components/ui/BaseForm";
 
 type FormValues = {
   name: string;
@@ -68,7 +69,7 @@ export function ProgramTemplateForm({
     const res = await createType({ name: newTypeName });
     const created = res.data;
 
-    // ✅ auto-select
+    // auto-select
     setValue("typeId", created.id);
 
     setNewTypeName("");
@@ -100,7 +101,19 @@ export function ProgramTemplateForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <BaseForm
+      mode={mode}
+      isLoading={isPending}
+      onSubmit={handleSubmit(onSubmit)}
+      onDelete={onDelete}
+      title={
+        mode === "edit"
+          ? "Edit Template"
+          : mode === "view"
+            ? "View Template"
+            : "Create Template"
+      }
+    >
       {/* Name */}
       <div>
         <label className="text-sm text-[var(--text-secondary)]">
@@ -242,35 +255,6 @@ export function ProgramTemplateForm({
           </button>
         )}
       </div>
-
-      {/* Actions */}
-      <div className="flex justify-between items-center">
-        {/* Delete */}
-        {mode === "edit" && onDelete && (
-          <button
-            type="button"
-            onClick={onDelete}
-            className="px-3 py-2 rounded-lg text-sm bg-red-500/10 text-red-400"
-          >
-            Delete
-          </button>
-        )}
-
-        {/* Submit */}
-        {!isView && (
-          <button
-            type="submit"
-            disabled={isPending}
-            className="ml-auto px-4 py-2 rounded-lg bg-[var(--main-gold)] text-black"
-          >
-            {isPending
-              ? "Saving..."
-              : mode === "edit"
-                ? "Update Template"
-                : "Create Template"}
-          </button>
-        )}
-      </div>
-    </form>
+    </BaseForm>
   );
 }

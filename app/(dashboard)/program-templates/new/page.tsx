@@ -22,6 +22,8 @@ export default function NewProgramTemplatePage() {
       {/* Form */}
       <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6">
         <ProgramTemplateForm
+          mode="create"
+          initialData={{}}
           onSuccess={(template) => {
             router.push(`/program-templates/${template.id}`);
           }}

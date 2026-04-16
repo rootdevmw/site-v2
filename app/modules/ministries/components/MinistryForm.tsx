@@ -10,24 +10,28 @@ import { useMembers } from "../../members/hooks/useMembers";
 
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
+import { BaseForm } from "@/components/ui/BaseForm";
 import { MinistryMember } from "../types/ministry.types";
 
 import { useRouter } from "next/navigation";
 import { showLoading, dismissToast, showError } from "@/lib/toast";
 
 export function MinistryForm({
+  mode = "create",
   initialData,
-  id,
+  onDelete,
 }: {
-  initialData?: Partial<MinistryFormValues>;
-  id?: string;
+  mode?: "create" | "edit" | "view";
+  initialData?: Partial<MinistryFormValues> & { id?: string };
+  onDelete?: () => void;
 }) {
   const router = useRouter();
 
   const createMutation = useCreateMinistry();
   const updateMutation = useUpdateMinistry();
 
-  const isEdit = !!id;
+  const isEdit = mode === "edit";
+  const isView = mode === "view";
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const { data: membersData } = useMembers({
@@ -47,9 +51,9 @@ export function MinistryForm({
       isEdit ? "Updating ministry..." : "Creating ministry...",
     );
 
-    if (isEdit) {
+    if (isEdit && initialData?.id) {
       updateMutation.mutate(
-        { id: id!, data },
+        { id: initialData.id, data },
         {
           onSuccess: () => {
             dismissToast(toastId);
@@ -76,23 +80,37 @@ export function MinistryForm({
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <BaseForm
+      mode={mode}
+      isLoading={isPending}
+      onSubmit={form.handleSubmit(onSubmit)}
+      onDelete={onDelete}
+      title={
+        isEdit ? "Edit Ministry" : isView ? "View Ministry" : "Create Ministry"
+      }
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Name */}
         <Input
           label="Ministry Name"
           {...form.register("name")}
           error={form.formState.errors.name?.message}
+          disabled={isView}
         />
 
         {/* Description */}
-        <Input label="Description" {...form.register("description")} />
+        <Input
+          label="Description"
+          {...form.register("description")}
+          disabled={isView}
+        />
 
         {/* Leader */}
         <Select
           label="Leader"
           {...form.register("leaderId")}
           error={form.formState.errors.leaderId?.message}
+          disabled={isView}
         >
           <option value="">Select leader</option>
 
@@ -104,7 +122,11 @@ export function MinistryForm({
         </Select>
 
         {/* Overseer */}
-        <Select label="Overseer (Optional)" {...form.register("overseerId")}>
+        <Select
+          label="Overseer (Optional)"
+          {...form.register("overseerId")}
+          disabled={isView}
+        >
           <option value="">Select overseer</option>
 
           {members.map((m: MinistryMember, index: number) => (
@@ -114,23 +136,6 @@ export function MinistryForm({
           ))}
         </Select>
       </div>
-
-      {/* Submit */}
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="px-6 py-2 bg-[var(--main-gold)] text-black rounded-lg font-medium disabled:opacity-60"
-        >
-          {isPending
-            ? isEdit
-              ? "Updating..."
-              : "Creating..."
-            : isEdit
-              ? "Update Ministry"
-              : "Create Ministry"}
-        </button>
-      </div>
-    </form>
+    </BaseForm>
   );
 }

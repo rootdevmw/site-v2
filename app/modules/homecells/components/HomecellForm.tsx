@@ -13,23 +13,27 @@ import { useMembers } from "@/app/modules/members/hooks/useMembers";
 
 import { Input } from "@/components/ui/Input";
 import { SearchableSelect } from "@/components/ui/SearchableSelect";
+import { BaseForm } from "@/components/ui/BaseForm";
 
 import { useRouter } from "next/navigation";
 import { dismissToast, showLoading } from "@/lib/toast";
 
 export function HomecellForm({
+  mode = "create",
   initialData,
-  id,
+  onDelete,
 }: {
-  initialData?: Partial<HomecellFormValues>;
-  id?: string;
+  mode?: "create" | "edit" | "view";
+  initialData?: Partial<HomecellFormValues> & { id?: string };
+  onDelete?: () => void;
 }) {
   const router = useRouter();
 
   const createMutation = useCreateHomecell();
   const updateMutation = useUpdateHomecell();
 
-  const isEdit = !!id;
+  const isEdit = mode === "edit";
+  const isView = mode === "view";
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const { data } = useMembers({ page: 1, limit: 100 });
@@ -51,9 +55,9 @@ export function HomecellForm({
       isEdit ? "Updating homecell..." : "Creating homecell...",
     );
 
-    if (isEdit) {
+    if (isEdit && initialData?.id) {
       updateMutation.mutate(
-        { id: id!, data: values },
+        { id: initialData.id, data: values },
         {
           onSuccess: () => {
             dismissToast(toastId);
@@ -74,19 +78,29 @@ export function HomecellForm({
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <BaseForm
+      mode={mode}
+      isLoading={isPending}
+      onSubmit={form.handleSubmit(onSubmit)}
+      onDelete={onDelete}
+      title={
+        isEdit ? "Edit Homecell" : isView ? "View Homecell" : "Create Homecell"
+      }
+    >
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           label="Homecell Name"
           {...form.register("name")}
           error={form.formState.errors.name?.message}
+          disabled={isView}
         />
 
         <Input
           label="Location"
           {...form.register("location")}
           error={form.formState.errors.location?.message}
+          disabled={isView}
         />
 
         {/* Leader */}
@@ -96,6 +110,7 @@ export function HomecellForm({
           value={form.watch("leaderId")}
           onChange={(val) => form.setValue("leaderId", val)}
           error={form.formState.errors.leaderId?.message}
+          disabled={isView}
         />
 
         {/* Overseer */}
@@ -105,25 +120,9 @@ export function HomecellForm({
           value={form.watch("overseerId")}
           onChange={(val) => form.setValue("overseerId", val)}
           error={form.formState.errors.overseerId?.message}
+          disabled={isView}
         />
       </div>
-
-      {/* Submit */}
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] transition-all duration-200 disabled:opacity-60"
-        >
-          {isPending
-            ? isEdit
-              ? "Updating..."
-              : "Creating..."
-            : isEdit
-              ? "Update Homecell"
-              : "Create Homecell"}
-        </button>
-      </div>
-    </form>
+    </BaseForm>
   );
 }

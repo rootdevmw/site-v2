@@ -1,25 +1,21 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useMember } from "@/app/modules/members/hooks/useMember";
-import { useDeleteMember } from "@/app/modules/members/hooks/useDeleteMember";
-import { MemberForm } from "@/app/modules/members/components/MemberForm";
+import { useProgram } from "@/app/modules/programs/hooks/useProgram";
+import { useDeleteProgram } from "@/app/modules/programs/hooks/useDeleteProgram";
+import { ProgramForm } from "@/app/modules/programs/components/ProgramForm";
 
-type Ministry = {
-  id: string;
-};
-
-export default function EditMemberPage() {
+export default function EditProgramPage() {
   const { id } = useParams();
   const router = useRouter();
 
-  const { data, isLoading, isError } = useMember(id as string);
-  const { mutateAsync: deleteMember } = useDeleteMember();
+  const { data, isLoading, isError } = useProgram(id as string);
+  const { mutateAsync: deleteProgram } = useDeleteProgram();
 
   if (isLoading) {
     return (
       <div className="p-6 text-sm text-[var(--text-secondary)]">
-        Loading member...
+        Loading program...
       </div>
     );
   }
@@ -27,9 +23,9 @@ export default function EditMemberPage() {
   if (isError || !data?.data) {
     return (
       <div className="p-6 text-sm text-red-600">
-        Failed to load member
+        Failed to load program
         <button
-          onClick={() => router.push("/members")}
+          onClick={() => router.push("/programs")}
           className="ml-3 text-[var(--blue)] hover:opacity-90 transition-all duration-200"
         >
           Go back
@@ -38,7 +34,7 @@ export default function EditMemberPage() {
     );
   }
 
-  const member = data.data;
+  const program = data.data;
 
   return (
     <div className="space-y-6">
@@ -46,15 +42,15 @@ export default function EditMemberPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-            Edit Member
+            Edit Program
           </h1>
           <p className="text-sm text-[var(--text-secondary)]">
-            Update member details
+            Update program details
           </p>
         </div>
 
         <button
-          onClick={() => router.push(`/members/${member.id}`)}
+          onClick={() => router.push(`/programs/${program.id}`)}
           className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200"
         >
           View Details
@@ -63,21 +59,22 @@ export default function EditMemberPage() {
 
       {/* Form Card */}
       <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-6">
-        <MemberForm
+        <ProgramForm
           mode="edit"
           initialData={{
-            id: member.id,
-            firstName: member.firstName,
-            lastName: member.lastName,
-            phone: member.phone,
-            status: member.status,
-            location: member.location,
-            homecellId: member.homecell?.id || "",
-            ministryIds: member.ministries?.map((m: Ministry) => m.id) || [],
+            date: program.date,
+            typeId: program.type?.id || "",
+            homecellId: program.homecell?.id || "",
+            items:
+              program.items?.map((item) => ({
+                title: item.title,
+                time: item.time,
+                responsibleId: item.responsible?.id || "",
+              })) || [],
           }}
           onDelete={async () => {
-            await deleteMember(member.id);
-            router.push("/members");
+            await deleteProgram(program.id);
+            router.push("/programs");
           }}
         />
       </div>

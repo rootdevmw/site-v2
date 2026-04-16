@@ -15,6 +15,7 @@ type Props = {
   onChange: (value: string) => void;
   placeholder?: string;
   error?: string;
+  disabled?: boolean;
 };
 
 export function SearchableSelect({
@@ -24,6 +25,7 @@ export function SearchableSelect({
   onChange,
   placeholder = "Select...",
   error,
+  disabled = false,
 }: Props) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -52,26 +54,33 @@ export function SearchableSelect({
       <div ref={ref} className="relative">
         {/* Input */}
         <input
+          disabled={disabled}
           value={open ? search : selected?.label || ""}
           placeholder={placeholder}
           onFocus={() => {
-            setOpen(true);
-            setSearch("");
+            if (!disabled) {
+              setOpen(true);
+              setSearch("");
+            }
           }}
           onChange={(e) => {
-            setSearch(e.target.value);
-            setOpen(true);
+            if (!disabled) {
+              setSearch(e.target.value);
+              setOpen(true);
+            }
           }}
           className={`w-full px-3 py-2 rounded-lg text-sm outline-none transition-all duration-200
           ${
-            error
-              ? "bg-[var(--card-elevated)] border border-red-400 focus:ring-1 focus:ring-red-400"
-              : "bg-[var(--card-elevated)] border border-[var(--border-soft)] focus:ring-1 focus:ring-[var(--main-gold)]"
+            disabled
+              ? "bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-secondary)] cursor-not-allowed opacity-60"
+              : error
+                ? "bg-[var(--card-elevated)] border border-red-400 focus:ring-1 focus:ring-red-400"
+                : "bg-[var(--card-elevated)] border border-[var(--border-soft)] focus:ring-1 focus:ring-[var(--main-gold)]"
           }`}
         />
 
         {/* Dropdown */}
-        {open && (
+        {open && !disabled && (
           <div className="absolute z-20 mt-1 w-full bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-xl shadow-lg max-h-60 overflow-auto">
             {filtered.length === 0 && (
               <div className="px-3 py-2 text-xs text-[var(--text-secondary)]">

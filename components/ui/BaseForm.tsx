@@ -1,49 +1,75 @@
 "use client";
 
-export function BaseForm({
-  title,
-  isLoading,
-  onSubmit,
-  onDelete,
-  mode,
-  children,
-}: {
-  title?: string;
+import { ReactNode } from "react";
+import { DeleteConfirmButton } from "./DeleteConfirmButton";
+
+type BaseFormProps = {
+  mode: "create" | "edit" | "view";
   isLoading?: boolean;
   onSubmit: () => void;
   onDelete?: () => void;
-  mode?: "create" | "edit" | "view";
-  children: React.ReactNode;
-}) {
+  title?: string;
+  children: ReactNode;
+};
+
+export function BaseForm({
+  mode,
+  isLoading = false,
+  onSubmit,
+  onDelete,
+  title,
+  children,
+}: BaseFormProps) {
   const isView = mode === "view";
+  const isEdit = mode === "edit";
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
-      {title && <h1 className="text-2xl font-semibold">{title}</h1>}
+    <div className="space-y-6">
+      {title && (
+        <div>
+          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
+            {title}
+          </h1>
+          <p className="text-sm text-[var(--text-secondary)] mt-1">
+            {mode === "create" && "Create a new item"}
+            {mode === "edit" && "Edit existing item"}
+            {mode === "view" && "View item details"}
+          </p>
+        </div>
+      )}
 
-      {children}
-
-      <div className="flex justify-between items-center">
-        {mode === "edit" && onDelete && (
-          <button
-            type="button"
-            onClick={onDelete}
-            className="px-3 py-2 rounded-lg text-sm bg-red-500/10 text-red-400"
-          >
-            Delete
-          </button>
-        )}
+      <form onSubmit={onSubmit} className="space-y-6">
+        {children}
 
         {!isView && (
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="ml-auto px-4 py-2 rounded-lg bg-[var(--main-gold)] text-black"
-          >
-            {isLoading ? "Saving..." : mode === "edit" ? "Update" : "Create"}
-          </button>
+          <div className="flex justify-between pt-6 border-t border-[var(--border-soft)]">
+            <div>
+              {isEdit && onDelete && (
+                <DeleteConfirmButton
+                  triggerLabel="Delete"
+                  title="Confirm delete"
+                  description="This action cannot be undone. Are you sure you want to delete this item?"
+                  confirmLabel="Delete"
+                  cancelLabel="Cancel"
+                  onConfirm={onDelete}
+                />
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="px-6 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            >
+              {isLoading
+                ? "Saving..."
+                : mode === "create"
+                  ? "Create"
+                  : "Update"}
+            </button>
+          </div>
         )}
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
