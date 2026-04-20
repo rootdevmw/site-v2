@@ -10,6 +10,8 @@ import { TableLayout } from "@/components/ui/TableLayout";
 import { Table } from "@/components/ui/Table";
 import { Pagination } from "@/components/ui/Pagination";
 import { DateInput } from "@/components/ui/DateInput";
+import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
+import { useDeleteProgram } from "@/app/modules/programs/hooks/useDeleteProgram";
 
 export default function ProgramsPage() {
   const router = useRouter();
@@ -19,6 +21,7 @@ export default function ProgramsPage() {
 
   const [date, setDate] = useState("");
   const debouncedDate = useDebounce(date);
+  const { mutateAsync: deleteProgram } = useDeleteProgram();
 
   const { data, isLoading } = usePrograms({
     page,
@@ -78,7 +81,10 @@ export default function ProgramsPage() {
               Edit
             </button>
 
-            <button className="text-red-400">Delete</button>
+            <DeleteConfirmButton
+              description={`Delete program with ID ${p.id}? This cannot be undone.`}
+              onConfirm={() => deleteProgram(p.id)}
+            />
           </>
         )}
       />

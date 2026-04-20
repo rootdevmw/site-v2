@@ -354,7 +354,7 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
           <div
             onClick={() => {
               if (!editor) return;
-              editor.chain().focus("end").run();
+              editor.chain().focus().run();
             }}
             className="h-[400px] flex flex-col
               bg-[var(--card-bg)]

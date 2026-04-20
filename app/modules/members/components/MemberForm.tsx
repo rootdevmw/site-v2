@@ -63,7 +63,7 @@ export function MemberForm({
       createMutation.mutate(data, {
         onSuccess: () => {
           dismissToast(toastId);
-          router.push("/members");
+          router.push("/dashboard/members");
         },
         onError: () => {
           dismissToast(toastId);
