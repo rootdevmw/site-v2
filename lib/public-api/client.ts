@@ -26,7 +26,7 @@ export async function publicApi<T>(
   });
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch ${path}`);
+    throw new Error(`Failed to fetch ${publicBaseUrl}${path}`);
   }
 
   return res.json();
