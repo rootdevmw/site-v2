@@ -95,6 +95,18 @@ const NAV_ICONS: Record<string, JSX.Element> = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
     </svg>
   ),
+  Settings: (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M11.983 5.5c.64 0 1.159.519 1.159 1.159v.217a5.5 5.5 0 012.205.91l.154-.154a1.159 1.159 0 111.64 1.64l-.154.154a5.5 5.5 0 01.91 2.205h.217a1.159 1.159 0 110 2.318h-.217a5.5 5.5 0 01-.91 2.205l.154.154a1.159 1.159 0 11-1.64 1.64l-.154-.154a5.5 5.5 0 01-2.205.91v.217a1.159 1.159 0 11-2.318 0v-.217a5.5 5.5 0 01-2.205-.91l-.154.154a1.159 1.159 0 11-1.64-1.64l.154-.154a5.5 5.5 0 01-.91-2.205H5.5a1.159 1.159 0 110-2.318h.217a5.5 5.5 0 01.91-2.205l-.154-.154a1.159 1.159 0 111.64-1.64l.154.154a5.5 5.5 0 012.205-.91v-.217c0-.64.519-1.159 1.159-1.159z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  ),
+  
+  "change-password": (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 7a3 3 0 00-6 0v3H7a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2h-2V7z" />
+    </svg>
+  ),
 };
 
 const ChevronIcon = ({ open }: { open: boolean }) => (

@@ -35,7 +35,7 @@ export const navigation = [
     roles: ["ADMIN", "EDITOR", "DEACON"],
   },
 
-  //  GROUPED PROGRAMS
+  // PROGRAMS
   {
     label: "Programs",
     roles: ["ADMIN", "PASTOR", "DEACON"],
@@ -68,6 +68,8 @@ export const navigation = [
     href: "/dashboard/newsletters",
     roles: ["ADMIN", "EDITOR", "MEDIA", "DEACON"],
   },
+
+  // AUTH
   {
     label: "Auth",
     roles: ["ADMIN"],
@@ -77,7 +79,23 @@ export const navigation = [
         href: "/dashboard/users",
         roles: ["ADMIN", "PASTOR", "DEACON"],
       },
-      { label: "roles", href: "/dashboard/roles", roles: ["ADMIN", "PASTOR"] },
+      {
+        label: "roles",
+        href: "/dashboard/roles",
+        roles: ["ADMIN", "PASTOR"],
+      },
+    ],
+  },
+
+  {
+    label: "Settings",
+    roles: ["ADMIN", "PASTOR", "DEACON", "EDITOR", "MEDIA"],
+    children: [
+      {
+        label: "Change Password",
+        href: "/dashboard/settings/change-password",
+        roles: ["ADMIN", "PASTOR", "DEACON", "EDITOR", "MEDIA"],
+      },
     ],
   },
 ];

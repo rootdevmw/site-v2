@@ -56,7 +56,7 @@ export function UserForm({
         {
           onSuccess: () => {
             dismissToast(toastId);
-            router.push("/users");
+            router.push("/dashboard/users");
           },
           onError: () => {
             dismissToast(toastId);
@@ -69,7 +69,7 @@ export function UserForm({
         {
           onSuccess: () => {
             dismissToast(toastId);
-            router.push("/users");
+            router.push("/dashboard/users");
           },
           onError: () => {
             dismissToast(toastId);
