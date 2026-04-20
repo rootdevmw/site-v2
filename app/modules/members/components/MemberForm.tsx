@@ -52,7 +52,7 @@ export function MemberForm({
         {
           onSuccess: () => {
             dismissToast(toastId);
-            router.push("/members");
+            router.push("/dashboard/members");
           },
           onError: () => {
             dismissToast(toastId);
