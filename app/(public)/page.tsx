@@ -140,7 +140,7 @@ export default async function PublicHomePage() {
                 Join us Sundays
               </p>
               <p className="mt-0.5 text-sm text-white/80">
-                Services at 9:00 AM & 11:00 AM
+                Services at 7:00 AM & 9:30 AM
               </p>
             </div>
           </div>

@@ -3,7 +3,9 @@ import Link from "next/link";
 const details = [
   {
     label: "Sunday worship",
-    value: "9:00 AM & 11:00 AM",
+    value: "7:00 - 9:00 AM & 9:30 -11:30 AM",
+    href: "/programs",
+    external: false,
     icon: (
       <svg
         className="h-5 w-5"
@@ -23,6 +25,8 @@ const details = [
   {
     label: "Location",
     value: "Redcross Church of Christ",
+    href: "https://www.google.com/maps/search/?api=1&query=52X9%2BHGP+Blantyre+Malawi",
+    external: true,
     icon: (
       <svg
         className="h-5 w-5"
@@ -46,7 +50,9 @@ const details = [
   },
   {
     label: "Phone",
-    value: "+265 (0) 000 000 000",
+    value: "+265 (0) 888 565 565",
+    href: "https://wa.me/265888565565",
+    external: true,
     icon: (
       <svg
         className="h-5 w-5"
@@ -65,7 +71,9 @@ const details = [
   },
   {
     label: "Email",
-    value: "hello@redcrosschurch.org",
+    value: "churchofchristatredcross@gmail.com",
+    href: "mailto:churchofchristatredcross@gmail.com",
+    external: false,
     icon: (
       <svg
         className="h-5 w-5"
@@ -234,22 +242,39 @@ export default function ContactPage() {
 
               <div className="mt-7 space-y-3">
                 {details.map((d) => (
-                  <div
+                  <Link
                     key={d.label}
-                    className="flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4 transition hover:bg-white/10"
+                    href={d.href}
+                    target={d.external ? "_blank" : undefined}
+                    rel={d.external ? "noopener noreferrer" : undefined}
+                    className="group flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4 transition hover:bg-white/10 hover:border-white/20"
                   >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#9ecfbf]/10 text-[#9ecfbf]">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#9ecfbf]/10 text-[#9ecfbf] transition group-hover:bg-[#9ecfbf]/20">
                       {d.icon}
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-xs font-semibold uppercase tracking-wider text-[#6b9e90]">
                         {d.label}
                       </p>
-                      <p className="mt-0.5 font-semibold text-white">
+                      <p className="mt-0.5 font-semibold text-white break-words">
                         {d.value}
                       </p>
                     </div>
-                  </div>
+                    {/* Arrow indicator */}
+                    <svg
+                      className="mt-1 h-4 w-4 shrink-0 text-white/30 transition group-hover:text-white/60 group-hover:translate-x-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </Link>
                 ))}
               </div>
 
@@ -298,7 +323,8 @@ export default function ContactPage() {
               Ready to connect?
             </p>
             <p className="mt-1 text-[15px] font-medium text-[#18342f]">
-              Whether it's your first Sunday or you're ready to get more involved.
+              Whether it's your first Sunday or you're ready to get more
+              involved.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
