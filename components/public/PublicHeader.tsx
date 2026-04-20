@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -19,6 +20,10 @@ const navItems = [
 export function PublicHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -48,7 +53,6 @@ export function PublicHeader() {
           {/* LEFT — Logo */}
           <Link href="/" className="group flex items-center gap-3">
             <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-[#18342f]/20 bg-[#18342f] transition-transform duration-200 group-hover:scale-105">
-              {/* Cross icon fallback if logo hasn't loaded */}
               <span className="absolute inset-0 flex items-center justify-center">
                 <svg
                   viewBox="0 0 24 24"
@@ -78,19 +82,24 @@ export function PublicHeader() {
 
           {/* CENTER — Nav */}
           <nav className="hidden lg:flex items-center">
-            {navItems.map((item, i) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={[
-                  "relative px-3.5 py-2 text-[13px] font-medium text-[#3a5450] transition-colors duration-150 hover:text-[#18342f]",
-                  "after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:w-0 after:-translate-x-1/2 after:bg-[#4a7c6f] after:transition-all after:duration-200 hover:after:w-4/5",
-                  i < navItems.length - 1 ? "" : "",
-                ].join(" ")}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={[
+                    "relative px-3.5 py-2 text-[13px] font-medium transition-colors duration-150",
+                    "after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:-translate-x-1/2 after:bg-[#4a7c6f] after:transition-all after:duration-200",
+                    active
+                      ? "text-[#18342f] after:w-4/5"
+                      : "text-[#3a5450] hover:text-[#18342f] after:w-0 hover:after:w-4/5",
+                  ].join(" ")}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* RIGHT — Actions */}
@@ -139,16 +148,24 @@ export function PublicHeader() {
         >
           <div className="border-t border-[#dce8e3] bg-white px-4 pb-6 pt-4">
             <div className="mb-4 grid grid-cols-2 gap-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-[#3a5450] transition hover:bg-[#f0f5f3] hover:text-[#18342f]"
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={[
+                      "rounded-lg px-3 py-2.5 text-sm font-medium transition",
+                      active
+                        ? "bg-[#18342f] text-white"
+                        : "text-[#3a5450] hover:bg-[#f0f5f3] hover:text-[#18342f]",
+                    ].join(" ")}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
             </div>
 
             <div className="flex flex-col gap-2 border-t border-[#dce8e3] pt-4">
