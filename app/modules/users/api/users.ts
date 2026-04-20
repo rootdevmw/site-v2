@@ -12,7 +12,6 @@ export async function getUsers(
   params: UserFilters,
 ): Promise<ApiResponse<User>> {
   const res = await api.get("/users", { params });
-  console.log("getUsers response:", res.data);
   return res.data;
 }
 
