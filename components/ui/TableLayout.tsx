@@ -5,11 +5,9 @@ import { ReactNode } from "react";
 type Props = {
   title: string;
   description?: string;
-
-  actions?: ReactNode; // Add buttons
-  filters?: ReactNode; // Search + selects
-
-  children: ReactNode; // Table
+  actions?: ReactNode;
+  filters?: ReactNode;
+  children: ReactNode;
   pagination?: ReactNode;
 };
 
@@ -22,26 +20,25 @@ export function TableLayout({
   pagination,
 }: Props) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex items-start justify-between gap-4 pb-5 border-b border-[var(--border-soft)]">
         <div>
-          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
+          <h1 className="text-xl font-semibold text-[var(--text-primary)]">
             {title}
           </h1>
           {description && (
-            <p className="text-sm text-[var(--text-secondary)]">
+            <p className="mt-0.5 text-sm text-[var(--text-secondary)]">
               {description}
             </p>
           )}
         </div>
-
-        <div className="flex gap-2">{actions}</div>
+        {actions && <div className="flex shrink-0 gap-2">{actions}</div>}
       </div>
 
       {/* Filters */}
       {filters && (
-        <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-4">
+        <div className="bg-[var(--card-elevated)] border border-[var(--border-soft)] rounded-xl px-4 py-3">
           {filters}
         </div>
       )}

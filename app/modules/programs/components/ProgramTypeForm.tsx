@@ -1,24 +1,42 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateProgramType } from "../hooks/useCreateProgramType";
 import { BaseForm } from "@/components/ui/BaseForm";
-
-type FormValues = {
-  name: string;
-};
+import { Input } from "@/components/ui/Input";
+import { showError, showSuccess } from "@/lib/toast";
+import {
+  programTypeSchema,
+  ProgramTypeFormValues,
+} from "../validation/programType.schema";
 
 export function ProgramTypeForm({
   onSuccess,
 }: {
   onSuccess?: (type: any) => void;
 }) {
-  const { register, handleSubmit } = useForm<FormValues>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProgramTypeFormValues>({
+    resolver: zodResolver(programTypeSchema),
+    defaultValues: {
+      name: "",
+    },
+  });
+
   const { mutateAsync, isPending } = useCreateProgramType();
 
-  const onSubmit = async (values: FormValues) => {
-    const res = await mutateAsync(values);
-    onSuccess?.(res.data);
+  const onSubmit = async (values: ProgramTypeFormValues) => {
+    try {
+      const res = await mutateAsync(values);
+      showSuccess("Program type created successfully");
+      onSuccess?.(res.data);
+    } catch {
+      showError("Failed to create program type");
+    }
   };
 
   return (
@@ -28,13 +46,7 @@ export function ProgramTypeForm({
       onSubmit={handleSubmit(onSubmit)}
       title="Create Program Type"
     >
-      <div>
-        <label className="text-sm text-[var(--text-secondary)]">Name</label>
-        <input
-          {...register("name", { required: true })}
-          className="w-full mt-1 px-3 py-2 rounded-lg bg-[var(--card-elevated)] border border-[var(--border-soft)]"
-        />
-      </div>
+      <Input label="Name" {...register("name")} error={errors.name?.message} />
     </BaseForm>
   );
 }

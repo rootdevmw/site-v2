@@ -35,10 +35,7 @@ export function LoginForm() {
       { email, password },
       {
         onSuccess: () => {
-          router.push("/");
-        },
-        onError: () => {
-          setError("Invalid email or password");
+          router.push("/dashboard");
         },
       },
     );
@@ -98,6 +95,16 @@ export function LoginForm() {
       >
         {isPending ? "Signing in..." : "Sign in"}
       </button>
+      {/* Login Link */}
+      <p className="text-xs text-center text-[var(--text-secondary)]">
+        Don&apos;t have an account?{" "}
+        <a
+          href="/register"
+          className="text-[var(--main-gold)] hover:underline"
+        >
+          Sign up
+        </a>
+      </p>
     </form>
   );
 }

@@ -57,7 +57,7 @@ export function MinistryForm({
         {
           onSuccess: () => {
             dismissToast(toastId);
-            router.push("/ministries");
+            router.push("/dashboard/ministries");
           },
           onError: () => {
             dismissToast(toastId);
@@ -69,7 +69,7 @@ export function MinistryForm({
       createMutation.mutate(data, {
         onSuccess: () => {
           dismissToast(toastId);
-          router.push("/ministries");
+          router.push("/dashboard/ministries");
         },
         onError: () => {
           dismissToast(toastId);

@@ -1,6 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { useMembers } from "@/app/modules/members/hooks/useMembers";
@@ -11,6 +14,7 @@ import { useUpdateProgram } from "../hooks/useUpdateProgram";
 import { useProgramTemplates } from "@/app/modules/programTemplates/hooks/useProgramTemplates";
 import { useCreateProgramTemplate } from "../../programTemplates/hooks/useCreateProgramTemplate";
 import { ProgramTemplate } from "@/app/modules/programTemplates/types/programTemplate.types";
+import { programSchema, ProgramFormValues } from "../validation/program.schema";
 
 import { DateInput } from "@/components/ui/DateInput";
 import { BaseForm } from "@/components/ui/BaseForm";
@@ -18,7 +22,8 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { SearchableSelect } from "@/components/ui/SearchableSelect";
 
-import { dismissToast, showLoading } from "@/lib/toast";
+import { ProgramTypeForm } from "./ProgramTypeForm";
+import { dismissToast, showError, showLoading, showSuccess } from "@/lib/toast";
 import { toInputDate } from "@/lib/utils/date";
 
 import { DndContext, closestCenter } from "@dnd-kit/core";
@@ -29,19 +34,6 @@ import {
 } from "@dnd-kit/sortable";
 
 import { CSS } from "@dnd-kit/utilities";
-
-// ---------------- TYPES ----------------
-type ProgramFormValues = {
-  date: string;
-  typeId: string;
-  homecellId?: string;
-  items: {
-    title: string;
-    description?: string;
-    time?: string;
-    responsibleId?: string;
-  }[];
-};
 
 // ---------------- SORTABLE ITEM ----------------
 function SortableItem({
@@ -60,8 +52,17 @@ function SortableItem({
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {children}
+    <div ref={setNodeRef} style={style} className="flex gap-2 items-start">
+      <button
+        type="button"
+        {...attributes}
+        {...listeners}
+        className="mt-4 px-1 cursor-grab touch-none text-[var(--text-secondary)] select-none"
+        aria-label="Drag to reorder"
+      >
+        ⠿
+      </button>
+      <div className="flex-1">{children}</div>
     </div>
   );
 }
@@ -77,6 +78,8 @@ export function ProgramForm({
   onDelete?: () => void;
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const [showAddTypeModal, setShowAddTypeModal] = useState(false);
 
   const createMutation = useCreateProgram();
   const updateMutation = useUpdateProgram();
@@ -97,8 +100,8 @@ export function ProgramForm({
     value: m.id,
   }));
 
-  // ---------------- FORM ----------------
   const form = useForm<ProgramFormValues>({
+    resolver: zodResolver(programSchema),
     defaultValues: initialData
       ? {
           date: toInputDate(initialData.date),
@@ -119,14 +122,20 @@ export function ProgramForm({
         },
   });
 
-  const { register, control, handleSubmit, setValue, watch } = form;
+  const {
+    register,
+    control,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = form;
 
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: "items",
   });
 
-  // ---------------- TEMPLATES ----------------
   const { data: templatesData } = useProgramTemplates({
     homecellId: watch("homecellId"),
   });
@@ -150,7 +159,6 @@ export function ProgramForm({
     );
   }
 
-  // ---------------- DnD ----------------
   function handleDragEnd(event: any) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -161,18 +169,16 @@ export function ProgramForm({
     move(oldIndex, newIndex);
   }
 
-  // ---------------- VALIDATION ----------------
   function hasConflict(items: ProgramFormValues["items"]) {
     const times = items.map((i) => i.time).filter(Boolean);
     return new Set(times).size !== times.length;
   }
 
-  // ---------------- SAVE AS TEMPLATE ----------------
-  function handleSaveAsTemplate() {
+  async function handleSaveAsTemplate() {
     const data = form.getValues();
 
     if (!data.typeId || !data.items.length) {
-      alert("Program must have type and items to save as template");
+      showError("Program must have type and items to save as template");
       return;
     }
 
@@ -190,10 +196,9 @@ export function ProgramForm({
     });
   }
 
-  // ---------------- SUBMIT ----------------
   const onSubmit = (data: ProgramFormValues) => {
     if (hasConflict(data.items)) {
-      alert("Two activities cannot have the same time");
+      showError("Two activities cannot have the same time");
       return;
     }
 
@@ -209,125 +214,174 @@ export function ProgramForm({
       isEdit ? "Updating program..." : "Creating program...",
     );
 
+    const handleError = () => {
+      dismissToast(toastId);
+      showError("Failed to save program");
+    };
+
+    const handleSuccess = () => {
+      dismissToast(toastId);
+      showSuccess(isEdit ? "Program updated" : "Program created");
+      router.push("/dashboard/programs");
+    };
+
     if (isEdit) {
       updateMutation.mutate(
         { id: initialData.id, data: payload },
         {
-          onSuccess: () => {
-            dismissToast(toastId);
-            router.push("/programs");
-          },
-          onError: () => dismissToast(toastId),
+          onSuccess: handleSuccess,
+          onError: handleError,
         },
       );
     } else {
       createMutation.mutate(payload, {
-        onSuccess: () => {
-          dismissToast(toastId);
-          router.push("/programs");
-        },
-        onError: () => dismissToast(toastId),
+        onSuccess: handleSuccess,
+        onError: handleError,
       });
     }
   };
 
-  // ---------------- UI ----------------
   return (
-    <BaseForm
-      mode={mode}
-      isLoading={isPending}
-      onSubmit={handleSubmit(onSubmit)}
-      onDelete={onDelete}
-      title={
-        isEdit ? "Edit Program" : isView ? "View Program" : "Create Program"
-      }
-    >
-      {/* Top */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <DateInput
-          label="Date"
-          value={watch("date") || ""}
-          onValueChange={(value) => setValue("date", value)}
-          disabled={isView}
-        />
+    <>
+      <BaseForm
+        mode={mode}
+        isLoading={isPending}
+        onSubmit={handleSubmit(onSubmit)}
+        onDelete={onDelete}
+        title={
+          isEdit ? "Edit Program" : isView ? "View Program" : "Create Program"
+        }
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <DateInput
+            label="Date"
+            value={watch("date") || ""}
+            onChange={(e) => setValue("date", e.target.value)}
+            disabled={isView}
+            error={errors.date?.message}
+          />
 
-        <Select label="Program Type" {...register("typeId")} disabled={isView}>
-          <option value="">Select type</option>
-          {types.map((t: any) => (
+          <div className="flex items-end gap-2">
+            <div className="flex-1">
+              <Select
+                label="Program Type"
+                {...register("typeId")}
+                error={errors.typeId?.message}
+                disabled={isView}
+              >
+                <option value="">Select type</option>
+                {types.map((t: any) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            {!isView && (
+              <button
+                type="button"
+                onClick={() => setShowAddTypeModal(true)}
+                className="px-3 py-[9px] mb-0.5 rounded-lg bg-[var(--card-elevated)] border border-[var(--border-soft)] text-sm whitespace-nowrap"
+              >
+                + Add
+              </button>
+            )}
+          </div>
+        </div>
+
+        <Select
+          label="Use Template"
+          onChange={(e) => applyTemplate(e.target.value)}
+          disabled={isView}
+        >
+          <option value="">Select template</option>
+          {templates.map((t: any) => (
             <option key={t.id} value={t.id}>
               {t.name}
             </option>
           ))}
         </Select>
-      </div>
 
-      {/* Template */}
-      <Select
-        label="Use Template"
-        onChange={(e) => applyTemplate(e.target.value)}
-        disabled={isView}
-      >
-        <option value="">Select template</option>
-        {templates.map((t: any) => (
-          <option key={t.id} value={t.id}>
-            {t.name}
-          </option>
-        ))}
-      </Select>
-
-      {/* Items */}
-      <div className="space-y-4">
-        <DndContext
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={fields.map((f) => f.id)}
-            strategy={verticalListSortingStrategy}
+        <div className="space-y-4">
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
           >
-            {fields.map((field, index) => (
-              <SortableItem key={field.id} id={field.id}>
-                <div className="p-4 rounded-xl border space-y-3">
-                  <Input
-                    label="Title"
-                    {...register(`items.${index}.title`)}
-                    disabled={isView}
-                  />
+            <SortableContext
+              items={fields.map((f) => f.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {fields.map((field, index) => (
+                <SortableItem key={field.id} id={field.id}>
+                  <div className="p-4 rounded-xl border space-y-3">
+                    <Input
+                      label="Title"
+                      {...register(`items.${index}.title`)}
+                      error={errors.items?.[index]?.title?.message}
+                      disabled={isView}
+                    />
 
-                  <Input
-                    label="Time"
-                    type="time"
-                    {...register(`items.${index}.time`)}
-                    disabled={isView}
-                  />
+                    <Input
+                      label="Time"
+                      type="time"
+                      {...register(`items.${index}.time`)}
+                      error={errors.items?.[index]?.time?.message}
+                      disabled={isView}
+                    />
 
-                  <SearchableSelect
-                    label="Responsible"
-                    options={memberOptions}
-                    value={watch(`items.${index}.responsibleId`)}
-                    onChange={(val) =>
-                      setValue(`items.${index}.responsibleId`, val)
-                    }
-                    disabled={isView}
-                  />
+                    <SearchableSelect
+                      label="Responsible"
+                      options={memberOptions}
+                      value={watch(`items.${index}.responsibleId`)}
+                      onChange={(val) =>
+                        setValue(`items.${index}.responsibleId`, val)
+                      }
+                      error={errors.items?.[index]?.responsibleId?.message}
+                      disabled={isView}
+                    />
 
-                  {!isView && (
-                    <button onClick={() => remove(index)} type="button">
-                      Remove
-                    </button>
-                  )}
-                </div>
-              </SortableItem>
-            ))}
-          </SortableContext>
-        </DndContext>
+                    {!isView && (
+                      <button onClick={() => remove(index)} type="button">
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                </SortableItem>
+              ))}
+            </SortableContext>
+          </DndContext>
 
-        {!isView && (
-          <button type="button" onClick={() => append({ title: "" })}>
-            + Add Activity
-          </button>
-        )}
-      </div>
-    </BaseForm>
+          {!isView && (
+            <button type="button" onClick={() => append({ title: "" })}>
+              + Add Activity
+            </button>
+          )}
+        </div>
+      </BaseForm>
+
+      {showAddTypeModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-[var(--card-bg)] rounded-2xl p-6 w-full max-w-sm space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold">Add Program Type</h2>
+              <button
+                type="button"
+                onClick={() => setShowAddTypeModal(false)}
+                className="text-[var(--text-secondary)] text-xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+            <ProgramTypeForm
+              onSuccess={(newType) => {
+                queryClient.invalidateQueries({ queryKey: ["program-types"] });
+                setValue("typeId", newType.id);
+                setShowAddTypeModal(false);
+              }}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 }

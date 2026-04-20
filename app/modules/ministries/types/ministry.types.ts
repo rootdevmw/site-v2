@@ -1,3 +1,10 @@
+export type Event = {
+  id: string;
+  title: string;
+  startTime: string;
+  location?: string | null;
+};
+
 export type Ministry = {
   id: string;
   name: string;
@@ -23,6 +30,9 @@ export type Ministry = {
     firstName: string;
     lastName: string;
   }[];
+
+  // 🔥 NEW
+  events?: Event[];
 };
 
 export type MinistryFilters = {

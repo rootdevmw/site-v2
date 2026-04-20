@@ -1,37 +1,37 @@
 export const navigation = [
   {
     label: "Dashboard",
-    href: "/",
+    href: "/dashboard",
     roles: ["ADMIN", "PASTOR", "DEACON", "EDITOR", "MEDIA"],
   },
   {
     label: "Members",
-    href: "/members",
+    href: "/dashboard/members",
     roles: ["ADMIN", "PASTOR", "DEACON"],
   },
   {
     label: "Ministries",
-    href: "/ministries",
+    href: "/dashboard/ministries",
     roles: ["ADMIN", "PASTOR", "DEACON"],
   },
   {
     label: "Homecells",
-    href: "/homecells",
+    href: "/dashboard/homecells",
     roles: ["ADMIN", "PASTOR", "DEACON"],
   },
   {
     label: "Content",
-    href: "/content",
+    href: "/dashboard/content",
     roles: ["ADMIN", "EDITOR", "DEACON"],
   },
   {
     label: "Events",
-    href: "/events",
+    href: "/dashboard/events",
     roles: ["ADMIN", "EDITOR", "DEACON"],
   },
   {
     label: "Announcements",
-    href: "/announcements",
+    href: "/dashboard/announcements",
     roles: ["ADMIN", "EDITOR", "DEACON"],
   },
 
@@ -42,26 +42,42 @@ export const navigation = [
     children: [
       {
         label: "Programs",
-        href: "/programs",
+        href: "/dashboard/programs",
         roles: ["ADMIN", "PASTOR", "DEACON"],
       },
       {
         label: "Templates",
-        href: "/program-templates",
+        href: "/dashboard/program-templates",
         roles: ["ADMIN", "PASTOR", "DEACON"],
       },
-      { label: "Types", href: "/program-types", roles: ["ADMIN", "PASTOR"] },
+      {
+        label: "Types",
+        href: "/dashboard/program-types",
+        roles: ["ADMIN", "PASTOR"],
+      },
     ],
   },
 
   {
     label: "Streams",
-    href: "/streams",
+    href: "/dashboard/streams",
     roles: ["ADMIN", "MEDIA", "DEACON"],
   },
   {
     label: "Newsletters",
-    href: "/newsletters",
+    href: "/dashboard/newsletters",
     roles: ["ADMIN", "EDITOR", "MEDIA", "DEACON"],
+  },
+  {
+    label: "Auth",
+    roles: ["ADMIN"],
+    children: [
+      {
+        label: "users",
+        href: "/dashboard/users",
+        roles: ["ADMIN", "PASTOR", "DEACON"],
+      },
+      { label: "roles", href: "/dashboard/roles", roles: ["ADMIN", "PASTOR"] },
+    ],
   },
 ];

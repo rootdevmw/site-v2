@@ -1,74 +1,199 @@
 "use client";
 
-import { forwardRef, useId, useState, type InputHTMLAttributes } from "react";
+import {
+  forwardRef,
+  useId,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type ForwardedRef,
+  type InputHTMLAttributes,
+} from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 type Props = {
   label?: string;
-  value?: string;
-  onValueChange?: (value: string) => void;
   error?: string;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value">;
+} & Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange"> & {
+    value?: string | Date | null;
+    onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  };
+
+function formatDateValue(date: Date | null, type?: string) {
+  if (!date) return "";
+
+  if (type === "date") {
+    return date.toISOString().slice(0, 10);
+  }
+
+  return date.toISOString();
+}
+
+function parseDateValue(value: string | Date | null | undefined) {
+  if (!value) return null;
+  if (value instanceof Date) return value;
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function assignRef(
+  ref: ForwardedRef<HTMLInputElement>,
+  value: HTMLInputElement | null,
+) {
+  if (typeof ref === "function") {
+    ref(value);
+    return;
+  }
+
+  if (ref) {
+    ref.current = value;
+  }
+}
 
 export const DateInput = forwardRef<HTMLInputElement, Props>(
-  ({ label, value, onValueChange, error, ...props }, ref) => {
+  (
+    {
+      label,
+      error,
+      value,
+      onChange,
+      type = "date",
+      disabled,
+      name,
+      onBlur,
+      ...props
+    },
+    ref,
+  ) => {
     const id = useId();
-    const [focused, setFocused] = useState(false);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const [open, setOpen] = useState(false);
+    const [internalSelectedDate, setInternalSelectedDate] = useState<Date | null>(
+      parseDateValue(value),
+    );
+    const [tempDate, setTempDate] = useState<Date | null>(
+      parseDateValue(value),
+    );
+    const selectedDate =
+      value !== undefined ? parseDateValue(value) : internalSelectedDate;
 
-    const hasValue = Boolean(value);
-    const isFloated = true; // always float for date inputs
+    const commitDate = () => {
+      const nextValue = formatDateValue(tempDate, type);
+
+      if (value === undefined) {
+        setInternalSelectedDate(tempDate);
+      }
+      setOpen(false);
+
+      if (inputRef.current) {
+        inputRef.current.value = nextValue;
+      }
+
+      onChange?.({
+        target: {
+          name,
+          value: nextValue,
+        },
+        currentTarget: {
+          name,
+          value: nextValue,
+        },
+      } as ChangeEvent<HTMLInputElement>);
+    };
+
+    const cancelDate = () => {
+      setTempDate(selectedDate);
+      setOpen(false);
+    };
 
     return (
-      <div className="date-input-root">
-        <div className="date-input-field">
-          {label && (
-            <label
-              htmlFor={id}
-              className={`date-input-label${isFloated ? " floated" : ""}`}
-            >
-              {label}
-            </label>
-          )}
+      <div className="space-y-1 relative">
+        {label && (
+          <label
+            htmlFor={id}
+            className="text-sm text-[var(--text-secondary)]"
+          >
+            {label}
+          </label>
+        )}
 
-          <input
-            ref={ref}
-            id={id}
-            type="date"
-            value={value || ""}
-            onChange={(e) => onValueChange?.(e.target.value)}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            className={[
-              "date-input-el",
-              hasValue ? "has-value" : "",
-              !label ? "no-label" : "",
-              error ? "has-error" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            {...props}
-          />
+        <input
+          ref={(node) => {
+            inputRef.current = node;
+            assignRef(ref, node);
+          }}
+          id={id}
+          type="hidden"
+          name={name}
+          disabled={disabled}
+          onBlur={onBlur}
+          {...props}
+          {...(value !== undefined
+            ? { value: formatDateValue(selectedDate, type) }
+            : { defaultValue: formatDateValue(selectedDate, type) })}
+        />
 
-          {/* Calendar icon */}
-          <span className="date-input-icon" aria-hidden="true">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-          </span>
-        </div>
+        <button
+          type="button"
+          onClick={() => {
+            if (!disabled) {
+              setTempDate(selectedDate);
+              setOpen(true);
+            }
+          }}
+          disabled={disabled}
+          className={`w-full px-3 py-2 rounded-lg text-left text-sm outline-none transition-all duration-200
+            ${
+              error
+                ? "bg-[var(--card-elevated)] border border-red-400 text-[var(--text-primary)] focus:ring-1 focus:ring-red-400"
+                : "bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-primary)] focus:ring-1 focus:ring-[var(--main-gold)] focus:border-[var(--main-gold)]"
+            }
+            ${disabled ? "opacity-60 cursor-not-allowed" : ""}
+          `}
+        >
+          {selectedDate ? selectedDate.toLocaleString() : "Select date & time"}
+        </button>
 
-        {error && <p className="date-input-error">{error}</p>}
+        {open && !disabled && (
+          <div className="absolute z-50 mt-2 bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-xl p-4 shadow-lg">
+            <DatePicker
+              selected={tempDate}
+              onChange={(date: Date | null) => setTempDate(date)}
+              showTimeSelect={type === "datetime-local"}
+              timeIntervals={15}
+              inline
+            />
+
+            <div className="mt-3 text-sm text-[var(--text-secondary)]">
+              Preview:{" "}
+              <span className="text-[var(--text-primary)]">
+                {tempDate ? tempDate.toLocaleString() : "No date selected"}
+              </span>
+            </div>
+
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                type="button"
+                onClick={cancelDate}
+                className="px-3 py-1 text-sm rounded-md bg-[var(--card-elevated)]"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={commitDate}
+                className="px-3 py-1 text-sm rounded-md bg-[var(--main-gold)] text-black"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        )}
+
+        {error && <p className="text-xs text-red-500">{error}</p>}
       </div>
     );
   },

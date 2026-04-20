@@ -32,7 +32,7 @@ export function DeleteConfirmButton({
       await onConfirm();
       setOpen(false);
     } catch {
-      // Mutation hooks own the error toast. Keep the modal open so the user can retry.
+      // Mutation hooks own the error toast. Keep modal open so user can retry.
     } finally {
       setIsDeleting(false);
     }
@@ -46,7 +46,7 @@ export function DeleteConfirmButton({
         onClick={() => setOpen(true)}
         className={
           className ||
-          "px-3 py-1 rounded-md text-sm bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all duration-200 disabled:opacity-50"
+          "px-4 py-2 rounded-lg text-sm font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50"
         }
       >
         {triggerLabel}
@@ -56,22 +56,34 @@ export function DeleteConfirmButton({
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
           <button
             type="button"
-            aria-label="Close delete confirmation"
-            className="absolute inset-0 bg-black/60"
+            aria-label="Close"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
 
-          <div className="relative w-full max-w-md rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)] shadow-xl">
-            <div className="p-6 space-y-3">
-              <div className="h-10 w-10 rounded-full bg-red-500/10 text-red-400 flex items-center justify-center text-lg font-semibold">
-                !
+          <div className="relative w-full max-w-md rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)] shadow-2xl">
+            <div className="p-6 space-y-4">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-red-500/10">
+                <svg
+                  className="h-5 w-5 text-red-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
               </div>
 
               <div>
-                <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                <h2 className="text-base font-semibold text-[var(--text-primary)]">
                   {title}
                 </h2>
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
                   {description}
                 </p>
               </div>
@@ -82,7 +94,7 @@ export function DeleteConfirmButton({
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setOpen(false)}
-                className="px-4 py-2 rounded-lg text-sm bg-[var(--card-elevated)] text-[var(--text-primary)] hover:bg-[var(--hover-soft)] transition-all duration-200 disabled:opacity-50"
+                className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--card-elevated)] text-[var(--text-primary)] hover:bg-[var(--hover-soft)] transition-colors disabled:opacity-50"
               >
                 {cancelLabel}
               </button>
@@ -91,7 +103,7 @@ export function DeleteConfirmButton({
                 type="button"
                 disabled={isDeleting}
                 onClick={handleConfirm}
-                className="px-4 py-2 rounded-lg text-sm font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all duration-200 disabled:opacity-50"
+                className="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50"
               >
                 {isDeleting ? "Deleting..." : confirmLabel}
               </button>

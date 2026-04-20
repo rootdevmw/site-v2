@@ -11,9 +11,17 @@ type Props = {
   value: string[];
   onChange: (value: string[]) => void;
   error?: string;
+  disabled?: boolean;
 };
 
-export function MultiSelect({ label, options, value, onChange, error }: Props) {
+export function MultiSelect({
+  label,
+  options,
+  value,
+  onChange,
+  error,
+  disabled,
+}: Props) {
   function toggle(val: string) {
     if (value.includes(val)) {
       onChange(value.filter((v) => v !== val));
@@ -35,12 +43,13 @@ export function MultiSelect({ label, options, value, onChange, error }: Props) {
               key={opt.value}
               type="button"
               onClick={() => toggle(opt.value)}
+              disabled={disabled}
               className={`px-3 py-1 rounded-full text-sm border transition-all duration-200
                 ${
                   selected
                     ? "bg-[var(--main-gold)] text-black border-[var(--gold-dark)]"
                     : "bg-[var(--card-elevated)] text-[var(--text-secondary)] border-[var(--border-soft)] hover:bg-[var(--hover-soft)]"
-                }`}
+                } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {opt.label}
             </button>

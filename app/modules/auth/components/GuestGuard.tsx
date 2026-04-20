@@ -11,7 +11,7 @@ export function GuestGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (initialized && user) {
-      router.replace("/");
+      router.replace("/dashboard");
     }
   }, [initialized, user]);
 
