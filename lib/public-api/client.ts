@@ -18,8 +18,9 @@ export async function publicApi<T>(
     throw new Error("NEXT_PUBLIC_API_URL is not configured");
   }
 
+  const publicBaseUrl = baseUrl.concat("/public");
   const { revalidate = 60, ...requestOptions } = options ?? {};
-  const res = await fetch(`${baseUrl}${path}`, {
+  const res = await fetch(`${publicBaseUrl}${path}`, {
     ...requestOptions,
     next: { revalidate },
   });
