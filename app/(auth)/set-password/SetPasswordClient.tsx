@@ -6,7 +6,7 @@ import { useState } from "react";
 import { showSuccess, showError } from "@/lib/toast";
 import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
 
-export default function SetPasswordPage() {
+export default function SetPasswordClient() {
   const params = useSearchParams();
   const token = params.get("token");
   const router = useRouter();

@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useResetPassword } from "@/app/modules/auth/hooks/useResetPassword";
 
-export default function ResetPasswordPage() {
+export default function ResetPasswordClient() {
   const params = useSearchParams();
   const token = params.get("token");
   const router = useRouter();
