@@ -125,13 +125,14 @@ export default function AboutPage() {
               </h2>
               <p className="mt-4 text-[15px] leading-7 text-[#52645d]">
                 Red Cross Church of Christ has been a worshipping community
-                since 1982. We are a congregation shaped by the New Testament —
+                since yyyy. We are a congregation shaped by the New Testament —
                 seeking to follow Jesus faithfully while remaining a warm,
                 welcoming home for people at every stage of their journey.
               </p>
               <p className="mt-4 text-[15px] leading-7 text-[#52645d]">
                 We believe the church is not a building but a people — and every
-                person who walks through our doors is a full part of that family.
+                person who walks through our doors is a full part of that
+                family.
               </p>
             </div>
             <div className="relative">
@@ -145,7 +146,7 @@ export default function AboutPage() {
                   Est.
                 </p>
                 <p className="font-serif text-3xl font-bold text-[#4a7c6f]">
-                  1982
+                  yyyy
                 </p>
                 <p className="mt-1 text-xs font-medium uppercase tracking-widest text-[#6b8c80]">
                   Serving the community
@@ -237,7 +238,8 @@ export default function AboutPage() {
               Come as you are
             </p>
             <p className="mt-1 text-[15px] font-medium text-[#18342f]">
-              Whether new to faith or looking for a church home — you're welcome here.
+              Whether new to faith or looking for a church home — you're welcome
+              here.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

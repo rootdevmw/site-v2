@@ -383,7 +383,8 @@ export default async function PublicHomePage() {
               New here?
             </p>
             <p className="mt-1 text-[15px] font-medium text-[#18342f]">
-              You're welcome just as you are — no expectations, just a warm welcome.
+              You're welcome just as you are — no expectations, just a warm
+              welcome.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
