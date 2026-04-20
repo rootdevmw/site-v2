@@ -44,7 +44,7 @@ export function RoleForm({
         {
           onSuccess: () => {
             dismissToast(toastId);
-            router.push("/roles");
+            router.push("/dashboard/roles");
           },
           onError: () => {
             dismissToast(toastId);
@@ -55,7 +55,7 @@ export function RoleForm({
       createMutation.mutate(data, {
         onSuccess: () => {
           dismissToast(toastId);
-          router.push("/roles");
+          router.push("/dashboard/roles");
         },
         onError: () => {
           dismissToast(toastId);
