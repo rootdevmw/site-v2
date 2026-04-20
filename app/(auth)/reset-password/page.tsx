@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import SetPasswordClient from "./SetPasswordClient";
+import ResetPasswordPage from "./ReSetPasswordClient";
 
 export default function Page() {
   return (
     <Suspense fallback={null}>
-      <SetPasswordClient />
+      <ResetPasswordPage />
     </Suspense>
   );
 }
