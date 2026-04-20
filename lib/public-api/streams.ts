@@ -5,7 +5,10 @@ export async function getLiveStream() {
   return publicApi<Stream | null>("/streams/live", { revalidate: 20 });
 }
 
-export async function getPublicStreams(params?: { page?: number; limit?: number }) {
+export async function getPublicStreams(params?: {
+  page?: number;
+  limit?: number;
+}) {
   const searchParams = new URLSearchParams({
     page: String(params?.page ?? 1),
     limit: String(params?.limit ?? 6),
