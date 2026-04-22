@@ -72,7 +72,7 @@ export default async function PublicHomePage() {
       )}
 
       {/* ── HERO ──────────────────────────────────────────────── */}
-      <section className="relative min-h-[640px] overflow-hidden bg-[#0f2420]">
+      <section className="relative min-h-[640px] overflow-hidden bg-[#1a0a02]">
         {/* Background image */}
         <img
           src="/IMGL8976.jpg"
@@ -81,7 +81,7 @@ export default async function PublicHomePage() {
         />
 
         {/* Softer overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f2420]/70 via-[#18342f]/50 to-[#1a4a3d]/30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a0a02]/70 via-[#2b1405]/50 to-[#3d1a07]/30" />
 
         {/* Decorative cross */}
         <div className="absolute right-0 top-0 h-[500px] w-[500px] opacity-[0.06]">
@@ -96,8 +96,8 @@ export default async function PublicHomePage() {
           {/* LEFT — TEXT */}
           <div>
             <div className="mb-5 flex items-center gap-3">
-              <div className="h-px w-8 bg-[#a8c5bb]" />
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#a8c5bb]">
+              <div className="h-px w-8 bg-[#e8c49a]" />
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#e8c49a]">
                 Welcoming you home
               </p>
             </div>
@@ -105,10 +105,10 @@ export default async function PublicHomePage() {
             <h1 className="font-serif text-5xl font-semibold leading-[1.12] text-white sm:text-6xl lg:text-7xl">
               Growing together
               <br />
-              <span className="text-[#9ecfbf]">in Christ.</span>
+              <span className="text-[#e8c49a]">in Christ.</span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-lg leading-8 text-[#c5dcd5]">
+            <p className="mt-6 max-w-xl text-lg leading-8 text-[#fde5c0]">
               Join us for worship, teaching, fellowship, and practical ministry
               shaped by the hope of the gospel.
             </p>
@@ -116,7 +116,7 @@ export default async function PublicHomePage() {
             <div className="mt-9 flex flex-wrap gap-4">
               <Link
                 href="/live"
-                className="rounded-lg bg-white px-6 py-3.5 text-sm font-semibold text-[#18342f] shadow-lg transition hover:bg-[#edf4ef] hover:shadow-xl active:scale-[0.98]"
+                className="rounded-lg bg-white px-6 py-3.5 text-sm font-semibold text-[#2b1405] shadow-lg transition hover:bg-[#faebd7] hover:shadow-xl active:scale-[0.98]"
               >
                 Watch live →
               </Link>
@@ -132,25 +132,25 @@ export default async function PublicHomePage() {
           {/* RIGHT — VISUAL CARD (fills space) */}
           <div className="relative hidden lg:block">
             <div className="rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur-md shadow-xl">
-              <p className="text-xs font-semibold uppercase tracking-widest text-[#9ecfbf]">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#e8c49a]">
                 Join us Sundays
               </p>
               <p className="mt-2 font-serif text-xl text-white">
                 Worship & Fellowship
               </p>
 
-              <div className="mt-4 space-y-3 text-sm text-[#c5dcd5]">
+              <div className="mt-4 space-y-3 text-sm text-[#fde5c0]">
                 <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#9ecfbf]" />
+                  <span className="h-2 w-2 rounded-full bg-[#e8c49a]" />
                   7:00 AM Service
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#9ecfbf]" />
+                  <span className="h-2 w-2 rounded-full bg-[#e8c49a]" />
                   9:30 AM Service
                 </div>
               </div>
 
-              <div className="mt-6 border-t border-white/10 pt-4 text-sm text-[#c5dcd5]">
+              <div className="mt-6 border-t border-white/10 pt-4 text-sm text-[#fde5c0]">
                 A welcoming community where you can grow, serve, and belong.
               </div>
             </div>
@@ -163,16 +163,16 @@ export default async function PublicHomePage() {
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-8 flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a7c6f]">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
                 This week
               </p>
-              <h2 className="font-serif mt-2 text-2xl font-semibold text-[#18342f] sm:text-3xl">
+              <h2 className="font-serif mt-2 text-2xl font-semibold text-[#4a2008] sm:text-3xl">
                 Upcoming gatherings
               </h2>
             </div>
             <Link
               href="/events"
-              className="hidden shrink-0 text-sm font-semibold text-[#18342f] underline underline-offset-4 hover:text-[#4a7c6f] sm:block"
+              className="hidden shrink-0 text-sm font-semibold text-[#4a2008] underline underline-offset-4 hover:text-[#c2620a] sm:block"
             >
               All events →
             </Link>
@@ -184,32 +184,32 @@ export default async function PublicHomePage() {
                 <Link
                   key={event.id}
                   href={`/events/${event.id}`}
-                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#d8e2dc] bg-white transition-all duration-200 hover:border-[#18342f]/20 hover:shadow-lg"
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition-all duration-200 hover:border-[#7c3d0f]/20 hover:shadow-lg"
                 >
-                  <div className="h-1 w-full bg-gradient-to-r from-[#18342f] to-[#4a7c6f]" />
+                  <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
                   <div className="flex flex-1 flex-col p-6">
-                    <div className="mb-4 inline-flex flex-col items-center self-start rounded-xl border border-[#e2ece6] bg-[#f4f8f5] px-3 py-2 text-center">
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-[#4a7c6f]">
+                    <div className="mb-4 inline-flex flex-col items-center self-start rounded-xl border border-[#f0dfc0] bg-[#fdf6ee] px-3 py-2 text-center">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-[#c2620a]">
                         {formatMonth(event.startTime)}
                       </span>
-                      <span className="font-serif text-2xl font-bold leading-none text-[#18342f]">
+                      <span className="font-serif text-2xl font-bold leading-none text-[#4a2008]">
                         {formatDay(event.startTime)}
                       </span>
                       {formatDayOfWeek(event.startTime) && (
-                        <span className="text-[9px] font-medium text-[#6b8c80]">
+                        <span className="text-[9px] font-medium text-[#8c6d3f]">
                           {formatDayOfWeek(event.startTime)}
                         </span>
                       )}
                     </div>
 
-                    <h3 className="font-serif flex-1 text-lg font-semibold leading-snug text-[#18342f] group-hover:text-[#285047]">
+                    <h3 className="font-serif flex-1 text-lg font-semibold leading-snug text-[#4a2008] group-hover:text-[#7c3d0f]">
                       {event.title}
                     </h3>
 
                     <div className="mt-3 space-y-1.5">
-                      <div className="flex items-center gap-2 text-sm text-[#52645d]">
+                      <div className="flex items-center gap-2 text-sm text-[#6b4c2a]">
                         <svg
-                          className="h-3.5 w-3.5 shrink-0 text-[#4a7c6f]"
+                          className="h-3.5 w-3.5 shrink-0 text-[#c2620a]"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -223,9 +223,9 @@ export default async function PublicHomePage() {
                         </svg>
                         {formatTime(event.startTime)}
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-[#52645d]">
+                      <div className="flex items-center gap-2 text-sm text-[#6b4c2a]">
                         <svg
-                          className="h-3.5 w-3.5 shrink-0 text-[#4a7c6f]"
+                          className="h-3.5 w-3.5 shrink-0 text-[#c2620a]"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -246,7 +246,7 @@ export default async function PublicHomePage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 flex items-center gap-1 border-t border-[#eef5f1] pt-4 text-xs font-semibold text-[#4a7c6f]">
+                    <div className="mt-4 flex items-center gap-1 border-t border-[#faebd7] pt-4 text-xs font-semibold text-[#c2620a]">
                       View details
                       <span className="transition-transform group-hover:translate-x-1">
                         →
@@ -264,7 +264,7 @@ export default async function PublicHomePage() {
 
           <Link
             href="/events"
-            className="mt-6 flex items-center justify-center text-sm font-semibold text-[#18342f] underline underline-offset-4 sm:hidden"
+            className="mt-6 flex items-center justify-center text-sm font-semibold text-[#4a2008] underline underline-offset-4 sm:hidden"
           >
             View all events →
           </Link>
@@ -272,11 +272,11 @@ export default async function PublicHomePage() {
       </section>
 
       {/* ── SERMONS ───────────────────────────────────────────── */}
-      <section className="bg-[#18342f] px-4 py-14 sm:px-6 lg:px-8">
+      <section className="bg-[#2b1405] px-4 py-14 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-8 flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9ecfbf]">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#e8c49a]">
                 Teaching
               </p>
               <h2 className="font-serif mt-2 text-2xl font-semibold text-white sm:text-3xl">
@@ -285,7 +285,7 @@ export default async function PublicHomePage() {
             </div>
             <Link
               href="/sermons"
-              className="hidden shrink-0 text-sm font-semibold text-[#9ecfbf] underline underline-offset-4 hover:text-white sm:block"
+              className="hidden shrink-0 text-sm font-semibold text-[#e8c49a] underline underline-offset-4 hover:text-white sm:block"
             >
               All sermons →
             </Link>
@@ -302,13 +302,13 @@ export default async function PublicHomePage() {
                   <span className="font-serif pointer-events-none absolute right-5 top-3 select-none text-6xl font-bold text-white/[0.04]">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="inline-flex w-fit items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#9ecfbf]">
+                  <span className="inline-flex w-fit items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#e8c49a]">
                     {item.type?.name || "Message"}
                   </span>
-                  <h3 className="font-serif mt-4 flex-1 text-lg font-semibold leading-snug text-white group-hover:text-[#c5dcd5]">
+                  <h3 className="font-serif mt-4 flex-1 text-lg font-semibold leading-snug text-white group-hover:text-[#fde5c0]">
                     {item.title}
                   </h3>
-                  <div className="mt-5 flex items-center gap-1 border-t border-white/10 pt-4 text-xs font-semibold text-[#9ecfbf]">
+                  <div className="mt-5 flex items-center gap-1 border-t border-white/10 pt-4 text-xs font-semibold text-[#e8c49a]">
                     Read
                     <span className="transition-transform group-hover:translate-x-1">
                       →
@@ -326,24 +326,24 @@ export default async function PublicHomePage() {
       </section>
 
       {/* ── MINISTRIES ────────────────────────────────────────── */}
-      <section className="bg-[#f4f8f5] px-4 py-14 sm:px-6 lg:px-8">
+      <section className="bg-[#fdf6ee] px-4 py-14 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-8 flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a7c6f]">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
                 Serve
               </p>
-              <h2 className="font-serif mt-2 text-2xl font-semibold text-[#18342f] sm:text-3xl">
+              <h2 className="font-serif mt-2 text-2xl font-semibold text-[#4a2008] sm:text-3xl">
                 Find your place
               </h2>
-              <p className="mt-2 max-w-md text-sm text-[#52645d]">
+              <p className="mt-2 max-w-md text-sm text-[#6b4c2a]">
                 Every gift matters. Explore the teams serving our church and
                 community.
               </p>
             </div>
             <Link
               href="/ministries"
-              className="mt-3 inline-flex items-center gap-2 self-start rounded-lg bg-[#18342f] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#285047] lg:self-auto"
+              className="mt-3 inline-flex items-center gap-2 self-start rounded-lg bg-[#c2620a] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#7c3d0f] lg:self-auto"
             >
               All ministries →
             </Link>
@@ -354,11 +354,11 @@ export default async function PublicHomePage() {
               <Link
                 key={ministry.id}
                 href={`/ministries/${ministry.id}`}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#d8e2dc] bg-white transition hover:border-[#18342f]/20 hover:shadow-md"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition hover:border-[#7c3d0f]/20 hover:shadow-md"
               >
-                <div className="h-1 w-full bg-gradient-to-r from-[#18342f] to-[#4a7c6f]" />
+                <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
                 <div className="flex flex-1 flex-col p-5">
-                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#eef5f1] text-[#18342f]">
+                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#faebd7] text-[#4a2008]">
                     <svg
                       className="h-4 w-4"
                       fill="none"
@@ -373,10 +373,10 @@ export default async function PublicHomePage() {
                       />
                     </svg>
                   </div>
-                  <h3 className="font-serif font-semibold text-[#18342f] group-hover:text-[#285047]">
+                  <h3 className="font-serif font-semibold text-[#4a2008] group-hover:text-[#7c3d0f]">
                     {ministry.name}
                   </h3>
-                  <p className="mt-1.5 text-sm leading-6 text-[#52645d]">
+                  <p className="mt-1.5 text-sm leading-6 text-[#6b4c2a]">
                     {ministry.description || "Serving together with purpose."}
                   </p>
                 </div>
@@ -387,13 +387,13 @@ export default async function PublicHomePage() {
       </section>
 
       {/* ── CLOSING CTA ───────────────────────────────────────── */}
-      <section className="border-t border-[#d8e2dc] bg-white px-4 py-12 sm:px-6 lg:px-8">
+      <section className="border-t border-[#e8c49a] bg-white px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a7c6f]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
               New here?
             </p>
-            <p className="mt-1 text-[15px] font-medium text-[#18342f]">
+            <p className="mt-1 text-[15px] font-medium text-[#4a2008]">
               You're welcome just as you are — no expectations, just a warm
               welcome.
             </p>
@@ -401,13 +401,13 @@ export default async function PublicHomePage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/contact"
-              className="rounded-lg bg-[#18342f] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#285047]"
+              className="rounded-lg bg-[#c2620a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#7c3d0f]"
             >
               Plan a visit
             </Link>
             <Link
               href="/about"
-              className="rounded-lg border border-[#c5d8d0] bg-white px-5 py-2.5 text-sm font-semibold text-[#18342f] transition hover:border-[#18342f]/30 hover:shadow-sm"
+              className="rounded-lg border border-[#e8c49a] bg-white px-5 py-2.5 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/30 hover:shadow-sm"
             >
               Learn about us
             </Link>

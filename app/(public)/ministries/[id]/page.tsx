@@ -38,7 +38,7 @@ export default async function PublicMinistryDetailsPage({
   return (
     <div className="font-sans">
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#18342f] px-4 py-24 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#2b1405] px-4 py-24 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute right-0 top-0 h-96 w-96 opacity-[0.04]">
           <svg viewBox="0 0 200 200" fill="none">
             <rect x="85" y="20" width="30" height="160" fill="white" />
@@ -49,13 +49,13 @@ export default async function PublicMinistryDetailsPage({
         <div className="relative mx-auto max-w-screen-2xl">
           <Link
             href="/ministries"
-            className="text-sm font-semibold text-[#9ecfbf] hover:underline"
+            className="text-sm font-semibold text-[#e8c49a] hover:underline"
           >
             ← Back to ministries
           </Link>
 
           <div className="mt-8 max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9ecfbf]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#e8c49a]">
               Ministry
             </p>
 
@@ -63,7 +63,7 @@ export default async function PublicMinistryDetailsPage({
               {ministry.name}
             </h1>
 
-            <p className="mt-6 text-[17px] leading-8 text-[#c5dcd5]">
+            <p className="mt-6 text-[17px] leading-8 text-[#fde5c0]">
               {ministry.description ||
                 "Serving together with purpose and unity in Christ."}
             </p>
@@ -74,12 +74,12 @@ export default async function PublicMinistryDetailsPage({
       {/* ── MAIN CONTENT ─────────────────────────────────────── */}
       <section className="px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
-          <div className="rounded-2xl border border-[#d8e2dc] bg-white p-8">
-            <h2 className="font-serif text-2xl font-semibold text-[#18342f]">
+          <div className="rounded-2xl border border-[#e8c49a] bg-white p-8">
+            <h2 className="font-serif text-2xl font-semibold text-[#4a2008]">
               About this ministry
             </h2>
 
-            <p className="mt-4 text-[15px] leading-7 text-[#52645d]">
+            <p className="mt-4 text-[15px] leading-7 text-[#6b4c2a]">
               {ministry.description ||
                 "This ministry provides opportunities to serve, grow spiritually, and build meaningful relationships within the church community."}
             </p>
@@ -89,13 +89,13 @@ export default async function PublicMinistryDetailsPage({
 
       {/* ── MINISTRY EVENTS (NEW) ────────────────────────────── */}
       {ministry.events && ministry.events.length > 0 && (
-        <section className="bg-[#f4f8f5] px-4 py-20 sm:px-6 lg:px-8">
+        <section className="bg-[#fdf6ee] px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-screen-2xl">
             <div className="mb-10">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a7c6f]">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
                 Ministry events
               </p>
-              <h2 className="font-serif mt-2 text-3xl font-semibold text-[#18342f] sm:text-4xl">
+              <h2 className="font-serif mt-2 text-3xl font-semibold text-[#4a2008] sm:text-4xl">
                 Upcoming gatherings
               </h2>
             </div>
@@ -105,28 +105,28 @@ export default async function PublicMinistryDetailsPage({
                 <Link
                   key={event.id}
                   href={`/events/${event.id}`}
-                  className="group relative rounded-2xl border border-[#d8e2dc] bg-white p-6 transition hover:border-[#18342f]/20 hover:shadow-lg"
+                  className="group relative rounded-2xl border border-[#e8c49a] bg-white p-6 transition hover:border-[#7c3d0f]/20 hover:shadow-lg"
                 >
                   {/* Ghost number */}
-                  <span className="font-serif absolute right-5 top-3 text-6xl font-bold text-[#18342f]/[0.04]">
+                  <span className="font-serif absolute right-5 top-3 text-6xl font-bold text-[#4a2008]/[0.04]">
                     {String(i + 1).padStart(2, "0")}
                   </span>
 
                   {/* Date badge */}
-                  <div className="mb-5 inline-flex flex-col items-center rounded-lg border border-[#e2ece6] bg-[#f4f8f5] px-3 py-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#4a7c6f]">
+                  <div className="mb-5 inline-flex flex-col items-center rounded-lg border border-[#f0dfc0] bg-[#fdf6ee] px-3 py-2">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#c2620a]">
                       {formatMonth(event.startTime)}
                     </span>
-                    <span className="font-serif text-2xl font-bold text-[#18342f]">
+                    <span className="font-serif text-2xl font-bold text-[#4a2008]">
                       {formatDay(event.startTime)}
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-lg font-semibold text-[#18342f] group-hover:text-[#285047]">
+                  <h3 className="font-serif text-lg font-semibold text-[#4a2008] group-hover:text-[#7c3d0f]">
                     {event.title}
                   </h3>
 
-                  <div className="mt-3 space-y-1 text-sm text-[#52645d]">
+                  <div className="mt-3 space-y-1 text-sm text-[#6b4c2a]">
                     <p>
                       {formatDayOfWeek(event.startTime)},{" "}
                       {formatTime(event.startTime)}
@@ -134,7 +134,7 @@ export default async function PublicMinistryDetailsPage({
                     <p>{event.location || "Location to be announced"}</p>
                   </div>
 
-                  <div className="mt-4 text-xs font-semibold text-[#4a7c6f]">
+                  <div className="mt-4 text-xs font-semibold text-[#c2620a]">
                     View details →
                   </div>
                 </Link>
@@ -145,10 +145,10 @@ export default async function PublicMinistryDetailsPage({
       )}
 
       {/* ── FEATURE SECTION ─────────────────────────────────── */}
-      <section className="bg-[#18342f] px-4 py-20 sm:px-6 lg:px-8">
+      <section className="bg-[#2b1405] px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9ecfbf]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#e8c49a]">
               Why join
             </p>
             <h2 className="font-serif mt-2 text-3xl font-semibold text-white sm:text-4xl">
@@ -181,7 +181,7 @@ export default async function PublicMinistryDetailsPage({
                 <h3 className="font-serif text-lg font-semibold text-white">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm text-[#9ab8b0]">{item.detail}</p>
+                <p className="mt-2 text-sm text-[#e6c79c]">{item.detail}</p>
               </div>
             ))}
           </div>
@@ -189,17 +189,17 @@ export default async function PublicMinistryDetailsPage({
       </section>
 
       {/* ── CTA ─────────────────────────────────────────────── */}
-      <section className="border-t border-[#d8e2dc] bg-[#f4f8f5] px-4 py-20 sm:px-6 lg:px-8">
+      <section className="border-t border-[#e8c49a] bg-[#fdf6ee] px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a7c6f]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
             Get involved
           </p>
 
-          <h2 className="font-serif mt-3 text-3xl font-semibold text-[#18342f]">
+          <h2 className="font-serif mt-3 text-3xl font-semibold text-[#4a2008]">
             Interested in joining?
           </h2>
 
-          <p className="mt-4 text-[15px] leading-7 text-[#52645d]">
+          <p className="mt-4 text-[15px] leading-7 text-[#6b4c2a]">
             Reach out and we will help you connect with the right team and take
             your next step.
           </p>
@@ -207,14 +207,14 @@ export default async function PublicMinistryDetailsPage({
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               href="/contact"
-              className="rounded-lg bg-[#18342f] px-6 py-3.5 text-sm font-semibold text-white hover:bg-[#285047]"
+              className="rounded-lg bg-[#c2620a] px-6 py-3.5 text-sm font-semibold text-white hover:bg-[#7c3d0f]"
             >
               Contact us
             </Link>
 
             <Link
               href="/events"
-              className="rounded-lg border border-[#c5d8d0] bg-white px-6 py-3.5 text-sm font-semibold text-[#18342f] hover:shadow-sm"
+              className="rounded-lg border border-[#e8c49a] bg-white px-6 py-3.5 text-sm font-semibold text-[#4a2008] hover:shadow-sm"
             >
               See events
             </Link>

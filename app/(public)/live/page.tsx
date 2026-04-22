@@ -103,9 +103,9 @@ const fallbackPlatform: PlatformStyle = {
       />
     </svg>
   ),
-  bg: "#18342f",
-  hoverBg: "#0f2420",
-  badgeColor: "#18342f",
+  bg: "#c2620a",
+  hoverBg: "#7c3d0f",
+  badgeColor: "#c2620a",
 };
 
 /* ── PAGE ────────────────────────────────────────────────── */
@@ -127,7 +127,7 @@ export default async function LivePage() {
   return (
     <div className="font-sans">
       {/* ── PAGE HEADER ───────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#18342f] px-4 py-10 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#2b1405] px-4 py-10 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 opacity-[0.04]">
           <svg viewBox="0 0 200 200" fill="none">
             <rect x="85" y="20" width="30" height="160" fill="white" />
@@ -138,15 +138,15 @@ export default async function LivePage() {
           <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="mb-2 flex items-center gap-2.5">
-                <div className="h-px w-6 bg-[#9ecfbf]" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9ecfbf]">
+                <div className="h-px w-6 bg-[#e8c49a]" />
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e8c49a]">
                   Live & online
                 </p>
               </div>
               <h1 className="font-serif text-2xl font-semibold text-white sm:text-3xl">
                 Worship with us, wherever you are
               </h1>
-              <p className="mt-1.5 text-sm text-[#9ab8b0]">
+              <p className="mt-1.5 text-sm text-[#e6c79c]">
                 Join the current broadcast or find the next scheduled stream.
               </p>
             </div>
@@ -155,13 +155,13 @@ export default async function LivePage() {
       </section>
 
       {/* ── LIVE PLAYER ───────────────────────────────────────── */}
-      <section className="bg-[#f4f8f5] px-4 py-10 sm:px-6 lg:px-8">
+      <section className="bg-[#fdf6ee] px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           {liveStream && embedUrl ? (
-            <div className="overflow-hidden rounded-2xl border border-[#d8e2dc] bg-white shadow-lg">
+            <div className="overflow-hidden rounded-2xl border border-[#e8c49a] bg-white shadow-lg">
               {/* Live bar */}
-              <div className="h-1 w-full bg-gradient-to-r from-[#18342f] to-[#4a7c6f]" />
-              <div className="flex items-center gap-3 border-b border-[#d8e2dc] bg-[#fdf4f4] px-6 py-3">
+              <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
+              <div className="flex items-center gap-3 border-b border-[#e8c49a] bg-[#fdf4f4] px-6 py-3">
                 <span className="relative flex h-2.5 w-2.5 shrink-0">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
@@ -184,10 +184,10 @@ export default async function LivePage() {
 
                 {/* Info + platform buttons */}
                 <div className="flex flex-col justify-center p-8">
-                  <h2 className="font-serif text-2xl font-semibold leading-snug text-[#18342f]">
+                  <h2 className="font-serif text-2xl font-semibold leading-snug text-[#4a2008]">
                     {liveStream.title}
                   </h2>
-                  <p className="mt-3 text-sm leading-7 text-[#52645d]">
+                  <p className="mt-3 text-sm leading-7 text-[#6b4c2a]">
                     We're streaming live right now. Join us from wherever you
                     are and worship together with the Red Cross church family.
                   </p>
@@ -220,16 +220,16 @@ export default async function LivePage() {
             </div>
           ) : (
             /* Off-air state */
-            <div className="overflow-hidden rounded-2xl border border-[#d8e2dc] bg-white">
-              <div className="h-1 w-full bg-gradient-to-r from-[#18342f] to-[#4a7c6f]" />
-              <div className="flex items-center gap-3 border-b border-[#d8e2dc] bg-[#f4f8f5] px-6 py-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#d8e2dc]" />
-                <p className="text-xs font-bold uppercase tracking-widest text-[#6b8c80]">
+            <div className="overflow-hidden rounded-2xl border border-[#e8c49a] bg-white">
+              <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
+              <div className="flex items-center gap-3 border-b border-[#e8c49a] bg-[#fdf6ee] px-6 py-3">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#e8c49a]" />
+                <p className="text-xs font-bold uppercase tracking-widest text-[#8c6d3f]">
                   Off air
                 </p>
               </div>
               <div className="px-8 py-16 text-center">
-                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#eef5f1] text-[#4a7c6f]">
+                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#faebd7] text-[#c2620a]">
                   <svg
                     className="h-7 w-7"
                     fill="none"
@@ -244,10 +244,10 @@ export default async function LivePage() {
                     />
                   </svg>
                 </div>
-                <p className="font-serif text-xl font-semibold text-[#18342f]">
+                <p className="font-serif text-xl font-semibold text-[#4a2008]">
                   No stream active right now
                 </p>
-                <p className="mt-2 text-sm text-[#52645d]">
+                <p className="mt-2 text-sm text-[#6b4c2a]">
                   Check back on Sunday or see what's coming up below.
                 </p>
               </div>
@@ -257,10 +257,10 @@ export default async function LivePage() {
       </section>
 
       {/* ── UPCOMING STREAMS ──────────────────────────────────── */}
-      <section className="bg-[#18342f] px-4 py-12 sm:px-6 lg:px-8">
+      <section className="bg-[#2b1405] px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9ecfbf]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#e8c49a]">
               What's next
             </p>
             <h2 className="font-serif mt-2 text-2xl font-semibold text-white sm:text-3xl">
@@ -278,13 +278,13 @@ export default async function LivePage() {
                     className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10"
                   >
                     <div className="mb-5 inline-flex flex-col items-center rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-center">
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-[#9ecfbf]">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-[#e8c49a]">
                         {formatMonth(stream.startsAt)}
                       </span>
                       <span className="font-serif text-2xl font-bold leading-none text-white">
                         {formatDay(stream.startsAt)}
                       </span>
-                      <span className="text-[9px] font-medium text-[#9ab8b0]">
+                      <span className="text-[9px] font-medium text-[#e6c79c]">
                         {formatYear(stream.startsAt)}
                       </span>
                     </div>
@@ -293,7 +293,7 @@ export default async function LivePage() {
                       {stream.title}
                     </h3>
 
-                    <div className="mt-3 flex items-center gap-1.5 text-sm text-[#9ab8b0]">
+                    <div className="mt-3 flex items-center gap-1.5 text-sm text-[#e6c79c]">
                       <svg
                         className="h-3.5 w-3.5 shrink-0"
                         fill="none"
@@ -333,7 +333,7 @@ export default async function LivePage() {
             </div>
           ) : (
             <div className="rounded-2xl border border-white/10 bg-white/5 px-8 py-14 text-center">
-              <p className="text-[#9ab8b0]">
+              <p className="text-[#e6c79c]">
                 No upcoming streams scheduled yet. Check back soon.
               </p>
             </div>
@@ -342,28 +342,28 @@ export default async function LivePage() {
       </section>
 
       {/* ── CLOSING CTA ───────────────────────────────────────── */}
-      <section className="border-t border-[#d8e2dc] bg-white px-4 py-12 sm:px-6 lg:px-8">
+      <section className="border-t border-[#e8c49a] bg-white px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a7c6f]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
               Need help?
             </p>
-            <p className="mt-1 text-[15px] font-medium text-[#18342f]">
+            <p className="mt-1 text-[15px] font-medium text-[#4a2008]">
               Trouble joining online? We'll walk you through it.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/contact"
-              className="rounded-lg bg-[#18342f] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#285047]"
-            >
-              Contact us
-            </Link>
-            <Link
               href="/sermons"
-              className="rounded-lg border border-[#c5d8d0] bg-white px-5 py-2.5 text-sm font-semibold text-[#18342f] transition hover:border-[#18342f]/30 hover:shadow-sm"
+              className="rounded-lg bg-[#c2620a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#7c3d0f]"
             >
               Browse sermons
+            </Link>
+            <Link
+              href="/contact"
+              className="rounded-lg border border-[#e8c49a] bg-white px-5 py-2.5 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/30 hover:shadow-sm"
+            >
+              Contact us
             </Link>
           </div>
         </div>

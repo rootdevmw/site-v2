@@ -156,7 +156,7 @@ export default function ContactPage() {
   return (
     <div className="font-sans">
       {/* ── PAGE HEADER ───────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#18342f] px-4 py-10 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#2b1405] px-4 py-10 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 opacity-[0.04]">
           <svg viewBox="0 0 200 200" fill="none">
             <rect x="85" y="20" width="30" height="160" fill="white" />
@@ -167,15 +167,15 @@ export default function ContactPage() {
           <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="mb-2 flex items-center gap-2.5">
-                <div className="h-px w-6 bg-[#9ecfbf]" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9ecfbf]">
+                <div className="h-px w-6 bg-[#e8c49a]" />
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e8c49a]">
                   Get in touch
                 </p>
               </div>
               <h1 className="font-serif text-2xl font-semibold text-white sm:text-3xl">
                 We would love to meet you
               </h1>
-              <p className="mt-1.5 text-sm text-[#9ab8b0]">
+              <p className="mt-1.5 text-sm text-[#e6c79c]">
                 Planning a first visit, looking for prayer, or hoping to join a
                 ministry — reach out and we'll help you take the next step.
               </p>
@@ -185,13 +185,13 @@ export default function ContactPage() {
       </section>
 
       {/* ── WAYS TO CONNECT ───────────────────────────────────── */}
-      <section className="bg-[#f4f8f5] px-4 py-12 sm:px-6 lg:px-8">
+      <section className="bg-[#fdf6ee] px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a7c6f]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
               How can we help?
             </p>
-            <h2 className="font-serif mt-2 text-2xl font-semibold text-[#18342f] sm:text-3xl">
+            <h2 className="font-serif mt-2 text-2xl font-semibold text-[#4a2008] sm:text-3xl">
               We're here for you
             </h2>
           </div>
@@ -200,20 +200,20 @@ export default function ContactPage() {
             {ways.map((way, i) => (
               <div
                 key={way.title}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#d8e2dc] bg-white transition hover:border-[#18342f]/20 hover:shadow-lg"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition hover:border-[#7c3d0f]/20 hover:shadow-lg"
               >
-                <div className="h-1 w-full bg-gradient-to-r from-[#18342f] to-[#4a7c6f]" />
+                <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
                 <div className="relative flex flex-1 flex-col p-6">
-                  <span className="font-serif pointer-events-none absolute right-5 top-3 select-none text-6xl font-bold text-[#18342f]/[0.04]">
+                  <span className="font-serif pointer-events-none absolute right-5 top-3 select-none text-6xl font-bold text-[#4a2008]/[0.04]">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#eef5f1] text-[#18342f]">
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#faebd7] text-[#4a2008]">
                     {way.icon}
                   </div>
-                  <h3 className="font-serif text-lg font-semibold text-[#18342f]">
+                  <h3 className="font-serif text-lg font-semibold text-[#4a2008]">
                     {way.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 text-[#52645d]">
+                  <p className="mt-2 text-sm leading-6 text-[#6b4c2a]">
                     {way.text}
                   </p>
                 </div>
@@ -224,18 +224,18 @@ export default function ContactPage() {
       </section>
 
       {/* ── CONTACT DETAILS ───────────────────────────────────── */}
-      <section className="bg-[#18342f] px-4 py-12 sm:px-6 lg:px-8">
+      <section className="bg-[#2b1405] px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             {/* Details */}
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9ecfbf]">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#e8c49a]">
                 Find us
               </p>
               <h2 className="font-serif mt-2 text-2xl font-semibold text-white sm:text-3xl">
                 Church details
               </h2>
-              <p className="mt-3 text-sm leading-6 text-[#9ab8b0]">
+              <p className="mt-3 text-sm leading-6 text-[#e6c79c]">
                 We meet every Sunday and would love to see you. You can also
                 reach us online any time.
               </p>
@@ -249,11 +249,11 @@ export default function ContactPage() {
                     rel={d.external ? "noopener noreferrer" : undefined}
                     className="group flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4 transition hover:bg-white/10 hover:border-white/20"
                   >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#9ecfbf]/10 text-[#9ecfbf] transition group-hover:bg-[#9ecfbf]/20">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e8c49a]/10 text-[#e8c49a] transition group-hover:bg-[#e8c49a]/20">
                       {d.icon}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-[#6b9e90]">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-[#c2a23a]">
                         {d.label}
                       </p>
                       <p className="mt-0.5 font-semibold text-white break-words">
@@ -301,12 +301,12 @@ export default function ContactPage() {
                 alt="Church community gathered"
                 className="h-[420px] w-full rounded-2xl object-cover ring-1 ring-white/10"
               />
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#0f2420]/70 via-transparent" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#1a0a02]/70 via-transparent" />
               <div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-sm">
                 <p className="font-serif text-base font-semibold text-white">
                   You're always welcome here.
                 </p>
-                <p className="mt-1 text-sm text-[#c5dcd5]">
+                <p className="mt-1 text-sm text-[#fde5c0]">
                   No expectations — just a warm community waiting to meet you.
                 </p>
               </div>
@@ -316,13 +316,13 @@ export default function ContactPage() {
       </section>
 
       {/* ── CLOSING CTA ───────────────────────────────────────── */}
-      <section className="border-t border-[#d8e2dc] bg-white px-4 py-12 sm:px-6 lg:px-8">
+      <section className="border-t border-[#e8c49a] bg-white px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a7c6f]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
               Ready to connect?
             </p>
-            <p className="mt-1 text-[15px] font-medium text-[#18342f]">
+            <p className="mt-1 text-[15px] font-medium text-[#4a2008]">
               Whether it's your first Sunday or you're ready to get more
               involved.
             </p>
@@ -330,13 +330,13 @@ export default function ContactPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/about"
-              className="rounded-lg bg-[#18342f] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#285047]"
+              className="rounded-lg bg-[#c2620a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#7c3d0f]"
             >
               Learn about us
             </Link>
             <Link
               href="/sermons"
-              className="rounded-lg border border-[#c5d8d0] bg-white px-5 py-2.5 text-sm font-semibold text-[#18342f] transition hover:border-[#18342f]/30 hover:shadow-sm"
+              className="rounded-lg border border-[#e8c49a] bg-white px-5 py-2.5 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/30 hover:shadow-sm"
             >
               Read a sermon
             </Link>

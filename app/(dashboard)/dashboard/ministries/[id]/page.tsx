@@ -11,6 +11,7 @@ import { Info } from "@/components/ui/Info";
 import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
 import { SearchableSelect } from "@/components/ui/SearchableSelect";
 import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
+import { CsvMemberUpload } from "@/app/modules/ministries/components/CsvMemberUpload";
 
 import {
   MinistryMember,
@@ -103,21 +104,28 @@ export default function MinistryDetailsPage() {
             Members
           </h2>
 
-          <div className="w-64">
-            <SearchableSelect
-              label=""
-              placeholder="Add member..."
-              options={availableMembers.map((m) => ({
-                label: `${m.firstName} ${m.lastName}`,
-                value: m.id,
-              }))}
-              onChange={(memberId) => {
-                assign.mutate({
-                  ministryId,
-                  memberId,
-                });
-              }}
+          <div className="flex items-center gap-2">
+            <CsvMemberUpload
+              ministryId={ministryId}
+              allMembers={allMembers}
+              assignedIds={assignedIds}
             />
+            <div className="w-56">
+              <SearchableSelect
+                label=""
+                placeholder="Add member..."
+                options={availableMembers.map((m) => ({
+                  label: `${m.firstName} ${m.lastName}`,
+                  value: m.id,
+                }))}
+                onChange={(memberId) => {
+                  assign.mutate({
+                    ministryId,
+                    memberId,
+                  });
+                }}
+              />
+            </div>
           </div>
         </div>
 

@@ -35,7 +35,7 @@ export function ShareButton({ title }: { title: string }) {
   return (
     <button
       onClick={handleShare}
-      className="flex items-center gap-2 rounded-lg border border-[#d8e2dc] bg-[#f4f8f5] px-4 py-2 text-sm font-semibold text-[#18342f] transition hover:border-[#18342f]/20 hover:shadow-sm"
+      className="flex items-center gap-2 rounded-lg border border-[#e8c49a] bg-[#fdf6ee] px-4 py-2 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/20 hover:shadow-sm"
     >
       <FiShare2 className="h-4 w-4" />
 

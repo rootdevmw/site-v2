@@ -41,8 +41,8 @@ export function Pagination({
         className={[
           "rounded-lg border px-4 py-2 text-sm font-medium transition",
           page <= 1
-            ? "pointer-events-none border-[#d8e2dc] bg-[#f4f8f5] text-[#b0c4bc]"
-            : "border-[#d8e2dc] bg-white text-[#18342f] hover:border-[#18342f]/30 hover:shadow-sm",
+            ? "pointer-events-none border-[#e8c49a] bg-[#fdf6ee] text-[#c4a882]"
+            : "border-[#e8c49a] bg-white text-[#4a2008] hover:border-[#7c3d0f]/30 hover:shadow-sm",
         ].join(" ")}
       >
         ← Prev
@@ -53,7 +53,7 @@ export function Pagination({
           p === "…" ? (
             <span
               key={`ellipsis-${i}`}
-              className="flex h-9 w-7 items-center justify-center text-sm text-[#9ab8b0]"
+              className="flex h-9 w-7 items-center justify-center text-sm text-[#c2a23a]"
             >
               …
             </span>
@@ -64,8 +64,8 @@ export function Pagination({
               className={[
                 "flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition",
                 p === page
-                  ? "bg-[#18342f] text-white"
-                  : "border border-[#d8e2dc] bg-white text-[#52645d] hover:border-[#18342f]/30",
+                  ? "bg-[#c2620a] text-white"
+                  : "border border-[#e8c49a] bg-white text-[#6b4c2a] hover:border-[#7c3d0f]/30",
               ].join(" ")}
             >
               {p}
@@ -80,8 +80,8 @@ export function Pagination({
         className={[
           "rounded-lg border px-4 py-2 text-sm font-medium transition",
           page >= totalPages
-            ? "pointer-events-none border-[#d8e2dc] bg-[#f4f8f5] text-[#b0c4bc]"
-            : "border-[#d8e2dc] bg-white text-[#18342f] hover:border-[#18342f]/30 hover:shadow-sm",
+            ? "pointer-events-none border-[#e8c49a] bg-[#fdf6ee] text-[#c4a882]"
+            : "border-[#e8c49a] bg-white text-[#4a2008] hover:border-[#7c3d0f]/30 hover:shadow-sm",
         ].join(" ")}
       >
         Next →

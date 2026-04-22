@@ -47,7 +47,7 @@ export default async function PublicEventDetailsPage({
   return (
     <div className="font-sans">
       {/* ── EVENT HERO ────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#18342f] px-4 py-20 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#2b1405] px-4 py-20 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute right-0 top-0 h-96 w-96 opacity-[0.04]">
           <svg
             viewBox="0 0 200 200"
@@ -63,7 +63,7 @@ export default async function PublicEventDetailsPage({
           {/* Back link */}
           <Link
             href="/events"
-            className="group mb-8 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#9ecfbf] transition hover:text-white"
+            className="group mb-8 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#e8c49a] transition hover:text-white"
           >
             <svg
               className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1"
@@ -84,20 +84,20 @@ export default async function PublicEventDetailsPage({
           <div className="flex flex-wrap items-start gap-6">
             {/* Large date badge */}
             <div className="flex flex-col items-center rounded-xl border border-white/10 bg-white/10 px-5 py-4 text-center backdrop-blur-sm">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#9ecfbf]">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#e8c49a]">
                 {formatMonth(event.startTime)}
               </span>
               <span className="font-serif text-4xl font-bold leading-none text-white">
                 {formatDay(event.startTime)}
               </span>
-              <span className="mt-0.5 text-xs font-medium text-[#9ab8b0]">
+              <span className="mt-0.5 text-xs font-medium text-[#e6c79c]">
                 {formatYear(event.startTime)}
               </span>
             </div>
 
             <div className="flex-1">
               {/* Type badge */}
-              <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-[#9ecfbf]">
+              <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-[#e8c49a]">
                 {event.type?.name || "Event"}
               </span>
 
@@ -107,7 +107,7 @@ export default async function PublicEventDetailsPage({
 
               {/* Quick time + location line */}
               <div className="mt-4 flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 text-sm text-[#9ab8b0]">
+                <div className="flex items-center gap-2 text-sm text-[#e6c79c]">
                   <svg
                     className="h-4 w-4 shrink-0"
                     fill="none"
@@ -126,7 +126,7 @@ export default async function PublicEventDetailsPage({
                 {event.location && (
                   <>
                     <div className="h-4 w-px self-center bg-white/10" />
-                    <div className="flex items-center gap-2 text-sm text-[#9ab8b0]">
+                    <div className="flex items-center gap-2 text-sm text-[#e6c79c]">
                       <svg
                         className="h-4 w-4 shrink-0"
                         fill="none"
@@ -159,15 +159,15 @@ export default async function PublicEventDetailsPage({
       <section className="px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl space-y-5">
           {/* Time details card */}
-          <div className="overflow-hidden rounded-2xl border border-[#d8e2dc] bg-white">
-            <div className="border-b border-[#eef5f1] bg-[#f4f8f5] px-6 py-3">
-              <p className="text-xs font-semibold uppercase tracking-widest text-[#4a7c6f]">
+          <div className="overflow-hidden rounded-2xl border border-[#e8c49a] bg-white">
+            <div className="border-b border-[#faebd7] bg-[#fdf6ee] px-6 py-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#c2620a]">
                 When & where
               </p>
             </div>
             <div className="grid gap-0 sm:grid-cols-2">
-              <div className="flex items-start gap-4 border-b border-[#eef5f1] p-6 sm:border-b-0 sm:border-r">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eef5f1] text-[#18342f]">
+              <div className="flex items-start gap-4 border-b border-[#faebd7] p-6 sm:border-b-0 sm:border-r">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#faebd7] text-[#4a2008]">
                   <svg
                     className="h-4 w-4"
                     fill="none"
@@ -183,16 +183,16 @@ export default async function PublicEventDetailsPage({
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#6b8c80]">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-[#8c6d3f]">
                     Starts
                   </p>
-                  <p className="mt-1 font-semibold text-[#18342f]">
+                  <p className="mt-1 font-semibold text-[#4a2008]">
                     {formatFull(event.startTime)}
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-4 border-b border-[#eef5f1] p-6 sm:border-b-0">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eef5f1] text-[#18342f]">
+              <div className="flex items-start gap-4 border-b border-[#faebd7] p-6 sm:border-b-0">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#faebd7] text-[#4a2008]">
                   <svg
                     className="h-4 w-4"
                     fill="none"
@@ -208,16 +208,16 @@ export default async function PublicEventDetailsPage({
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#6b8c80]">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-[#8c6d3f]">
                     Ends
                   </p>
-                  <p className="mt-1 font-semibold text-[#18342f]">
+                  <p className="mt-1 font-semibold text-[#4a2008]">
                     {formatFull(event.endTime)}
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-4 p-6 sm:col-span-2 sm:border-t sm:border-[#eef5f1]">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eef5f1] text-[#18342f]">
+              <div className="flex items-start gap-4 p-6 sm:col-span-2 sm:border-t sm:border-[#faebd7]">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#faebd7] text-[#4a2008]">
                   <svg
                     className="h-4 w-4"
                     fill="none"
@@ -238,10 +238,10 @@ export default async function PublicEventDetailsPage({
                   </svg>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#6b8c80]">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-[#8c6d3f]">
                     Location
                   </p>
-                  <p className="mt-1 font-semibold text-[#18342f]">
+                  <p className="mt-1 font-semibold text-[#4a2008]">
                     {event.location || "To be announced"}
                   </p>
                 </div>
@@ -251,14 +251,14 @@ export default async function PublicEventDetailsPage({
 
           {/* Description card */}
           {event.description && (
-            <div className="overflow-hidden rounded-2xl border border-[#d8e2dc] bg-white">
-              <div className="border-b border-[#eef5f1] bg-[#f4f8f5] px-6 py-3">
-                <p className="text-xs font-semibold uppercase tracking-widest text-[#4a7c6f]">
+            <div className="overflow-hidden rounded-2xl border border-[#e8c49a] bg-white">
+              <div className="border-b border-[#faebd7] bg-[#fdf6ee] px-6 py-3">
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#c2620a]">
                   About this event
                 </p>
               </div>
               <div className="p-6 sm:p-8">
-                <p className="text-[15px] leading-8 text-[#3a5450]">
+                <p className="text-[15px] leading-8 text-[#5c3018]">
                   {event.description}
                 </p>
               </div>
@@ -266,16 +266,16 @@ export default async function PublicEventDetailsPage({
           )}
 
           {/* Share / add to calendar row */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#d8e2dc] bg-white px-6 py-5">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#e8c49a] bg-white px-6 py-5">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-[#4a7c6f]">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#c2620a]">
                 Don't miss it
               </p>
-              <p className="mt-0.5 text-sm text-[#52645d]">
+              <p className="mt-0.5 text-sm text-[#6b4c2a]">
                 Share this event with friends and family.
               </p>
             </div>
-            <button className="flex items-center gap-2 rounded-lg border border-[#d8e2dc] bg-[#f4f8f5] px-4 py-2 text-sm font-semibold text-[#18342f] transition hover:border-[#18342f]/20 hover:shadow-sm">
+            <button className="flex items-center gap-2 rounded-lg border border-[#e8c49a] bg-[#fdf6ee] px-4 py-2 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/20 hover:shadow-sm">
               <svg
                 className="h-4 w-4"
                 fill="none"
@@ -296,28 +296,28 @@ export default async function PublicEventDetailsPage({
       </section>
 
       {/* ── CLOSING CTA ───────────────────────────────────────── */}
-      <section className="border-t border-[#d8e2dc] bg-[#f4f8f5] px-4 py-20 sm:px-6 lg:px-8">
+      <section className="border-t border-[#e8c49a] bg-[#fdf6ee] px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a7c6f]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
             See what else is on
           </p>
-          <h2 className="font-serif mt-3 text-3xl font-semibold text-[#18342f]">
+          <h2 className="font-serif mt-3 text-3xl font-semibold text-[#4a2008]">
             More gatherings await
           </h2>
-          <p className="mt-4 text-[15px] leading-7 text-[#52645d]">
+          <p className="mt-4 text-[15px] leading-7 text-[#6b4c2a]">
             There's always something happening at Red Cross. Browse all upcoming
             events or get in touch if you have questions.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               href="/events"
-              className="rounded-lg bg-[#18342f] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#285047]"
+              className="rounded-lg bg-[#c2620a] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#7c3d0f]"
             >
               All events
             </Link>
             <Link
               href="/contact"
-              className="rounded-lg border border-[#c5d8d0] bg-white px-6 py-3.5 text-sm font-semibold text-[#18342f] transition hover:border-[#18342f]/30 hover:shadow-sm"
+              className="rounded-lg border border-[#e8c49a] bg-white px-6 py-3.5 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/30 hover:shadow-sm"
             >
               Get in touch
             </Link>
