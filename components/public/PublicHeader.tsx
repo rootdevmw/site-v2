@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -17,9 +18,19 @@ const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
+const marqueeVerses = [
+  "Welcome — You are loved",
+  '"Come to me, all who are weary, and I will give you rest" — Matthew 11:28',
+  '"For God so loved the world that he gave his one and only Son" — John 3:16',
+  '"The Lord bless you and keep you" — Numbers 6:24',
+  '"I can do all things through Christ who strengthens me" — Philippians 4:13',
+  '"Your word is a lamp to my feet and a light to my path" — Psalm 119:105',
+];
+
 export function PublicHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [verseIndex, setVerseIndex] = useState(0);
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -31,11 +42,34 @@ export function PublicHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVerseIndex((i) => (i + 1) % marqueeVerses.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
-      {/* Thin brand bar at top */}
-      <div className="w-full bg-[#18342f] px-4 py-1.5 text-center text-xs font-medium tracking-widest text-[#a8c5bb] uppercase">
-        Welcome — You are loved
+      {/* ── Rotating Verse Bar ─────────────────────────── */}
+      <div className="relative w-full bg-[#18342f] overflow-hidden">
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-[#18342f] to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#18342f] to-transparent z-10" />
+
+        <div className="relative h-7 flex items-center justify-center">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={verseIndex}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="px-6 text-center text-xs font-medium tracking-widest text-[#a8c5bb] uppercase whitespace-nowrap"
+            >
+              {marqueeVerses[verseIndex]}
+            </motion.p>
+          </AnimatePresence>
+        </div>
       </div>
 
       <header
@@ -114,13 +148,6 @@ export function PublicHeader() {
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
               </span>
               Live
-            </Link>
-
-            <Link
-              href="/login"
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-[#18342f] bg-[#18342f] px-4 py-2 text-[13px] font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#285047] hover:shadow-md active:scale-[0.98]"
-            >
-              Member Login
             </Link>
 
             {/* Mobile Toggle */}

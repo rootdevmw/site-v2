@@ -73,42 +73,52 @@ export default async function PublicHomePage() {
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="relative min-h-[640px] overflow-hidden bg-[#0f2420]">
+        {/* Background image */}
         <img
           src="/IMGL8976.jpg"
           alt="Church gathering"
-          className="absolute inset-0 h-full w-full object-cover opacity-25 mix-blend-luminosity"
+          className="absolute inset-0 h-full w-full object-cover opacity-40"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f2420]/80 via-[#18342f]/60 to-[#1a4a3d]/40" />
-        <div className="absolute right-0 top-0 h-[500px] w-[500px] opacity-5">
+
+        {/* Softer overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0f2420]/70 via-[#18342f]/50 to-[#1a4a3d]/30" />
+
+        {/* Decorative cross */}
+        <div className="absolute right-0 top-0 h-[500px] w-[500px] opacity-[0.06]">
           <svg viewBox="0 0 200 200" fill="none">
             <rect x="85" y="20" width="30" height="160" fill="white" />
             <rect x="20" y="70" width="160" height="30" fill="white" />
           </svg>
         </div>
 
-        <div className="relative mx-auto flex min-h-[640px] max-w-screen-2xl flex-col justify-center px-4 py-20 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
+        {/* Content */}
+        <div className="relative mx-auto grid min-h-[640px] max-w-screen-2xl items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8">
+          {/* LEFT — TEXT */}
+          <div>
             <div className="mb-5 flex items-center gap-3">
               <div className="h-px w-8 bg-[#a8c5bb]" />
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#a8c5bb]">
-                Church of Christ · Red Cross
+                Welcoming you home
               </p>
             </div>
+
             <h1 className="font-serif text-5xl font-semibold leading-[1.12] text-white sm:text-6xl lg:text-7xl">
               Growing together
               <br />
               <span className="text-[#9ecfbf]">in Christ.</span>
             </h1>
+
             <p className="mt-6 max-w-xl text-lg leading-8 text-[#c5dcd5]">
               Join us for worship, teaching, fellowship, and practical ministry
               shaped by the hope of the gospel.
             </p>
+
             <div className="mt-9 flex flex-wrap gap-4">
               <Link
-                href="/contact"
+                href="/live"
                 className="rounded-lg bg-white px-6 py-3.5 text-sm font-semibold text-[#18342f] shadow-lg transition hover:bg-[#edf4ef] hover:shadow-xl active:scale-[0.98]"
               >
-                Plan a visit
+                Watch live →
               </Link>
               <Link
                 href="/about"
@@ -119,29 +129,30 @@ export default async function PublicHomePage() {
             </div>
           </div>
 
-          <div className="mt-14 inline-flex max-w-sm items-center gap-4 rounded-xl border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-sm">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#a8c5bb]/30">
-              <svg
-                className="h-5 w-5 text-[#a8c5bb]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.8}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"
-                />
-              </svg>
-            </div>
-            <div>
+          {/* RIGHT — VISUAL CARD (fills space) */}
+          <div className="relative hidden lg:block">
+            <div className="rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur-md shadow-xl">
               <p className="text-xs font-semibold uppercase tracking-widest text-[#9ecfbf]">
                 Join us Sundays
               </p>
-              <p className="mt-0.5 text-sm text-white/80">
-                Services at 7:00 AM & 9:30 AM
+              <p className="mt-2 font-serif text-xl text-white">
+                Worship & Fellowship
               </p>
+
+              <div className="mt-4 space-y-3 text-sm text-[#c5dcd5]">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#9ecfbf]" />
+                  7:00 AM Service
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#9ecfbf]" />
+                  9:30 AM Service
+                </div>
+              </div>
+
+              <div className="mt-6 border-t border-white/10 pt-4 text-sm text-[#c5dcd5]">
+                A welcoming community where you can grow, serve, and belong.
+              </div>
             </div>
           </div>
         </div>

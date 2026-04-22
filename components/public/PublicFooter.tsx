@@ -46,6 +46,9 @@ export function PublicFooter() {
             <Link href="/contact" className="hover:text-white">
               Contact
             </Link>
+            <Link href="/login" className="hover:text-white">
+              Member Login
+            </Link>
           </div>
         </div>
       </div>

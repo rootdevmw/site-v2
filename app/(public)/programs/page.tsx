@@ -113,9 +113,6 @@ export default async function PublicProgramsPage({
                           <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-[#9ecfbf]">
                             {program.type.name}
                           </span>
-                          <h2 className="font-serif mt-1 text-[15px] font-semibold leading-snug text-white">
-                            {formatDate(program.date)}
-                          </h2>
                         </div>
 
                         <Link
