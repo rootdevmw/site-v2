@@ -1,17 +1,22 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+
 import {
   useUser,
   useAssignRole,
   useLinkUserToMember,
   useUnlinkUserFromMember,
 } from "@/app/modules/users/hooks/useUserActions";
+import { useRequestPasswordReset } from "@/app/modules/auth/hooks/useRequestPasswordReset";
+
 import { useRoles } from "@/app/modules/roles/hooks/useRoles";
 import { useMembers } from "@/app/modules/members/hooks/useMembers";
+
 import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
 import { SearchableSelect } from "@/components/ui/SearchableSelect";
-import { useState } from "react";
+import { showError, showSuccess } from "@/lib/toast";
 
 export default function UserDetailPage() {
   const params = useParams();
@@ -20,8 +25,6 @@ export default function UserDetailPage() {
 
   const { data: userData, isLoading: userLoading } = useUser(userId);
   const { data: rolesData } = useRoles({ limit: 100 });
-
-  //  fetch members
   const { data: membersData } = useMembers({ page: 1, limit: 100 });
 
   const { mutate: assignRole, isPending } = useAssignRole();
@@ -29,12 +32,16 @@ export default function UserDetailPage() {
   const { mutate: unlinkMember, isPending: isUnlinking } =
     useUnlinkUserFromMember();
 
+  const { mutate: resendSetPassword, isPending: isResendingPassword } =
+    useRequestPasswordReset();
+
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedMember, setSelectedMember] = useState<string | undefined>();
 
   const user = userData?.data;
   const roles = rolesData?.data || [];
   const members = membersData?.data || [];
+
   if (userLoading) {
     return <SpiritualLoader message="Loading user details..." />;
   }
@@ -45,11 +52,20 @@ export default function UserDetailPage() {
 
   const availableRoles = roles.filter((r) => !user.roles.includes(r.name));
 
-  //  map members → searchable select options
   const memberOptions = members.map((m) => ({
     value: m.id,
     label: `${m.firstName} ${m.lastName}`,
   }));
+
+  function handleResendPassword() {
+    resendSetPassword(
+      { email: user!.email },
+      {
+        onSuccess: () => showSuccess("Reset password link sent"),
+        onError: () => showError("Failed to send reset password link"),
+      },
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
@@ -64,11 +80,20 @@ export default function UserDetailPage() {
 
         <div className="flex gap-3">
           <button
+            onClick={handleResendPassword}
+            disabled={isResendingPassword}
+            className="px-4 py-2 rounded-lg text-sm font-medium bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 disabled:opacity-60"
+          >
+            {isResendingPassword ? "Sending..." : "Resend Set Password Link"}
+          </button>
+
+          <button
             onClick={() => router.push(`/dashboard/users/${userId}/edit`)}
             className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--card-elevated)] text-[var(--text-primary)] hover:bg-[var(--card-bg)]"
           >
             Edit User
           </button>
+
           <button
             onClick={() => router.back()}
             className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--text-secondary)] text-[var(--text-primary)]"
@@ -147,7 +172,7 @@ export default function UserDetailPage() {
         </div>
       </div>
 
-      {/*  MEMBER LINKING */}
+      {/* Member Linking */}
       <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6 space-y-6">
         <h2 className="text-lg font-medium text-[var(--text-primary)]">
           Member Linking
