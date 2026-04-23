@@ -21,7 +21,7 @@ export default function MembersPage() {
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
-
+  const [prefix, setPrefix] = useState("");
   const debouncedSearch = useDebounce(search);
 
   const { data, isLoading } = useMembers({
@@ -29,6 +29,7 @@ export default function MembersPage() {
     limit,
     search: debouncedSearch,
     status,
+    prefix,
   });
 
   const members = data?.data || [];
@@ -69,16 +70,30 @@ export default function MembersPage() {
             className="px-3 py-2 rounded-lg text-sm outline-none transition-all duration-200 bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-primary)] focus:ring-1 focus:ring-[var(--main-gold)] focus:border-[var(--main-gold)]"
           >
             <option value="">All Status</option>
-            <option value="Visitor">Visitor</option>
-            <option value="Member">Member</option>
-            <option value="Baptized">Baptized</option>
+            <option value="VISITOR">Visitor</option>
+            <option value="MEMBER">Member</option>
+          </select>
+          <select
+            value={prefix}
+            onChange={(e) => {
+              setPrefix(e.target.value);
+              setPage(1);
+            }}
+            className="px-3 py-2 rounded-lg text-sm outline-none transition-all duration-200 bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-primary)] focus:ring-1 focus:ring-[var(--main-gold)] focus:border-[var(--main-gold)]"
+          >
+            <option value="">All Prefixes</option>
+            <option value="PASTOR">Pastor</option>
+            <option value="DEACON">Deacon</option>
+            <option value="SISTER">Sister</option>
+            <option value="BROTHER">Brother</option>
           </select>
         </div>
       }
       pagination={
         <Pagination
           page={page}
-          totalPages={meta?.totalPages || 1}
+          total={meta?.total ?? 1}
+          limit={meta?.limit ?? 10}
           onPageChange={setPage}
         />
       }
@@ -90,7 +105,29 @@ export default function MembersPage() {
         columns={[
           {
             header: "Name",
-            render: (m) => `${m.firstName} ${m.lastName}`,
+            render: (m) => {
+              const prefixMap: Record<string, string> = {
+                PASTOR: "Ps",
+                DEACON: "Dec",
+                BROTHER: "Br",
+                SISTER: "Sis",
+              };
+
+              const shortPrefix = m.prefix ? prefixMap[m.prefix] : null;
+
+              return (
+                <div className="flex items-center gap-2">
+                  {shortPrefix && (
+                    <span className="px-2 py-0.5 text-xs rounded-full bg-[var(--main-gold)] text-black border border-[var(--gold-dark)]">
+                      {shortPrefix}
+                    </span>
+                  )}
+                  <span>
+                    {m.firstName} {m.lastName}
+                  </span>
+                </div>
+              );
+            },
           },
           { header: "Phone", accessor: "phone" },
           { header: "Status", accessor: "status" },

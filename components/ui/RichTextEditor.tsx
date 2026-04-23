@@ -343,7 +343,19 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
 
               <ToolbarButton
                 title="Add Scripture Reference"
-                onClick={() => setModal("scripture")}
+                onClick={() => {
+                  if (!editor) return;
+                  const { from, to } = editor.state.selection;
+                  if (from !== to) {
+                    const selected = editor.state.doc.textBetween(from, to, " ");
+                    const parsed = parseVerseRef(selected);
+                    if (parsed) {
+                      editor.chain().focus().deleteSelection().setScripture(parsed).run();
+                      return;
+                    }
+                  }
+                  setModal("scripture");
+                }}
               >
                 <FaBook />
               </ToolbarButton>
@@ -501,6 +513,19 @@ function ToolbarButton({
 
 function Divider() {
   return <div className="w-px h-6 bg-[var(--border-soft)] mx-1" />;
+}
+
+function parseVerseRef(text: string) {
+  const m = text
+    .trim()
+    .match(/^((?:[1-3]\s+)?[A-Za-z]+(?:\s+[A-Za-z]+){0,3})\s+(\d+):(\d+)(?:-(\d+))?$/);
+  if (!m) return null;
+  return {
+    book: m[1].trim(),
+    chapter: parseInt(m[2], 10),
+    verseFrom: parseInt(m[3], 10),
+    verseTo: m[4] ? parseInt(m[4], 10) : undefined,
+  };
 }
 
 RichTextEditor.displayName = "RichTextEditor";

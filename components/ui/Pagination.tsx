@@ -2,7 +2,8 @@
 
 type Props = {
   page: number;
-  totalPages?: number;
+  total: number;
+  limit: number;
   onPageChange: (page: number) => void;
 };
 
@@ -21,8 +22,9 @@ function getPages(current: number, total: number): (number | "…")[] {
   return pages;
 }
 
-export function Pagination({ page, totalPages, onPageChange }: Props) {
-  const pages = totalPages ? getPages(page, totalPages) : null;
+export function Pagination({ page, total, limit, onPageChange }: Props) {
+  const totalPages = Math.ceil(total / limit);
+  const pages = totalPages > 1 ? getPages(page, totalPages) : null;
 
   return (
     <div className="flex items-center justify-between gap-4">
@@ -34,7 +36,7 @@ export function Pagination({ page, totalPages, onPageChange }: Props) {
         ← Prev
       </button>
 
-      {pages && (
+      {pages ? (
         <div className="flex items-center gap-1">
           {pages.map((p, i) =>
             p === "…" ? (
@@ -59,15 +61,13 @@ export function Pagination({ page, totalPages, onPageChange }: Props) {
             ),
           )}
         </div>
-      )}
-
-      {!pages && (
+      ) : (
         <p className="text-sm text-[var(--text-secondary)]">Page {page}</p>
       )}
 
       <button
         onClick={() => onPageChange(page + 1)}
-        disabled={!!totalPages && page >= totalPages}
+        disabled={page >= totalPages}
         className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--card-elevated)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[var(--hover-soft)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Next →

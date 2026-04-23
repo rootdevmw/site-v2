@@ -22,3 +22,7 @@ export async function getPublishedContent(params?: {
 export async function getPublicContent(id: string) {
   return publicApi<Content>(`/content/${id}`);
 }
+
+export async function getContentTypes() {
+  return publicApi<{ id: string; name: string }[]>(`/content/types`);
+}

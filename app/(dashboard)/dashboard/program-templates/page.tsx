@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
@@ -8,14 +9,17 @@ import { TableLayout } from "@/components/ui/TableLayout";
 import { useProgramTemplates } from "@/app/modules/programTemplates/hooks/useProgramTemplates";
 import { useDeleteProgramTemplate } from "@/app/modules/programTemplates/hooks/useDeleteProgramTemplate";
 import { ProgramTemplate } from "@/app/modules/programTemplates/types/programTemplate.types";
+import { Pagination } from "@/components/ui/Pagination";
 
 export default function TemplatesPage() {
   const router = useRouter();
-  const { mutateAsync: deleteProgramTemplate } = useDeleteProgramTemplate();
+  const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useProgramTemplates();
+  const { mutateAsync: deleteProgramTemplate } = useDeleteProgramTemplate();
+  const { data, isLoading } = useProgramTemplates({ page });
 
   const templates = data?.data || [];
+  const meta = data?.meta;
 
   return (
     <TableLayout
@@ -49,7 +53,6 @@ export default function TemplatesPage() {
             >
               View
             </button>
-
             <button
               onClick={() =>
                 router.push(`/dashboard/program-templates/${t.id}/edit`)
@@ -68,6 +71,12 @@ export default function TemplatesPage() {
             />
           </>
         )}
+      />
+      <Pagination
+        page={page}
+        total={meta?.total ?? 0}
+        limit={meta?.limit ?? 10}
+        onPageChange={setPage}
       />
     </TableLayout>
   );

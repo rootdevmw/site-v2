@@ -17,14 +17,24 @@ function getPages(current: number, total: number): (number | "…")[] {
   return pages;
 }
 
+function buildHref(basePath: string, p: number, typeId?: string) {
+  const params = new URLSearchParams();
+  if (p > 1) params.set("page", String(p));
+  if (typeId) params.set("typeId", typeId);
+  const qs = params.toString();
+  return `${basePath}${qs ? `?${qs}` : ""}`;
+}
+
 export function Pagination({
   page,
   totalPages,
   basePath,
+  typeId,
 }: {
   page: number;
   totalPages: number;
   basePath: string;
+  typeId?: string; // optional so it works on pages without filtering
 }) {
   if (totalPages <= 1) return null;
 
@@ -36,7 +46,7 @@ export function Pagination({
       aria-label="Pagination"
     >
       <Link
-        href={page > 1 ? `${basePath}?page=${page - 1}` : "#"}
+        href={page > 1 ? buildHref(basePath, page - 1, typeId) : "#"}
         aria-disabled={page <= 1}
         className={[
           "rounded-lg border px-4 py-2 text-sm font-medium transition",
@@ -60,7 +70,7 @@ export function Pagination({
           ) : (
             <Link
               key={p}
-              href={`${basePath}?page=${p}`}
+              href={buildHref(basePath, p, typeId)}
               className={[
                 "flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition",
                 p === page
@@ -75,7 +85,7 @@ export function Pagination({
       </div>
 
       <Link
-        href={page < totalPages ? `${basePath}?page=${page + 1}` : "#"}
+        href={page < totalPages ? buildHref(basePath, page + 1, typeId) : "#"}
         aria-disabled={page >= totalPages}
         className={[
           "rounded-lg border px-4 py-2 text-sm font-medium transition",

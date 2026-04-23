@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { HeroCarousel } from "@/components/public/HeroCarousel";
 import { PublicEmptyState } from "@/components/public/PublicEmptyState";
 import { getPublishedContent } from "@/lib/public-api/content";
 import { getPublicEvents } from "@/lib/public-api/events";
@@ -73,15 +74,11 @@ export default async function PublicHomePage() {
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="relative min-h-[640px] overflow-hidden bg-[#1a0a02]">
-        {/* Background image */}
-        <img
-          src="/IMGL8976.jpg"
-          alt="Church gathering"
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
-        />
+        {/* Background carousel */}
+        <HeroCarousel />
 
-        {/* Softer overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a0a02]/70 via-[#2b1405]/50 to-[#3d1a07]/30" />
+        {/* Overlay — slightly denser to keep text legible over brighter images */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a0a02]/75 via-[#2b1405]/55 to-[#3d1a07]/35" />
 
         {/* Decorative cross */}
         <div className="absolute right-0 top-0 h-[500px] w-[500px] opacity-[0.06]">

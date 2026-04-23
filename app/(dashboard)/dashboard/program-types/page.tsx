@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useProgramTypes } from "@/app/modules/programs/hooks/useProgramTypes";
@@ -9,14 +10,17 @@ import { ProgramType } from "@/app/modules/programs/types/program.types";
 import { TableLayout } from "@/components/ui/TableLayout";
 import { Table } from "@/components/ui/Table";
 import { DeleteConfirmButton } from "@/components/ui/DeleteConfirmButton";
+import { Pagination } from "@/components/ui/Pagination";
 
 export default function ProgramTypesPage() {
   const router = useRouter();
-  const { mutateAsync: deleteType } = useDeleteProgramType();
+  const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useProgramTypes();
+  const { mutateAsync: deleteType } = useDeleteProgramType();
+  const { data, isLoading } = useProgramTypes({ page });
 
   const types = data?.data || [];
+  const meta = data?.meta;
 
   return (
     <TableLayout
@@ -53,6 +57,12 @@ export default function ProgramTypesPage() {
             />
           </>
         )}
+      />
+      <Pagination
+        page={page}
+        total={meta?.total ?? 0}
+        limit={meta?.limit ?? 10}
+        onPageChange={setPage}
       />
     </TableLayout>
   );

@@ -7,6 +7,7 @@ export type MemberFilters = {
   limit?: number;
   search?: string;
   status?: string;
+  prefix?: string;
 };
 
 export async function getMembers(

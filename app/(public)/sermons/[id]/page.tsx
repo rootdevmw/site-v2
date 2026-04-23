@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ContentViewer } from "@/components/ui/ContentViewer";
 import { getPublicContent } from "@/lib/public-api/content";
 import { ShareButton } from "@/components/public/ShareButton";
+import { FaPenNib } from "react-icons/fa";
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString(undefined, {
@@ -38,7 +39,7 @@ export default async function SermonDetailsPage({
           </svg>
         </div>
 
-        {/* 🔥 WIDER */}
+        {/*  WIDER */}
         <div className="relative mx-auto max-w-5xl">
           <Link
             href="/sermons"
@@ -105,6 +106,10 @@ export default async function SermonDetailsPage({
                 />
               </svg>
               Church of Christ · Red Cross
+            </div>
+            <div className="flex items-center gap-2 text-sm text-[#e6c79c]">
+              <FaPenNib className="h-4 w-4" />
+              by {content.author?.firstName} {content.author?.lastName}
             </div>
           </div>
         </div>

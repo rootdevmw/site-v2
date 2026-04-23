@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getPublicPrograms } from "@/lib/public-api/programs";
+import { getPublicPrograms, getProgramTypes } from "@/lib/public-api/programs";
 
 const PAGE_SIZE = 2;
 
@@ -26,23 +26,39 @@ function formatWeekday(value: string) {
 export default async function PublicProgramsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; typeId?: string }>;
 }) {
-  const { page: pageParam } = await searchParams;
+  const { page: pageParam, typeId } = await searchParams;
   const page = Math.max(1, Number(pageParam) || 1);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const res = await getPublicPrograms({
-    page,
-    limit: PAGE_SIZE,
-    fromDate: today.toISOString(),
-  });
+  const [res, typesRes] = await Promise.all([
+    getPublicPrograms({
+      page,
+      limit: PAGE_SIZE,
+      fromDate: today.toISOString(),
+      typeId,
+    }),
+    getProgramTypes(),
+  ]);
 
   const programs = res.data;
   const total = res.meta?.total ?? 0;
   const totalPages = res.meta?.totalPages ?? Math.ceil(total / PAGE_SIZE);
+  const types = typesRes.data ?? [];
+
+  function buildHref(params: { page?: number; typeId?: string }) {
+    const p = new URLSearchParams();
+    const resolvedPage = params.page ?? 1;
+    const resolvedTypeId =
+      params.typeId !== undefined ? params.typeId : (typeId ?? "");
+    if (resolvedPage > 1) p.set("page", String(resolvedPage));
+    if (resolvedTypeId) p.set("typeId", resolvedTypeId);
+    const qs = p.toString();
+    return `/programs${qs ? `?${qs}` : ""}`;
+  }
 
   return (
     <div className="font-sans">
@@ -82,6 +98,37 @@ export default async function PublicProgramsPage({
       {/* ── PROGRAMS ───────────────────────────────────────────── */}
       <section className="bg-[#fdf6ee] px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
+          {/* ── Type filter pills ── */}
+          {types.length > 0 && (
+            <div className="mb-7 flex flex-wrap gap-2">
+              <Link
+                href={buildHref({ page: 1, typeId: "" })}
+                className={[
+                  "rounded-full border px-4 py-1.5 text-xs font-semibold transition",
+                  !typeId
+                    ? "border-[#c2620a] bg-[#c2620a] text-white"
+                    : "border-[#e8c49a] bg-white text-[#6b4c2a] hover:border-[#c2620a]/40",
+                ].join(" ")}
+              >
+                All
+              </Link>
+              {types.map((t) => (
+                <Link
+                  key={t.id}
+                  href={buildHref({ page: 1, typeId: t.id })}
+                  className={[
+                    "rounded-full border px-4 py-1.5 text-xs font-semibold transition",
+                    typeId === t.id
+                      ? "border-[#c2620a] bg-[#c2620a] text-white"
+                      : "border-[#e8c49a] bg-white text-[#6b4c2a] hover:border-[#c2620a]/40",
+                  ].join(" ")}
+                >
+                  {t.name}
+                </Link>
+              ))}
+            </div>
+          )}
+
           {programs.length > 0 ? (
             <>
               <div className="grid gap-5 lg:grid-cols-2">
@@ -193,7 +240,7 @@ export default async function PublicProgramsPage({
                 <div className="mt-10 flex items-center justify-center gap-2">
                   {page > 1 && (
                     <Link
-                      href={`/programs?page=${page - 1}`}
+                      href={buildHref({ page: page - 1, typeId })}
                       className="rounded-lg border border-[#e8c49a] bg-white px-4 py-2 text-sm font-medium text-[#4a2008] transition hover:border-[#7c3d0f]/30 hover:shadow-sm"
                     >
                       ← Previous
@@ -205,7 +252,7 @@ export default async function PublicProgramsPage({
                       (p) => (
                         <Link
                           key={p}
-                          href={`/programs?page=${p}`}
+                          href={buildHref({ page: p, typeId })}
                           className={[
                             "flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition",
                             p === page
@@ -221,7 +268,7 @@ export default async function PublicProgramsPage({
 
                   {page < totalPages && (
                     <Link
-                      href={`/programs?page=${page + 1}`}
+                      href={buildHref({ page: page + 1, typeId })}
                       className="rounded-lg border border-[#e8c49a] bg-white px-4 py-2 text-sm font-medium text-[#4a2008] transition hover:border-[#7c3d0f]/30 hover:shadow-sm"
                     >
                       Next →
@@ -251,7 +298,9 @@ export default async function PublicProgramsPage({
                 No upcoming programs
               </p>
               <p className="mt-2 text-sm text-[#6b4c2a]">
-                Service programs will appear here once scheduled.
+                {typeId
+                  ? "No programs found for this type. Try a different filter."
+                  : "Service programs will appear here once scheduled."}
               </p>
             </div>
           )}

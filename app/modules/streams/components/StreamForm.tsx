@@ -8,6 +8,7 @@ import { useCreateStream } from "../hooks/useCreateStream";
 import { useUpdateStream } from "../hooks/useUpdateStream";
 import { usePlatforms } from "../hooks/usePlatforms";
 import { useCreatePlatform } from "../hooks/useCreatePlatform";
+import { useUpdatePlatform } from "../hooks/useUpdatePlatform";
 import { streamSchema, StreamFormValues } from "../validation/stream.schema";
 import type { Platform, Stream } from "../types/stream.types";
 
@@ -21,13 +22,11 @@ import { showSuccess, showError } from "@/lib/toast";
 type StreamFormInitialData = Partial<Omit<StreamFormValues, "startsAt">> & {
   id?: string;
   startsAt?: Date | string | null;
+  platforms?: Platform[];
 };
 
 function parseStartsAt(value: StreamFormInitialData["startsAt"]) {
-  if (!value) {
-    return null;
-  }
-
+  if (!value) return null;
   return value instanceof Date ? value : new Date(value);
 }
 
@@ -48,6 +47,7 @@ export function StreamForm({
   const { mutateAsync: updateStream } = useUpdateStream();
   const { mutateAsync: createPlatform, isPending: creatingPlatform } =
     useCreatePlatform();
+  const { mutateAsync: updatePlatform } = useUpdatePlatform();
 
   const { data: platformsData, isLoading: platformsLoading } = usePlatforms();
   const platforms = platformsData?.data || [];
@@ -55,6 +55,16 @@ export function StreamForm({
   const [showCreatePlatform, setShowCreatePlatform] = useState(false);
   const [newPlatformName, setNewPlatformName] = useState("");
   const [newPlatformUrl, setNewPlatformUrl] = useState("");
+
+  // Track per-platform URL edits: { [platformId]: url }
+  const [platformUrlEdits, setPlatformUrlEdits] = useState<
+    Record<string, string>
+  >(() =>
+    Object.fromEntries(
+      (initialData?.platforms ?? []).map((p) => [p.id, p.url]),
+    ),
+  );
+  const [savingPlatformId, setSavingPlatformId] = useState<string | null>(null);
 
   const {
     control,
@@ -71,6 +81,7 @@ export function StreamForm({
       platformIds: initialData?.platformIds ?? [],
     },
   });
+
   const platformIds = useWatch({ control, name: "platformIds" }) || [];
 
   const platformOptions = platforms.map((p: Platform) => ({
@@ -78,15 +89,42 @@ export function StreamForm({
     value: p.id,
   }));
 
+  // Platforms that are currently selected and have a known record
+  const selectedPlatforms = platforms.filter((p: Platform) =>
+    platformIds.includes(p.id),
+  );
+
+  const handlePlatformUrlChange = (id: string, url: string) => {
+    setPlatformUrlEdits((prev) => ({ ...prev, [id]: url }));
+  };
+
+  const handleSavePlatformUrl = async (platform: Platform) => {
+    const url = platformUrlEdits[platform.id]?.trim();
+    if (!url || url === platform.url) return;
+
+    setSavingPlatformId(platform.id);
+    try {
+      await updatePlatform({
+        id: platform.id,
+        data: { name: platform.name, url },
+      });
+      showSuccess(`${platform.name} URL updated`);
+    } catch {
+      showError(`Failed to update ${platform.name} URL`);
+    } finally {
+      setSavingPlatformId(null);
+    }
+  };
+
   const handleCreatePlatform = async () => {
     const name = newPlatformName.trim();
     const url = newPlatformUrl.trim();
-
     if (!name || !url) return;
 
     try {
       const res = await createPlatform({ name, url });
       setValue("platformIds", [...platformIds, res.data.id]);
+      setPlatformUrlEdits((prev) => ({ ...prev, [res.data.id]: url }));
       setNewPlatformName("");
       setNewPlatformUrl("");
       setShowCreatePlatform(false);
@@ -160,6 +198,47 @@ export function StreamForm({
         error={errors.platformIds?.message}
         disabled={isView || platformsLoading}
       />
+
+      {/* Per-platform URL editors */}
+      {selectedPlatforms.length > 0 && (
+        <div className="space-y-2">
+          {selectedPlatforms.map((platform: Platform) => {
+            const currentUrl = platformUrlEdits[platform.id] ?? platform.url;
+            const isDirty = currentUrl !== platform.url;
+            const isSaving = savingPlatformId === platform.id;
+
+            return (
+              <div
+                key={platform.id}
+                className="flex items-center gap-2 p-3 rounded-lg border border-[var(--border-soft)] bg-[var(--card-elevated)]"
+              >
+                <span className="text-xs font-medium text-[var(--text-secondary)] w-20 shrink-0 truncate">
+                  {platform.name}
+                </span>
+                <input
+                  value={currentUrl}
+                  onChange={(e) =>
+                    handlePlatformUrlChange(platform.id, e.target.value)
+                  }
+                  placeholder="Platform URL"
+                  disabled={isView || isSaving}
+                  className="flex-1 min-w-0 px-3 py-1.5 rounded-lg bg-[var(--card-bg)] border border-[var(--border-soft)] text-sm disabled:opacity-60"
+                />
+                {!isView && (
+                  <button
+                    type="button"
+                    onClick={() => handleSavePlatformUrl(platform)}
+                    disabled={!isDirty || isSaving}
+                    className="shrink-0 px-3 py-1.5 rounded-md bg-[var(--main-gold)] text-black text-xs font-medium disabled:opacity-40 transition-opacity"
+                  >
+                    {isSaving ? "Saving…" : "Save"}
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {!isView &&
         (!showCreatePlatform ? (

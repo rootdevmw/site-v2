@@ -57,7 +57,8 @@ export default function ProgramsPage() {
       pagination={
         <Pagination
           page={page}
-          totalPages={meta?.totalPages || 1}
+          total={meta?.total ?? 0}
+          limit={meta?.limit ?? 10}
           onPageChange={setPage}
         />
       }

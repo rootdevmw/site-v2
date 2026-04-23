@@ -38,7 +38,7 @@ export default function HomecellsPage() {
       description="Manage church homecells"
       actions={
         <button
-          onClick={() => router.push("/homecells/new")}
+          onClick={() => router.push("/dashboard/homecells/new")}
           className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] transition-all duration-200"
         >
           + Add Homecell
@@ -58,7 +58,8 @@ export default function HomecellsPage() {
       pagination={
         <Pagination
           page={page}
-          totalPages={meta?.totalPages || 1}
+          total={meta?.total || 1}
+          limit={meta?.limit ?? 10}
           onPageChange={setPage}
         />
       }
@@ -69,8 +70,6 @@ export default function HomecellsPage() {
         emptyMessage="No homecells found"
         columns={[
           { header: "Name", accessor: "name" },
-          { header: "Location", accessor: "location" },
-
           //  Leader with badge
           {
             header: "Leader",
@@ -107,18 +106,18 @@ export default function HomecellsPage() {
               ),
           },
         ]}
-        onRowClick={(hc) => router.push(`/homecells/${hc.id}`)}
+        onRowClick={(hc) => router.push(`/dashboard/homecells/${hc.id}`)}
         actions={(hc) => (
           <>
             <button
-              onClick={() => router.push(`/homecells/${hc.id}`)}
+              onClick={() => router.push(`/dashboard/homecells/${hc.id}`)}
               className="px-3 py-1 rounded-md text-sm bg-[var(--blue)] text-black"
             >
               View
             </button>
 
             <button
-              onClick={() => router.push(`/homecells/${hc.id}/edit`)}
+              onClick={() => router.push(`/dashboard/homecells/${hc.id}/edit`)}
               className="px-3 py-1 rounded-md text-sm bg-[var(--card-elevated)] text-[var(--text-primary)]"
             >
               Edit

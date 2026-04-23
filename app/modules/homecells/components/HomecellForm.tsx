@@ -39,7 +39,6 @@ export function HomecellForm({
   const { data } = useMembers({ page: 1, limit: 100 });
 
   const members = data?.data || [];
-
   const memberOptions = members.map((m: any) => ({
     label: `${m.firstName} ${m.lastName}`,
     value: m.id,
@@ -61,7 +60,7 @@ export function HomecellForm({
         {
           onSuccess: () => {
             dismissToast(toastId);
-            router.push("/homecells");
+            router.push("/dashboard/homecells");
           },
           onError: () => dismissToast(toastId),
         },
@@ -70,7 +69,7 @@ export function HomecellForm({
       createMutation.mutate(values, {
         onSuccess: () => {
           dismissToast(toastId);
-          router.push("/homecells");
+          router.push("/dashboard/homecells");
         },
         onError: () => dismissToast(toastId),
       });

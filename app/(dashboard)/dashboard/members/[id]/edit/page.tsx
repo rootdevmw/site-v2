@@ -64,6 +64,7 @@ export default function EditMemberPage() {
           mode="edit"
           initialData={{
             id: member.id,
+            prefix: member.prefix,
             firstName: member.firstName,
             lastName: member.lastName,
             phone: member.phone,

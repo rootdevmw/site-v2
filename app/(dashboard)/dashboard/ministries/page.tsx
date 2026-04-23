@@ -125,7 +125,8 @@ export default function MinistriesPage() {
       pagination={
         <Pagination
           page={page}
-          totalPages={meta?.totalPages || 1}
+          total={meta?.total || 1}
+          limit={meta?.limit ?? 10}
           onPageChange={setPage}
         />
       }

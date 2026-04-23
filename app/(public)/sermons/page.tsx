@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getPublishedContent } from "@/lib/public-api/content";
+import { getPublishedContent, getContentTypes } from "@/lib/public-api/content";
 import { Pagination } from "@/components/public/Pagination";
 
 const PAGE_SIZE = 6;
@@ -15,15 +15,31 @@ function formatDate(value: string) {
 export default async function SermonsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; typeId?: string }>;
 }) {
-  const { page: pageParam } = await searchParams;
+  const { page: pageParam, typeId } = await searchParams;
   const page = Math.max(1, Number(pageParam) || 1);
 
-  const res = await getPublishedContent({ page, limit: PAGE_SIZE });
+  const [res, typesRes] = await Promise.all([
+    getPublishedContent({ page, limit: PAGE_SIZE, typeId }),
+    getContentTypes(),
+  ]);
+
   const sermons = res.data;
   const total = res.meta?.total ?? 0;
   const totalPages = res.meta?.totalPages ?? Math.ceil(total / PAGE_SIZE);
+  const types = typesRes.data ?? [];
+
+  function buildHref(params: { page?: number; typeId?: string }) {
+    const p = new URLSearchParams();
+    const resolvedPage = params.page ?? 1;
+    const resolvedTypeId =
+      params.typeId !== undefined ? params.typeId : (typeId ?? "");
+    if (resolvedPage > 1) p.set("page", String(resolvedPage));
+    if (resolvedTypeId) p.set("typeId", resolvedTypeId);
+    const qs = p.toString();
+    return `/sermons${qs ? `?${qs}` : ""}`;
+  }
 
   return (
     <div className="font-sans">
@@ -63,6 +79,37 @@ export default async function SermonsPage({
       {/* ── SERMONS GRID ──────────────────────────────────────── */}
       <section className="bg-[#fdf6ee] px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
+          {/* ── Type filter pills ── */}
+          {types.length > 0 && (
+            <div className="mb-7 flex flex-wrap gap-2">
+              <Link
+                href={buildHref({ page: 1, typeId: "" })}
+                className={[
+                  "rounded-full border px-4 py-1.5 text-xs font-semibold transition",
+                  !typeId
+                    ? "border-[#c2620a] bg-[#c2620a] text-white"
+                    : "border-[#e8c49a] bg-white text-[#6b4c2a] hover:border-[#c2620a]/40",
+                ].join(" ")}
+              >
+                All
+              </Link>
+              {types.map((t) => (
+                <Link
+                  key={t.id}
+                  href={buildHref({ page: 1, typeId: t.id })}
+                  className={[
+                    "rounded-full border px-4 py-1.5 text-xs font-semibold transition",
+                    typeId === t.id
+                      ? "border-[#c2620a] bg-[#c2620a] text-white"
+                      : "border-[#e8c49a] bg-white text-[#6b4c2a] hover:border-[#c2620a]/40",
+                  ].join(" ")}
+                >
+                  {t.name}
+                </Link>
+              ))}
+            </div>
+          )}
+
           {sermons.length > 0 ? (
             <>
               <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -109,6 +156,7 @@ export default async function SermonsPage({
                 page={page}
                 totalPages={totalPages}
                 basePath="/sermons"
+                typeId={typeId!}
               />
             </>
           ) : (
@@ -132,7 +180,9 @@ export default async function SermonsPage({
                 No messages yet
               </p>
               <p className="mt-2 text-sm text-[#6b4c2a]">
-                Published teaching will appear here. Check back soon.
+                {typeId
+                  ? "No messages found for this type. Try a different filter."
+                  : "Published teaching will appear here. Check back soon."}
               </p>
             </div>
           )}

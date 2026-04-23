@@ -96,6 +96,7 @@ const ways = [
   {
     title: "Plan a visit",
     text: "First time? We'll help you know what to expect and feel right at home.",
+    url: "/plan-visit",
     icon: (
       <svg
         className="h-5 w-5"
@@ -115,6 +116,7 @@ const ways = [
   {
     title: "Prayer request",
     text: "Share what's on your heart. Our team prays together faithfully.",
+    url: "/prayer-request",
     icon: (
       <svg
         className="h-5 w-5"
@@ -133,6 +135,7 @@ const ways = [
   },
   {
     title: "Join a ministry",
+    url: "/ministries",
     text: "Ready to serve? We'd love to find a place that fits your gifts.",
     icon: (
       <svg
@@ -198,8 +201,9 @@ export default function ContactPage() {
 
           <div className="grid gap-5 md:grid-cols-3">
             {ways.map((way, i) => (
-              <div
+              <Link
                 key={way.title}
+                href={way.url}
                 className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition hover:border-[#7c3d0f]/20 hover:shadow-lg"
               >
                 <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
@@ -217,7 +221,7 @@ export default function ContactPage() {
                     {way.text}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -276,6 +280,78 @@ export default function ContactPage() {
                     </svg>
                   </Link>
                 ))}
+              </div>
+
+              {/* Social media */}
+              <div className="mt-7">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2a23a]">
+                  Follow us
+                </p>
+                <div className="mt-3 flex flex-wrap gap-3">
+                  <a
+                    href="https://www.facebook.com/churchofchristatredcross"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-4 py-3 transition hover:border-[#1877F2]/40 hover:bg-[#1877F2]/10"
+                  >
+                    {/* Facebook wordmark icon */}
+                    <svg
+                      className="h-5 w-5 shrink-0 text-[#1877F2]"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" />
+                    </svg>
+                    <span className="text-sm font-semibold text-white">
+                      Facebook
+                    </span>
+                    <svg
+                      className="h-3.5 w-3.5 text-white/30 transition group-hover:text-white/60 group-hover:translate-x-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </a>
+
+                  <a
+                    href="https://www.youtube.com/@churchofchristatredcross"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-4 py-3 transition hover:border-[#FF0000]/40 hover:bg-[#FF0000]/10"
+                  >
+                    {/* YouTube icon */}
+                    <svg
+                      className="h-5 w-5 shrink-0 text-[#FF0000]"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                    </svg>
+                    <span className="text-sm font-semibold text-white">
+                      YouTube
+                    </span>
+                    <svg
+                      className="h-3.5 w-3.5 text-white/30 transition group-hover:text-white/60 group-hover:translate-x-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </a>
+                </div>
               </div>
 
               <div className="mt-7 flex flex-wrap gap-3">

@@ -48,15 +48,16 @@ export function PublicFooter() {
 
           <div className="mt-4 flex flex-col gap-2 text-sm text-[#e6c79c] items-center md:items-end">
             {[
-              { label: "Sermons", href: "/sermons" },
-              { label: "Events", href: "/events" },
-              { label: "Ministries", href: "/ministries" },
-              { label: "Contact", href: "/contact" },
-              { label: "Member Login", href: "/login" },
+              { label: "Sermons", href: "/sermons", newTab: false },
+              { label: "Events", href: "/events", newTab: false },
+              { label: "Ministries", href: "/ministries", newTab: false },
+              { label: "Contact", href: "/contact", newTab: false },
+              { label: "Member Login", href: "/login", newTab: true },
             ].map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
+                target={item.newTab ? "_blank" : undefined}
                 className="relative transition-colors duration-200 hover:text-white
                 after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 
                 after:bg-gradient-to-r after:from-[#c2620a] after:to-[#c2a23a] 

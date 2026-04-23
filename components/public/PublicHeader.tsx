@@ -10,6 +10,7 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Ministries", href: "/ministries" },
+  { label: "Homecells", href: "/homecells" },
   { label: "Sermons", href: "/sermons" },
   { label: "Events", href: "/events" },
   { label: "Programs", href: "/programs" },
@@ -51,27 +52,6 @@ export function PublicHeader() {
 
   return (
     <>
-      {/* ── Rotating Verse Bar ─────────────────────────── */}
-      <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#7c3d0f] via-[#c2620a] to-[#7c3d0f]">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-[#7c3d0f] to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-[#7c3d0f] to-transparent" />
-
-        <div className="relative flex h-8 items-center justify-center">
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={verseIndex}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="whitespace-nowrap px-6 text-center text-xs font-medium uppercase tracking-widest text-[#fde5c0]"
-            >
-              {marqueeVerses[verseIndex]}
-            </motion.p>
-          </AnimatePresence>
-        </div>
-      </div>
-
       <header
         className={[
           "sticky top-0 z-40 transition-all duration-300",
@@ -80,6 +60,26 @@ export function PublicHeader() {
             : "bg-[#fdf6ee]/95 backdrop-blur",
         ].join(" ")}
       >
+        {/* ── Rotating Verse Bar ─────────────────────────── */}
+        <div className="relative w-full overflow-hidden bg-linear-to-r from-[#7c3d0f] via-[#c2620a] to-[#7c3d0f]">
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-linear-to-r from-[#7c3d0f] to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-linear-to-l from-[#7c3d0f] to-transparent" />
+          <div className="relative flex min-h-8 items-center justify-center py-1.5">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={verseIndex}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="px-8 text-center text-xs font-medium uppercase tracking-widest text-[#fde5c0] sm:whitespace-nowrap"
+              >
+                {marqueeVerses[verseIndex]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+        </div>
+
         {/* Sunset gradient hairline */}
         <div className="h-[3px] w-full bg-gradient-to-r from-[#7c3d0f] via-[#e8820c] to-[#c2a23a]" />
 

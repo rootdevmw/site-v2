@@ -40,6 +40,7 @@ export default function MemberDetailsPage() {
       {/* Info Card */}
       <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-6 space-y-4">
         <Info label="Phone" value={member.phone} />
+        <Info label="prefix" value={member.prefix} />
         <Info label="Status" value={member.status} />
         <Info label="Location" value={member.location} />
         <Info label="Homecell" value={member.homecell?.name} />

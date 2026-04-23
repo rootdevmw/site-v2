@@ -7,6 +7,7 @@ export async function getPublicPrograms(params?: {
   date?: string;
   fromDate?: string;
   homecellId?: string;
+  typeId?: string;
 }) {
   const searchParams = new URLSearchParams({
     page: String(params?.page ?? 1),
@@ -16,10 +17,14 @@ export async function getPublicPrograms(params?: {
   if (params?.date) searchParams.append("date", params.date);
   if (params?.fromDate) searchParams.append("fromDate", params.fromDate);
   if (params?.homecellId) searchParams.append("homecellId", params.homecellId);
-
+  if (params?.typeId) searchParams.append("typeId", params.typeId);
   return publicApi<Program[]>(`/programs?${searchParams.toString()}`);
 }
 
 export async function getPublicProgram(id: string) {
   return publicApi<Program>(`/programs/${id}`);
+}
+
+export async function getProgramTypes() {
+  return publicApi<{ id: string; name: string }[]>(`/programs/types`);
 }

@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { BaseForm } from "@/components/ui/BaseForm";
 import { dismissToast, showLoading } from "@/lib/toast";
+import { DateInput } from "@/components/ui/DateInput";
 
 export function MemberForm({
   mode = "create",
@@ -38,13 +39,20 @@ export function MemberForm({
     resolver: zodResolver(memberSchema),
     defaultValues: initialData || {
       ministryIds: [],
+      isBaptized: false,
     },
   });
+
+  const isBaptized = form.watch("isBaptized");
 
   const onSubmit = (data: MemberFormValues) => {
     const toastId = showLoading(
       isEdit ? "Updating member..." : "Creating member...",
     );
+
+    if (!data.isBaptized) {
+      data.baptismDate = undefined;
+    }
 
     if (isEdit && initialData?.id) {
       updateMutation.mutate(
@@ -85,6 +93,19 @@ export function MemberForm({
     >
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Status */}
+        <Select
+          label="Prefix"
+          {...form.register("prefix")}
+          error={form.formState.errors.prefix?.message}
+          disabled={isView}
+        >
+          <option value="">Select prefix</option>
+          <option value="PASTOR">Pastor</option>
+          <option value="DEACON">Deacon</option>
+          <option value="SISTER">Sister</option>
+          <option value="BROTHER">Brother</option>
+        </Select>
         <Input
           label="First Name"
           {...form.register("firstName")}
@@ -120,9 +141,8 @@ export function MemberForm({
           disabled={isView}
         >
           <option value="">Select status</option>
-          <option value="Visitor">Visitor</option>
-          <option value="Member">Member</option>
-          <option value="Baptized">Baptized</option>
+          <option value="VISITOR">Visitor</option>
+          <option value="MEMBER">Member</option>
         </Select>
 
         {/* Homecell */}
@@ -140,6 +160,50 @@ export function MemberForm({
           ))}
         </Select>
       </div>
+
+      {/* Baptized Radio Buttons */}
+      <div>
+        <label className="text-sm text-[var(--text-secondary)] mb-2 block">
+          Baptized
+        </label>
+
+        <div className="flex gap-3">
+          {[
+            { label: "Yes", value: true },
+            { label: "No", value: false },
+          ].map((option) => {
+            const selected = isBaptized === option.value;
+
+            return (
+              <button
+                key={option.label}
+                type="button"
+                disabled={isView}
+                onClick={() => form.setValue("isBaptized", option.value)}
+                className={`px-4 py-2 rounded-full text-sm border transition-all duration-200
+                ${
+                  selected
+                    ? "bg-[var(--main-gold)] text-black border-[var(--gold-dark)]"
+                    : "bg-[var(--card-elevated)] text-[var(--text-secondary)] border-[var(--border-soft)] hover:bg-[var(--hover-soft)]"
+                } ${isView ? "opacity-60 cursor-not-allowed" : ""}`}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Baptism Date (conditional) */}
+      {isBaptized && (
+        <DateInput
+          type="date"
+          label="Baptism Date"
+          {...form.register("baptismDate")}
+          error={form.formState.errors.baptismDate?.message}
+          disabled={isView}
+        />
+      )}
 
       {/* Ministries */}
       <div>

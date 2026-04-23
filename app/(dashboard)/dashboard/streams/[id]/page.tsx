@@ -18,7 +18,6 @@ export default function StreamDetailsPage() {
     useSetLiveStream();
 
   const stream = data?.data;
-
   if (isLoading) {
     return <SpiritualLoader message="Loading stream..." />;
   }
