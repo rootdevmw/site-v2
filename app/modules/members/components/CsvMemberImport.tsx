@@ -5,14 +5,17 @@ import { useRouter } from "next/navigation";
 import { useBulkCreateMembers } from "../hooks/useBulkCreateMembers";
 import { MemberFormValues } from "../types/member.types";
 
-const VALID_STATUSES = ["Visitor", "Member", "Baptized"] as const;
+const VALID_STATUSES = ["VISITOR", "MEMBER"] as const;
 type ValidStatus = (typeof VALID_STATUSES)[number];
+const VALID_PREFIXES = ["PASTOR", "DEACON", "SISTER", "BROTHER"] as const;
+type ValidPrefix = (typeof VALID_PREFIXES)[number];
 
 type ParsedRow = {
   firstName: string;
   lastName: string;
   phone: string;
   status: string;
+  prefix: string;
   location: string;
   issues: string[];
 };
@@ -64,7 +67,8 @@ function parseCsv(text: string): ParsedRow[] {
     const lastName = cols[1] || "";
     const phone = cols[2] || "";
     const status = cols[3] || "";
-    const location = cols[4] || "";
+    const prefix = cols[4] || "";
+    const location = cols[5] || "";
 
     const issues: string[] = [];
     if (!firstName) issues.push("First name required");
@@ -73,8 +77,11 @@ function parseCsv(text: string): ParsedRow[] {
     if (!VALID_STATUSES.includes(status as ValidStatus)) {
       issues.push(`Status must be Visitor, Member, or Baptized`);
     }
+    if (prefix && !VALID_PREFIXES.includes(prefix as ValidPrefix)) {
+      issues.push(`Prefix must be PASTOR, DEACON, SISTER, or BROTHER`);
+    }
 
-    return { firstName, lastName, phone, status, location, issues };
+    return { firstName, lastName, phone, status, prefix, location, issues };
   });
 }
 
@@ -119,6 +126,7 @@ export function CsvMemberImport() {
       lastName: r.lastName,
       phone: r.phone,
       status: r.status as ValidStatus,
+      prefix: r.prefix as ValidPrefix,
       location: r.location || undefined,
     }));
 
@@ -134,11 +142,12 @@ export function CsvMemberImport() {
       <div className="rounded-xl border border-(--border-soft) bg-(--card-elevated) px-4 py-3 text-sm text-(--text-secondary) space-y-1">
         <p className="font-medium text-(--text-primary)">Expected CSV format</p>
         <p className="font-mono text-xs">
-          firstName, lastName, phone, status, location
+          firstName, lastName, phone, status, prefix, location
         </p>
         <p className="text-xs">
-          Required: firstName, lastName, phone, status (Visitor / Member /
-          Baptized). Location is optional. First row may be a header.
+          Required: firstName, lastName, phone, status (VISITOR / MEMBER /
+          BAPTIZED). Prefix and Location are optional. First row may be a
+          header.
         </p>
       </div>
 
