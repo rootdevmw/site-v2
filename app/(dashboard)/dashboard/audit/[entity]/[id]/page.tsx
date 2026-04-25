@@ -2,20 +2,17 @@
 
 import { useParams } from "next/navigation";
 import { AuditLog } from "./AuditLog";
-import { useAuditLogs } from "@/app/modules/audit/hooks/useAuditLogs";
+import { useAuditTimeline } from "@/app/modules/audit/hooks/useAuditTimeline";
 
 export default function AuditDetailPage() {
   const { entity, id } = useParams();
 
-  const { data, isLoading } = useAuditLogs({
+  const { data, isLoading } = useAuditTimeline({
     entity: String(entity),
-    entityId: String(id),
-    page: 1,
-    limit: 50,
+    id: String(id),
   });
 
-  const logs = data?.data ?? [];
-
+  const logs = data ?? [];
   if (isLoading) {
     return (
       <div className="px-4 py-10 sm:px-6 lg:px-8">

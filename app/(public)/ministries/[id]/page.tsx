@@ -195,7 +195,9 @@ export default async function PublicMinistryDetailsPage({
 
       {/* ③ DARK — Leadership */}
       {hasLeadership && (
-        <section className="bg-[#2b1405]">
+        <section className="relative overflow-hidden bg-[#2b1405]">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#f3e1cf]" />
+
           <div className="pt-8 pb-6 text-center">
             <div className="flex items-center justify-center gap-4">
               <div className="h-px w-16 bg-[#e8c49a]/25" />
@@ -219,7 +221,7 @@ export default async function PublicMinistryDetailsPage({
               <LeaderPanel person={ministry.overseer} role="Overseer" />
             )}
           </div>
-          <div className="h-8" />
+          <div className="h-16" />
         </section>
       )}
 
@@ -273,43 +275,59 @@ export default async function PublicMinistryDetailsPage({
       )}
 
       {/* ⑤ DARK — Why join */}
-      <section className="bg-[#2b1405] px-6 py-10 sm:px-10">
+      <section className="relative overflow-hidden bg-[#f3e1cf] px-6 py-12 sm:px-10">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(194,98,10,0.12),_transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[#c2620a]/15" />
+
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-4">
-              <div className="h-px w-16 bg-[#e8c49a]/25" />
-              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-[#e8c49a]/60">
+              <div className="h-px w-16 bg-[#c2620a]/20" />
+              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-[#a55009]">
                 Why join
               </p>
-              <div className="h-px w-16 bg-[#e8c49a]/25" />
+              <div className="h-px w-16 bg-[#c2620a]/20" />
             </div>
-            <h2 className="mt-2 text-xl font-bold text-white">
+            <h2 className="mt-2 text-xl font-bold text-[#2b1405]">
               Grow through serving
             </h2>
+            <p className="mx-auto mt-3 max-w-2xl font-sans text-sm leading-7 text-[#6b4022]">
+              Ministry is not only about filling a role. It is a place to grow,
+              belong, and offer what God has placed in your hands.
+            </p>
           </div>
 
-          <div className="grid gap-px bg-[#e8c49a]/10 border border-[#e8c49a]/10 rounded-xl overflow-hidden sm:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-3">
             {[
               {
                 title: "Spiritual growth",
                 detail:
                   "Serving strengthens your walk with God and deepens your faith.",
+                accent: "from-[#fff4e8] to-[#f7dfc4]",
               },
               {
                 title: "Community",
                 detail:
                   "Build lasting relationships and serve alongside others in unity.",
+                accent: "from-[#fff7ef] to-[#f0d8bf]",
               },
               {
                 title: "Purpose",
                 detail:
                   "Use your gifts meaningfully to impact lives and glorify God.",
+                accent: "from-[#fff2e3] to-[#edd0af]",
               },
             ].map((item) => (
-              <div key={item.title} className="bg-[#2b1405] p-6 text-center">
-                <div className="mx-auto mb-3 h-px w-8 bg-[#e8c49a]/30" />
-                <h3 className="text-sm font-bold text-white">{item.title}</h3>
-                <p className="mt-2 font-sans text-sm leading-6 text-[#e6c79c]/70">
+              <div
+                key={item.title}
+                className={`rounded-2xl border border-white/70 bg-gradient-to-br ${item.accent} p-6 text-center shadow-[0_18px_40px_rgba(78,38,10,0.08)]`}
+              >
+                <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-[#c2620a]/15 bg-white/70">
+                  <div className="h-3 w-3 rounded-full bg-[#c2620a]/70" />
+                </div>
+                <div className="mx-auto mt-4 mb-3 h-px w-10 bg-[#c2620a]/20" />
+                <h3 className="text-sm font-bold text-[#2b1405]">{item.title}</h3>
+                <p className="mt-2 font-sans text-sm leading-6 text-[#6b4022]">
                   {item.detail}
                 </p>
               </div>

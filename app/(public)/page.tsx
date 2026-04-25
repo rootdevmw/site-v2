@@ -8,7 +8,7 @@ import { getPublicMinistries } from "@/lib/public-api/ministries";
 import { getLiveStream } from "@/lib/public-api/streams";
 
 function formatDay(value?: string | null) {
-  if (!value) return "–";
+  if (!value) return "-";
   return new Date(value).toLocaleDateString(undefined, { day: "numeric" });
 }
 
@@ -46,7 +46,6 @@ export default async function PublicHomePage() {
 
   return (
     <div className="font-sans">
-      {/* ── LIVE BANNER ───────────────────────────────────────── */}
       {liveStream && (
         <div className="relative z-50 bg-[#a04747] px-4 py-3 text-white">
           <div className="mx-auto flex max-w-screen-2xl items-center justify-between gap-4">
@@ -56,7 +55,7 @@ export default async function PublicHomePage() {
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
               </span>
               <p className="text-sm font-semibold tracking-wide">
-                Live now —{" "}
+                Live now -{" "}
                 <span className="font-normal opacity-90">
                   {liveStream.title}
                 </span>
@@ -66,21 +65,17 @@ export default async function PublicHomePage() {
               href="/live"
               className="shrink-0 rounded-md border border-white/40 px-3 py-1 text-xs font-semibold uppercase tracking-widest transition hover:bg-white/10"
             >
-              Join stream →
+              Join stream &rarr;
             </Link>
           </div>
         </div>
       )}
 
-      {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="relative min-h-[640px] overflow-hidden bg-[#1a0a02]">
-        {/* Background carousel */}
         <HeroCarousel />
 
-        {/* Overlay — slightly denser to keep text legible over brighter images */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#1a0a02]/75 via-[#2b1405]/55 to-[#3d1a07]/35" />
 
-        {/* Decorative cross */}
         <div className="absolute right-0 top-0 h-[500px] w-[500px] opacity-[0.06]">
           <svg viewBox="0 0 200 200" fill="none">
             <rect x="85" y="20" width="30" height="160" fill="white" />
@@ -88,9 +83,7 @@ export default async function PublicHomePage() {
           </svg>
         </div>
 
-        {/* Content */}
         <div className="relative mx-auto grid min-h-[640px] max-w-screen-2xl items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8">
-          {/* LEFT — TEXT */}
           <div>
             <div className="mb-5 flex items-center gap-3">
               <div className="h-px w-8 bg-[#e8c49a]" />
@@ -106,8 +99,9 @@ export default async function PublicHomePage() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-8 text-[#fde5c0]">
-              Join us for worship, teaching, fellowship, and practical ministry
-              shaped by the hope of the gospel.
+              Every church story begins with an invitation. Join us for
+              worship, teaching, fellowship, and practical ministry shaped by
+              the hope of the gospel.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-4">
@@ -115,18 +109,17 @@ export default async function PublicHomePage() {
                 href="/live"
                 className="rounded-lg bg-white px-6 py-3.5 text-sm font-semibold text-[#2b1405] shadow-lg transition hover:bg-[#faebd7] hover:shadow-xl active:scale-[0.98]"
               >
-                Watch live →
+                Watch live &rarr;
               </Link>
               <Link
                 href="/about"
                 className="rounded-lg border border-white/30 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white/60 hover:bg-white/10"
               >
-                Our story →
+                Our story &rarr;
               </Link>
             </div>
           </div>
 
-          {/* RIGHT — VISUAL CARD (fills space) */}
           <div className="relative hidden lg:block">
             <div className="rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur-md shadow-xl">
               <p className="text-xs font-semibold uppercase tracking-widest text-[#e8c49a]">
@@ -148,36 +141,37 @@ export default async function PublicHomePage() {
               </div>
 
               <div className="mt-6 border-t border-white/10 pt-4 text-sm leading-6 text-[#fde5c0]">
-                We are grateful that you're here. More than anything, it is our
-                prayer that this website leads you closer to God — so that you
-                too may experience the blessing of being part of the Body of
-                Christ. The Church is more than bricks and mortar; it is a
-                living, breathing body made up of people. Together, we are the
-                hands and feet of our Lord and Savior, Jesus Christ. Welcome,
-                and we hope to see you soon!
+                We are grateful that you&apos;re here. Our hope is that this
+                first step online leads naturally to the next one in person:
+                finding a place to worship, people to walk with, and meaningful
+                ways to grow in Christ together.
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── EVENTS ────────────────────────────────────────────── */}
       <section className="px-4 py-14 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-8 flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
-                This week
+                Start here
               </p>
               <h2 className="font-serif mt-2 text-2xl font-semibold text-[#4a2008] sm:text-3xl">
                 Upcoming gatherings
               </h2>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-[#6b4c2a]">
+                After the invitation comes a place to show up. These are the
+                moments where we gather, worship, pray, and make room for one
+                another.
+              </p>
             </div>
             <Link
               href="/events"
               className="hidden shrink-0 text-sm font-semibold text-[#4a2008] underline underline-offset-4 hover:text-[#c2620a] sm:block"
             >
-              All events →
+              All events &rarr;
             </Link>
           </div>
 
@@ -252,7 +246,7 @@ export default async function PublicHomePage() {
                     <div className="mt-4 flex items-center gap-1 border-t border-[#faebd7] pt-4 text-xs font-semibold text-[#c2620a]">
                       View details
                       <span className="transition-transform group-hover:translate-x-1">
-                        →
+                        &rarr;
                       </span>
                     </div>
                   </div>
@@ -269,28 +263,32 @@ export default async function PublicHomePage() {
             href="/events"
             className="mt-6 flex items-center justify-center text-sm font-semibold text-[#4a2008] underline underline-offset-4 sm:hidden"
           >
-            View all events →
+            View all events &rarr;
           </Link>
         </div>
       </section>
 
-      {/* ── SERMONS ───────────────────────────────────────────── */}
       <section className="bg-[#2b1405] px-4 py-14 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-8 flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#e8c49a]">
-                Teaching
+                Keep growing
               </p>
               <h2 className="font-serif mt-2 text-2xl font-semibold text-white sm:text-3xl">
                 Latest messages
               </h2>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-[#fde5c0]/75">
+                Gathering together opens the door, and God&apos;s Word keeps
+                shaping the journey. Read recent messages that continue the
+                conversation beyond Sunday.
+              </p>
             </div>
             <Link
               href="/sermons"
               className="hidden shrink-0 text-sm font-semibold text-[#e8c49a] underline underline-offset-4 hover:text-white sm:block"
             >
-              All sermons →
+              All sermons &rarr;
             </Link>
           </div>
 
@@ -314,7 +312,7 @@ export default async function PublicHomePage() {
                   <div className="mt-5 flex items-center gap-1 border-t border-white/10 pt-4 text-xs font-semibold text-[#e8c49a]">
                     Read
                     <span className="transition-transform group-hover:translate-x-1">
-                      →
+                      &rarr;
                     </span>
                   </div>
                 </Link>
@@ -328,27 +326,27 @@ export default async function PublicHomePage() {
         </div>
       </section>
 
-      {/* ── MINISTRIES ────────────────────────────────────────── */}
       <section className="bg-[#fdf6ee] px-4 py-14 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-8 flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
-                Serve
+                Belong and serve
               </p>
               <h2 className="font-serif mt-2 text-2xl font-semibold text-[#4a2008] sm:text-3xl">
                 Find your place
               </h2>
               <p className="mt-2 max-w-md text-sm text-[#6b4c2a]">
-                Every gift matters. Explore the teams serving our church and
-                community.
+                As faith deepens, it finds expression in people and purpose.
+                Every gift matters, and these ministries are some of the ways
+                our church serves one another and our wider community.
               </p>
             </div>
             <Link
               href="/ministries"
               className="mt-3 inline-flex items-center gap-2 self-start rounded-lg bg-[#c2620a] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#7c3d0f] lg:self-auto"
             >
-              All ministries →
+              All ministries &rarr;
             </Link>
           </div>
 
@@ -389,16 +387,15 @@ export default async function PublicHomePage() {
         </div>
       </section>
 
-      {/* ── CLOSING CTA ───────────────────────────────────────── */}
       <section className="border-t border-[#e8c49a] bg-white px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-screen-2xl flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-screen-2xl flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
-              New here?
+              Your next step
             </p>
             <p className="mt-1 text-[15px] font-medium text-[#4a2008]">
-              You're welcome just as you are — no expectations, just a warm
-              welcome.
+              If this story feels like one you want to step into, we would love
+              to help you move from visiting to belonging.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

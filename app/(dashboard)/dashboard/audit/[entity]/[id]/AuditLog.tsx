@@ -2,10 +2,25 @@
 
 import { useState } from "react";
 
-// ── Types ────────────────────────────────────────────────
 interface AuditEntry {
   id: string;
   userId: string | null;
+  user?: {
+    id: string;
+    email?: string | null;
+    roles?: Array<{
+      role?: {
+        id?: string;
+        name?: string | null;
+      } | null;
+    }>;
+    member?: {
+      id?: string;
+      prefix?: string | null;
+      firstName?: string | null;
+      lastName?: string | null;
+    } | null;
+  } | null;
   action: string;
   entity: string;
   entityId: string | null;
@@ -21,7 +36,6 @@ interface AuditLogProps {
   entries: AuditEntry[];
 }
 
-// ── Helpers ──────────────────────────────────────────────
 function formatAction(action: string) {
   return action
     .split("_")
@@ -49,16 +63,18 @@ function formatTime(value: string) {
 }
 
 function actionColor(action: string) {
-  if (action.includes("CREAT") || action.includes("ADD"))
+  if (action.includes("CREAT") || action.includes("ADD")) {
     return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
-  if (action.includes("DELET") || action.includes("REMOV"))
+  }
+  if (action.includes("DELET") || action.includes("REMOV")) {
     return "bg-red-500/10 text-red-400 border-red-500/20";
-  if (action.includes("UPDAT") || action.includes("EDIT"))
+  }
+  if (action.includes("UPDAT") || action.includes("EDIT")) {
     return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+  }
   return "bg-[var(--hover-soft)] text-[var(--text-secondary)] border-[var(--border-soft)]";
 }
 
-// ── Diff engine ──────────────────────────────────────────
 function flattenObject(
   obj: Record<string, any>,
   prefix = "",
@@ -116,7 +132,7 @@ function computeDiff(
 }
 
 function renderValue(val: any): string {
-  if (val === null || val === undefined) return "—";
+  if (val === null || val === undefined) return "-";
   if (typeof val === "boolean") return val ? "Yes" : "No";
   if (typeof val === "string" && val === "") return "(empty)";
   return String(val);
@@ -131,10 +147,27 @@ function formatKey(key: string) {
         .replace(/^./, (s) => s.toUpperCase())
         .trim(),
     )
-    .join(" › ");
+    .join(" > ");
 }
 
-// ── Diff Panel ───────────────────────────────────────────
+function getActorName(entry: AuditEntry) {
+  const firstName = entry.user?.member?.firstName?.trim();
+  const lastName = entry.user?.member?.lastName?.trim();
+  const fullName = [firstName, lastName].filter(Boolean).join(" ").trim();
+
+  if (fullName) return fullName;
+  if (entry.user?.email) return entry.user.email;
+  if (entry.userId) return `User #${entry.userId}`;
+  return "Unknown user";
+}
+
+function getActorRole(entry: AuditEntry) {
+  return entry.user?.roles
+    ?.map((item) => item.role?.name)
+    .filter(Boolean)
+    .join(", ");
+}
+
 function DiffPanel({
   before,
   after,
@@ -146,10 +179,10 @@ function DiffPanel({
   const { changed, unchanged } = computeDiff(before, after);
 
   return (
-    <div className="mt-3 rounded-xl border border-[var(--border-soft)] bg-[var(--card-elevated)] overflow-hidden text-xs">
+    <div className="mt-3 overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--card-elevated)] text-xs">
       {changed.length > 0 ? (
         <div>
-          <p className="px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] border-b border-[var(--border-soft)]">
+          <p className="border-b border-[var(--border-soft)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)]">
             {changed.length} field{changed.length !== 1 ? "s" : ""} changed
           </p>
           <div className="divide-y divide-[var(--border-soft)]">
@@ -159,25 +192,25 @@ function DiffPanel({
                 className="grid grid-cols-[1fr_auto_1fr] items-start gap-2 px-4 py-2.5"
               >
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-0.5">
+                  <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
                     {formatKey(key)}
                   </p>
                   <p
                     className={`break-all ${
                       b !== undefined
-                        ? "line-through text-red-400"
+                        ? "text-red-400 line-through"
                         : "text-[var(--text-secondary)]"
                     }`}
                   >
                     {renderValue(b)}
                   </p>
                 </div>
-                <div className="pt-4 text-[var(--text-secondary)]">→</div>
+                <div className="pt-4 text-[var(--text-secondary)]">{"->"}</div>
                 <div className="pt-4">
                   <p
                     className={`break-all ${
                       a !== undefined
-                        ? "text-emerald-400 font-medium"
+                        ? "font-medium text-emerald-400"
                         : "text-[var(--text-secondary)]"
                     }`}
                   >
@@ -198,9 +231,9 @@ function DiffPanel({
         <div className="border-t border-[var(--border-soft)]">
           <button
             onClick={() => setShowUnchanged((v) => !v)}
-            className="w-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-left"
+            className="w-full px-4 py-2 text-left text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
           >
-            {showUnchanged ? "▾" : "▸"} {unchanged.length} unchanged field
+            {showUnchanged ? "v" : ">"} {unchanged.length} unchanged field
             {unchanged.length !== 1 ? "s" : ""}
           </button>
           {showUnchanged && (
@@ -213,7 +246,7 @@ function DiffPanel({
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
                     {formatKey(key)}
                   </p>
-                  <p className="text-[var(--text-primary)] break-all text-right">
+                  <p className="break-all text-right text-[var(--text-primary)]">
                     {renderValue(value)}
                   </p>
                 </div>
@@ -226,37 +259,33 @@ function DiffPanel({
   );
 }
 
-// ── Audit Row ────────────────────────────────────────────
 function AuditRow({ entry }: { entry: AuditEntry }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="border-b border-[var(--border-soft)] last:border-0">
+    <div className="last:border-0 border-b border-[var(--border-soft)]">
       <button
         onClick={() => setExpanded((v) => !v)}
-        className="w-full text-left px-5 py-4 flex items-start gap-4 hover:bg-[var(--hover-soft)] transition-colors"
+        className="flex w-full items-start gap-4 px-5 py-4 text-left transition-colors hover:bg-[var(--hover-soft)]"
       >
-        {/* Date block */}
-        <div className="shrink-0 w-10 text-center pt-0.5">
+        <div className="w-10 shrink-0 pt-0.5 text-center">
           <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
             {formatDate(entry.createdAt).split(" ")[1]}
           </p>
           <p className="text-lg font-bold leading-none text-[var(--text-primary)]">
             {new Date(entry.createdAt).getDate()}
           </p>
-          <p className="text-[10px] text-[var(--text-secondary)] mt-0.5">
+          <p className="mt-0.5 text-[10px] text-[var(--text-secondary)]">
             {formatTime(entry.createdAt)}
           </p>
         </div>
 
-        {/* Divider */}
         <div className="mt-1 h-8 w-px shrink-0 bg-[var(--border-soft)]" />
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${actionColor(entry.action)}`}
+              className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest ${actionColor(entry.action)}`}
             >
               {formatAction(entry.action)}
             </span>
@@ -266,13 +295,31 @@ function AuditRow({ entry }: { entry: AuditEntry }) {
                 {formatEntity(entry.entity)}
               </span>
               {entry.entityId && (
-                <span className="text-[var(--text-secondary)] opacity-50">
+                <span className="opacity-50 text-[var(--text-secondary)]">
                   {" "}
                   #{entry.entityId}
                 </span>
               )}
             </span>
           </div>
+
+          {(entry.user || entry.userId) && (
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+              <span className="rounded-full bg-[var(--hover-soft)] px-2.5 py-1 font-medium text-[var(--text-primary)]">
+                {getActorName(entry)}
+              </span>
+              {entry.user?.email && (
+                <span className="text-[var(--text-secondary)]">
+                  {entry.user.email}
+                </span>
+              )}
+              {getActorRole(entry) && (
+                <span className="rounded-full border border-[var(--border-soft)] px-2 py-0.5 text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">
+                  {getActorRole(entry)}
+                </span>
+              )}
+            </div>
+          )}
 
           {entry.description && (
             <p className="mt-1 text-sm text-[var(--text-secondary)]">
@@ -286,17 +333,16 @@ function AuditRow({ entry }: { entry: AuditEntry }) {
               const { changed } = computeDiff(entry.before, entry.after);
               if (changed.length === 0) return null;
               return (
-                <p className="mt-1 text-[11px] text-[var(--text-secondary)] truncate">
+                <p className="mt-1 truncate text-[11px] text-[var(--text-secondary)]">
                   Changed: {changed.map((c) => formatKey(c.key)).join(", ")}
                 </p>
               );
             })()}
         </div>
 
-        {/* Chevron + time */}
-        <div className="shrink-0 flex flex-col items-end gap-1.5">
+        <div className="flex shrink-0 flex-col items-end gap-1.5">
           <span className="text-xs text-[var(--text-secondary)]">
-            {expanded ? "▾" : "▸"}
+            {expanded ? "v" : ">"}
           </span>
         </div>
       </button>
@@ -305,12 +351,15 @@ function AuditRow({ entry }: { entry: AuditEntry }) {
         <div className="px-5 pb-5">
           <DiffPanel before={entry.before} after={entry.after} />
 
-          {(entry.ipAddress || entry.userAgent || entry.userId) && (
+          {(entry.ipAddress || entry.userAgent || entry.userId || entry.user) && (
             <div className="mt-3 flex flex-wrap gap-4 text-[10px] text-[var(--text-secondary)] opacity-50">
+              {(entry.user || entry.userId) && (
+                <span>Actor: {getActorName(entry)}</span>
+              )}
               {entry.userId && <span>User ID: {entry.userId}</span>}
               {entry.ipAddress && <span>IP: {entry.ipAddress}</span>}
               {entry.userAgent && (
-                <span className="truncate max-w-xs">UA: {entry.userAgent}</span>
+                <span className="max-w-xs truncate">UA: {entry.userAgent}</span>
               )}
             </div>
           )}
@@ -320,7 +369,6 @@ function AuditRow({ entry }: { entry: AuditEntry }) {
   );
 }
 
-// ── Main Component ───────────────────────────────────────
 export function AuditLog({ entries }: AuditLogProps) {
   if (entries.length === 0) {
     return (
@@ -331,8 +379,8 @@ export function AuditLog({ entries }: AuditLogProps) {
   }
 
   return (
-    <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)] overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-soft)] bg-[var(--card-elevated)]">
+    <div className="overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)]">
+      <div className="flex items-center justify-between border-b border-[var(--border-soft)] bg-[var(--card-elevated)] px-5 py-4">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">
             Audit trail
