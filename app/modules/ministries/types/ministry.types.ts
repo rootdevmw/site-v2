@@ -17,21 +17,27 @@ export type Ministry = {
     id: string;
     firstName: string;
     lastName: string;
+    prefix: string;
+    bio?: { bio: string } | null;
   };
 
   overseer?: {
     id: string;
     firstName: string;
     lastName: string;
+    prefix: string;
+    bio?: { bio: string } | null;
   };
 
   members?: {
     id: string;
     firstName: string;
     lastName: string;
+    prefix: string;
+    bio?: { bio: string } | null;
   }[];
 
-  // 🔥 NEW
+  //  NEW
   events?: Event[];
 };
 

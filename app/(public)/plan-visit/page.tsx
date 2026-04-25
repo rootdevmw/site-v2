@@ -41,41 +41,94 @@ export default function PlanVisitPage() {
 
   if (submitted) {
     return (
-      <div className="font-sans min-h-screen bg-[#fdf6ee] flex items-center justify-center px-4">
-        <div className="max-w-md w-full text-center">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#faebd7] text-[#c2620a]">
-            <svg
-              className="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4.5 12.75l6 6 9-13.5"
-              />
-            </svg>
+      <div className="font-serif bg-[#fdf8f2]">
+        <section className="relative overflow-hidden bg-[#fdf8f2]">
+          <div className="relative mx-auto max-w-2xl px-6 py-12 sm:px-10 text-center">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px w-12 bg-[#e8c49a]/50" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#faebd7] text-[#c2620a]">
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 12.75l6 6 9-13.5"
+                  />
+                </svg>
+              </div>
+              <div className="h-px w-12 bg-[#e8c49a]/50" />
+            </div>
+
+            <h2 className="text-2xl font-bold text-[#2b1405]">
+              You're expected!
+            </h2>
+            <p className="mt-2 font-sans text-sm leading-6 text-[#6b4c2a]">
+              Thank you for letting us know you're coming. We'll do our best to
+              make you feel at home.
+            </p>
+
+            <div className="mt-5 flex justify-center gap-3">
+              <a
+                href="/"
+                className="rounded-lg bg-[#c2620a] px-6 py-2.5 font-sans text-sm font-semibold text-white hover:bg-[#7c3d0f] transition-colors"
+              >
+                Back to home
+              </a>
+              <a
+                href="/events"
+                className="rounded-lg border border-[#e8c49a] bg-white px-6 py-2.5 font-sans text-sm font-semibold text-[#4a2008] hover:bg-[#fdf0e0] transition-colors"
+              >
+                See upcoming events
+              </a>
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <svg width="60" height="12" viewBox="0 0 60 12" fill="none">
+                <circle cx="6" cy="6" r="2" fill="#c2620a" fillOpacity="0.35" />
+                <line
+                  x1="12"
+                  y1="6"
+                  x2="48"
+                  y2="6"
+                  stroke="#c2620a"
+                  strokeOpacity="0.25"
+                  strokeWidth="0.75"
+                />
+                <circle
+                  cx="30"
+                  cy="6"
+                  r="3"
+                  fill="#c2620a"
+                  fillOpacity="0.55"
+                />
+                <line
+                  x1="12"
+                  y1="6"
+                  x2="48"
+                  y2="6"
+                  stroke="#c2620a"
+                  strokeOpacity="0.25"
+                  strokeWidth="0.75"
+                />
+                <circle
+                  cx="54"
+                  cy="6"
+                  r="2"
+                  fill="#c2620a"
+                  fillOpacity="0.35"
+                />
+              </svg>
+            </div>
           </div>
-          <h2 className="font-serif text-2xl font-semibold text-[#4a2008]">
-            You're expected!
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-[#6b4c2a]">
-            Thank you for letting us know you're coming. We'll do our best to
-            make you feel at home.
-          </p>
-          <a
-            href="/"
-            className="mt-8 inline-block rounded-lg bg-[#c2620a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#7c3d0f]"
-          >
-            Back to home
-          </a>
-        </div>
+        </section>
       </div>
     );
   }
-
   return (
     <div className="font-sans">
       {/* ── HERO ── */}

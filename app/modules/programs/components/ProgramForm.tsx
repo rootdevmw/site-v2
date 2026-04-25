@@ -91,7 +91,6 @@ export function ProgramForm({
 
   const { data: membersData } = useMembers({ page: 1, limit: 100 });
   const { data: typesData } = useProgramTypes();
-
   const members = membersData?.data || [];
   const types = typesData?.data || [];
 
@@ -105,6 +104,7 @@ export function ProgramForm({
     defaultValues: initialData
       ? {
           date: toInputDate(initialData.date),
+          location: initialData.location,
           typeId: initialData.type?.id,
           homecellId: initialData.homecellId,
           items:
@@ -118,6 +118,7 @@ export function ProgramForm({
       : {
           date: "",
           typeId: "",
+          location: "",
           items: [],
         },
   });
@@ -141,7 +142,6 @@ export function ProgramForm({
   });
 
   const templates: ProgramTemplate[] = templatesData?.data || [];
-
   function applyTemplate(templateId: string) {
     const template = templates.find((t) => t.id === templateId);
     if (!template) return;
@@ -260,7 +260,12 @@ export function ProgramForm({
             disabled={isView}
             error={errors.date?.message}
           />
-
+          <Input
+            label="Program Location"
+            {...register("location")}
+            error={errors.location?.message}
+            disabled={isView}
+          />
           <div className="flex items-end gap-2">
             <div className="flex-1">
               <Select

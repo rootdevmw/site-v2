@@ -66,7 +66,7 @@ export default async function PublicProgramDetailsPage({
         <div className="mx-auto max-w-3xl">
           <div className="rounded-2xl border border-[#e8c49a] bg-white p-8">
             <h2 className="font-serif text-2xl text-[#4a2008] mb-6">
-              Order of Service
+              Location of Service: {program.location || "TBD"}
             </h2>
 
             <div className="space-y-4">

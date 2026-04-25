@@ -72,6 +72,7 @@ export default function EditMemberPage() {
             location: member.location,
             homecellId: member.homecell?.id || "",
             ministryIds: member.ministries?.map((m: Ministry) => m.id) || [],
+            bio: member.bio || "",
           }}
           onDelete={async () => {
             await deleteMember(member.id);

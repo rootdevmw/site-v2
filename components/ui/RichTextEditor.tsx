@@ -1,39 +1,38 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import ImageResize from "tiptap-extension-resize-image";
 
 import {
   forwardRef,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
-  useMemo,
 } from "react";
 
 import {
   FaBold,
+  FaBook,
+  FaImage,
   FaItalic,
+  FaLink,
+  FaListOl,
+  FaListUl,
+  FaMusic,
   FaStrikethrough,
   FaUnderline,
-  FaListUl,
-  FaListOl,
-  FaImage,
-  FaLink,
   FaYoutube,
-  FaBook,
-  FaMusic,
-  FaVideo,
 } from "react-icons/fa";
 
-import { FormField } from "./FormField";
-import { Scripture } from "./ScriptureExtension";
-import { SafeYoutube } from "./SafeYoutubeExtension";
-import { showError } from "@/lib/toast";
 import { useUploadMedia } from "@/app/modules/content/hooks/useUploadMedia";
+import { showError } from "@/lib/toast";
+import { FormField } from "./FormField";
+import { SafeYoutube } from "./SafeYoutubeExtension";
+import { Scripture } from "./ScriptureExtension";
 
 interface RichTextEditorProps {
   value?: string;
@@ -47,7 +46,6 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
   ({ value, onChange, label, error, disabled = false }, ref) => {
     const imageInputRef = useRef<HTMLInputElement | null>(null);
     const audioInputRef = useRef<HTMLInputElement | null>(null);
-    const videoInputRef = useRef<HTMLInputElement | null>(null);
 
     const { mutateAsync: uploadMedia, isPending: isUploading } =
       useUploadMedia();
@@ -68,10 +66,8 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
       () => [
         StarterKit.configure({ link: false }),
         Underline,
-        Image.configure({
-          HTMLAttributes: {
-            class: "max-w-full h-auto rounded-lg",
-          },
+        ImageResize.configure({
+          inline: false,
         }),
         Link.configure({
           openOnClick: false,
@@ -146,32 +142,6 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
       }
     };
 
-    // VIDEO UPLOAD HANDLER
-    const handleVideoSelect = async (
-      e: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-      const file = e.target.files?.[0];
-      if (!file || !editor) return;
-
-      try {
-        const res = await uploadMedia(file);
-        editor
-          .chain()
-          .focus()
-          .insertContent(
-            `<video controls src="${res.url}" style="width: 100%; max-width: 640px;"></video>`,
-          )
-          .run();
-      } catch {
-        showError("Video upload failed");
-      }
-
-      // Reset input
-      if (videoInputRef.current) {
-        videoInputRef.current.value = "";
-      }
-    };
-
     const handleInsert = () => {
       if (!editor) return;
 
@@ -241,13 +211,6 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
             ref={audioInputRef}
             className="hidden"
             onChange={handleAudioSelect}
-          />
-          <input
-            type="file"
-            accept="video/*"
-            ref={videoInputRef}
-            className="hidden"
-            onChange={handleVideoSelect}
           />
 
           {/* Toolbar */}
@@ -321,15 +284,6 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
                 <FaMusic />
               </ToolbarButton>
 
-              {/* VIDEO BUTTON */}
-              <ToolbarButton
-                title={isUploading ? "Uploading..." : "Upload Video"}
-                onClick={() => videoInputRef.current?.click()}
-                disabled={isUploading}
-              >
-                <FaVideo />
-              </ToolbarButton>
-
               <ToolbarButton title="Add Link" onClick={() => setModal("link")}>
                 <FaLink />
               </ToolbarButton>
@@ -347,10 +301,19 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
                   if (!editor) return;
                   const { from, to } = editor.state.selection;
                   if (from !== to) {
-                    const selected = editor.state.doc.textBetween(from, to, " ");
+                    const selected = editor.state.doc.textBetween(
+                      from,
+                      to,
+                      " ",
+                    );
                     const parsed = parseVerseRef(selected);
                     if (parsed) {
-                      editor.chain().focus().deleteSelection().setScripture(parsed).run();
+                      editor
+                        .chain()
+                        .focus()
+                        .deleteSelection()
+                        .setScripture(parsed)
+                        .run();
                       return;
                     }
                   }
@@ -518,7 +481,9 @@ function Divider() {
 function parseVerseRef(text: string) {
   const m = text
     .trim()
-    .match(/^((?:[1-3]\s+)?[A-Za-z]+(?:\s+[A-Za-z]+){0,3})\s+(\d+):(\d+)(?:-(\d+))?$/);
+    .match(
+      /^((?:[1-3]\s+)?[A-Za-z]+(?:\s+[A-Za-z]+){0,3})\s+(\d+):(\d+)(?:-(\d+))?$/,
+    );
   if (!m) return null;
   return {
     book: m[1].trim(),

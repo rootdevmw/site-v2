@@ -98,4 +98,9 @@ export const navigation = [
       },
     ],
   },
+  {
+    label: "Audit",
+    href: "/dashboard/audit",
+    roles: ["ADMIN"],
+  },
 ];

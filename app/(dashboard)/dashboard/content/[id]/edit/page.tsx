@@ -52,7 +52,7 @@ export default function EditContentPage() {
         <ContentForm
           mode="edit"
           initialData={formData}
-          onSuccess={() => router.push("/content")}
+          onSuccess={() => router.push("/dashboard/content")}
           onDelete={handleDelete}
         />
       </div>

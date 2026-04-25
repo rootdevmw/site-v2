@@ -2,7 +2,12 @@ import Link from "next/link";
 import { getPublicPrograms, getProgramTypes } from "@/lib/public-api/programs";
 
 const PAGE_SIZE = 2;
-
+const prefixMap: Record<string, string> = {
+  PASTOR: "Ps",
+  DEACON: "Dec",
+  BROTHER: "Br",
+  SISTER: "Sis",
+};
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString(undefined, {
     weekday: "long",
@@ -161,7 +166,11 @@ export default async function PublicProgramsPage({
                             {program.type.name}
                           </span>
                         </div>
-
+                        <div className="min-w-0 flex-1">
+                          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-[#e8c49a]">
+                            Location: {program.location || "TBD"}
+                          </span>
+                        </div>
                         <Link
                           href={`/programs/${program.id}`}
                           className="shrink-0 rounded-lg border border-white/20 px-3 py-1.5 text-[11px] font-semibold text-white/80 transition hover:bg-white/10 hover:text-white"
@@ -204,8 +213,9 @@ export default async function PublicProgramsPage({
                               {item.responsible && (
                                 <div className="mt-1.5 inline-flex items-center gap-1.5">
                                   <div className="flex h-4 w-4 items-center justify-center rounded-full bg-[#faebd7] text-[8px] font-bold text-[#c2620a]">
-                                    {item.responsible.firstName?.[0]}
-                                    {item.responsible.lastName?.[0]}
+                                    {item.responsible.prefix
+                                      ? prefixMap[item.responsible.prefix]
+                                      : null}
                                   </div>
                                   <span className="text-[11px] text-[#8c6d3f]">
                                     {item.responsible.firstName}{" "}

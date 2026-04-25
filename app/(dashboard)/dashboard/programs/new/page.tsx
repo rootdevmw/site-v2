@@ -116,7 +116,9 @@ export default function NewProgramPage() {
                     <SearchableSelect
                       label=""
                       options={memberOptions}
-                      value={responsibleOverrides[index] ?? item.responsibleId ?? ""}
+                      value={
+                        responsibleOverrides[index] ?? item.responsibleId ?? ""
+                      }
                       onChange={(val) =>
                         setResponsibleOverrides((prev) => ({
                           ...prev,

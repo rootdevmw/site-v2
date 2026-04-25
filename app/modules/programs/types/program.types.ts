@@ -8,6 +8,7 @@ export type ProgramItem = {
     id: string;
     firstName: string;
     lastName: string;
+    prefix?: string;
   } | null;
   responsibleId?: string;
 };
@@ -20,12 +21,15 @@ export type ProgramType = {
 export type Program = {
   id: string;
   date: string;
+  location?: string;
   type: {
     id: string;
     name: string;
   };
   homecellId?: string;
   items: ProgramItem[];
+  tags?: { id: string; name: string }[];
+  scriptures: [];
 };
 
 export type ProgramFormValues = {

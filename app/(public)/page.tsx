@@ -147,8 +147,14 @@ export default async function PublicHomePage() {
                 </div>
               </div>
 
-              <div className="mt-6 border-t border-white/10 pt-4 text-sm text-[#fde5c0]">
-                A welcoming community where you can grow, serve, and belong.
+              <div className="mt-6 border-t border-white/10 pt-4 text-sm leading-6 text-[#fde5c0]">
+                We are grateful that you're here. More than anything, it is our
+                prayer that this website leads you closer to God — so that you
+                too may experience the blessing of being part of the Body of
+                Christ. The Church is more than bricks and mortar; it is a
+                living, breathing body made up of people. Together, we are the
+                hands and feet of our Lord and Savior, Jesus Christ. Welcome,
+                and we hope to see you soon!
               </div>
             </div>
           </div>

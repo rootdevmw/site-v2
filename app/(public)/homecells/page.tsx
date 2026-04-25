@@ -59,58 +59,78 @@ export default async function PublicHomecells({
           {homecells.length > 0 ? (
             <>
               <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {homecells.map((homecell, i) => (
-                  <Link
-                    key={homecell.id}
-                    href={`/homecells/${homecell.id}`}
-                    className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition hover:border-[#7c3d0f]/20 hover:shadow-lg"
-                  >
-                    <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
+                {homecells.map((homecell, i) => {
+                  const upcomingProgram = homecell.programs?.[0];
 
-                    <div className="relative flex flex-1 flex-col p-6">
-                      <span className="font-serif pointer-events-none absolute right-5 top-3 select-none text-6xl font-bold text-[#4a2008]/[0.04]">
-                        {String((page - 1) * PAGE_SIZE + i + 1).padStart(
-                          2,
-                          "0",
-                        )}
-                      </span>
+                  return (
+                    <Link
+                      key={homecell.id}
+                      href={`/homecells/${homecell.id}`}
+                      className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition hover:border-[#7c3d0f]/20 hover:shadow-lg"
+                    >
+                      <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
 
-                      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#faebd7] text-[#4a2008]">
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={1.8}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5M12 12a4 4 0 100-8 4 4 0 000 8z"
-                          />
-                        </svg>
-                      </div>
-
-                      <h2 className="font-serif flex-1 text-lg font-semibold text-[#4a2008] group-hover:text-[#7c3d0f]">
-                        {homecell.name}
-                      </h2>
-
-                      <p className="mt-2 text-sm leading-6 text-[#6b4c2a]">
-                        {homecell.location ||
-                          "Serving together with purpose and unity."}
-                      </p>
-
-                      <div className="mt-5 flex items-center gap-1 border-t border-[#faebd7] pt-4 text-xs font-semibold text-[#c2620a]">
-                        Learn more
-                        <span className="transition-transform group-hover:translate-x-1">
-                          →
+                      <div className="relative flex flex-1 flex-col p-6">
+                        <span className="font-serif pointer-events-none absolute right-5 top-3 select-none text-6xl font-bold text-[#4a2008]/[0.04]">
+                          {String((page - 1) * PAGE_SIZE + i + 1).padStart(
+                            2,
+                            "0",
+                          )}
                         </span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
 
+                        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#faebd7] text-[#4a2008]">
+                          {/* icon unchanged */}
+                          <svg
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={1.8}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5M12 12a4 4 0 100-8 4 4 0 000 8z"
+                            />
+                          </svg>
+                        </div>
+
+                        <h2 className="font-serif flex-1 text-lg font-semibold text-[#4a2008] group-hover:text-[#7c3d0f]">
+                          {homecell.name}
+                        </h2>
+
+                        <p className="mt-2 text-sm leading-6 text-[#6b4c2a]">
+                          {homecell.location ||
+                            "Serving together with purpose and unity."}
+                        </p>
+
+                        {/* 🔥 NEW: Upcoming program button */}
+                        {upcomingProgram && (
+                          <Link
+                            href={`/programs/${upcomingProgram.id}`}
+                            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-[#c2a23a] bg-[#fff7e6] px-3 py-2 text-xs font-semibold text-[#7c3d0f] transition hover:bg-[#fdf0d3]"
+                          >
+                            Next Program
+                            <span className="font-normal text-[#6b4c2a]">
+                              {new Date(
+                                upcomingProgram.date,
+                              ).toLocaleDateString()}
+                            </span>
+                            <span className="ml-auto">→</span>
+                          </Link>
+                        )}
+
+                        <div className="mt-5 flex items-center gap-1 border-t border-[#faebd7] pt-4 text-xs font-semibold text-[#c2620a]">
+                          Learn more
+                          <span className="transition-transform group-hover:translate-x-1">
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
               <Pagination
                 page={page}
                 totalPages={totalPages}

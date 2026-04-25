@@ -47,7 +47,7 @@ export default function ProgramDetailsPage() {
         <Info label="Date" value={program.date} />
 
         <Info label="Type" value={program.type?.name} />
-
+        <Info label="Location" value={program.location} />
         <Info
           label="Homecell"
           value={program.homecellId ? "Assigned" : "Church"}

@@ -13,6 +13,7 @@ import { Select } from "@/components/ui/Select";
 import { BaseForm } from "@/components/ui/BaseForm";
 import { dismissToast, showLoading } from "@/lib/toast";
 import { DateInput } from "@/components/ui/DateInput";
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 
 export function MemberForm({
   mode = "create",
@@ -40,6 +41,7 @@ export function MemberForm({
     defaultValues: initialData || {
       ministryIds: [],
       isBaptized: false,
+      bio: "",
     },
   });
 
@@ -132,7 +134,13 @@ export function MemberForm({
           {...form.register("location")}
           disabled={isView}
         />
-
+        <RichTextEditor
+          label="Member Bio"
+          value={form.watch("bio")}
+          onChange={(val) => form.setValue("bio", val)}
+          error={form.formState.errors.bio?.message}
+          disabled={isView}
+        />
         {/* Status */}
         <Select
           label="Status"

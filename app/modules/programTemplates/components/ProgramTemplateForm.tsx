@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { FormField } from "@/components/ui/FormField";
 import { showError, showSuccess } from "@/lib/toast";
+import { useHomecells } from "@/app/modules/homecells/hooks/useHomecells";
 
 export function ProgramTemplateForm({
   initialData,
@@ -37,6 +38,8 @@ export function ProgramTemplateForm({
 
   const { data: typesData, isLoading: typesLoading } = useProgramTypes();
   const programTypes = typesData?.data || [];
+  const { data: homecellsData, isLoading: homecellsLoading } = useHomecells({});
+  const homecells = homecellsData?.data || [];
 
   const { mutateAsync: createType, isPending: creatingType } =
     useCreateProgramType();
@@ -52,6 +55,7 @@ export function ProgramTemplateForm({
     defaultValues: initialData || {
       name: "",
       typeId: "",
+      homecellId: "",
       items: [],
     },
   });
@@ -135,6 +139,23 @@ export function ProgramTemplateForm({
         {programTypes.map((type: any) => (
           <option key={type.id} value={type.id}>
             {type.name}
+          </option>
+        ))}
+      </Select>
+
+      <Select
+        label="Homecell"
+        {...register("homecellId")}
+        error={errors.homecellId?.message}
+        disabled={isView}
+      >
+        <option value="">
+          {homecellsLoading ? "Loading..." : "Select homecell"}
+        </option>
+
+        {homecells.map((homecell: any) => (
+          <option key={homecell.id} value={homecell.id}>
+            {homecell.name}
           </option>
         ))}
       </Select>

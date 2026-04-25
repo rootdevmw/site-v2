@@ -1,3 +1,5 @@
+import { Program } from "../../programs/types/program.types";
+
 export type Homecell = {
   id: string;
   name: string;
@@ -6,12 +8,23 @@ export type Homecell = {
     id: string;
     firstName: string;
     lastName: string;
+    prefix?: string;
+    bio?: {
+      bio: string;
+      id: string;
+    };
   } | null;
   overseer?: {
     id: string;
     firstName: string;
     lastName: string;
+    prefix?: string;
+    bio?: {
+      bio: string;
+      id: string;
+    };
   } | null;
+  programs?: Program[];
 };
 
 export type HomecellFormValues = {

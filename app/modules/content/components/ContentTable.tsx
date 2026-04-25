@@ -37,7 +37,7 @@ export function ContentTable({
       actions={(c) => (
         <>
           <button
-            onClick={() => router.push(`/content/${c.id}/edit`)}
+            onClick={() => router.push(`/dashboard/content/${c.id}/edit`)}
             className="text-[var(--main-gold)]"
           >
             Edit

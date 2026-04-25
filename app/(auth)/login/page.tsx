@@ -1,12 +1,27 @@
+"use client";
+
+import Link from "next/link";
 import { GuestGuard } from "@/app/modules/auth/components/GuestGuard";
 import { LoginForm } from "@/app/modules/auth/components/LoginForm";
 
 export default function LoginPage() {
   return (
     <GuestGuard>
-      <div
-        className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden bg-[var(--bg-dark)] text-[var(--text-primary)]"
-      >
+      <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden bg-[var(--bg-dark)] text-[var(--text-primary)]">
+        {/* Public site link */}
+        <Link
+          href="/"
+          className="
+            absolute top-6 left-6
+            text-xs font-medium
+            text-[var(--text-secondary)]
+            hover:text-[var(--text-primary)]
+            transition-colors
+          "
+        >
+          ← Back to website
+        </Link>
+
         {/* Soft ambient glow */}
         <div className="absolute inset-0 bg-[var(--card-elevated)] blur-3xl opacity-40 pointer-events-none" />
 
@@ -16,14 +31,18 @@ export default function LoginPage() {
             <h1 className="text-3xl font-semibold tracking-wide">
               Church of Christ at Redcross
             </h1>
-            <p className="text-sm text-[var(--text-secondary)]">Internal Management System</p>
+            <p className="text-sm text-[var(--text-secondary)]">
+              Internal Management System
+            </p>
           </div>
 
           {/* Card */}
           <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-8 space-y-6">
             <div className="text-center space-y-1">
               <h2 className="text-xl font-medium">Welcome back</h2>
-              <p className="text-sm text-[var(--text-secondary)]">Sign in to continue</p>
+              <p className="text-sm text-[var(--text-secondary)]">
+                Sign in to continue
+              </p>
             </div>
 
             <LoginForm />

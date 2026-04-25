@@ -35,6 +35,8 @@ export function Pagination({
   totalPages: number;
   basePath: string;
   typeId?: string; // optional so it works on pages without filtering
+  search?: string;
+  tags?: string;
 }) {
   if (totalPages <= 1) return null;
 

@@ -13,9 +13,8 @@ export function useAttentionNotifications() {
 
   async function fetchNotifications() {
     const res = await api.get("/attention/manage");
-
-    const { prayers, visitors, counts } = res.data.data;
-
+    const { prayers, visitors } = res.data.data;
+    const counts = res.data.meta.counts;
     setCounts(counts);
     setPrayers(prayers);
     setVisitors(visitors);

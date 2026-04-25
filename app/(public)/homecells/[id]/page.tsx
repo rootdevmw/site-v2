@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getPublicHomecell } from "@/lib/public-api/homecells";
+import { CiLocationOn } from "react-icons/ci";
 
 export default async function PublicMinistryDetailsPage({
   params,
@@ -11,7 +12,12 @@ export default async function PublicMinistryDetailsPage({
   const { id } = await params;
   const res = await getPublicHomecell(id);
   const homecell = res.data;
-
+  const prefixAbbr: Record<string, string> = {
+    BROTHER: "Br",
+    PASTOR: "Ps",
+    DEACON: "Dec",
+    SISTER: "Sis",
+  };
   if (!homecell) {
     notFound();
   }
@@ -35,16 +41,17 @@ export default async function PublicMinistryDetailsPage({
             ← Back to homecells
           </Link>
 
-          <div className="mt-5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#e8c49a]/70">
+          <div className="mt-5 relative overflow-hidden rounded-xl border border-[#e8c49a]/20 bg-gradient-to-br from-[#e8c49a]/10 to-[#e8c49a]/[0.03] p-6">
+            <div className="pointer-events-none absolute top-0 right-0 w-48 h-48 bg-[radial-gradient(circle,rgba(232,196,154,0.15)_0%,transparent_70%)]" />
+            <span className="inline-block rounded-full bg-[#e8c49a]/15 px-3 py-1 text-[11px] font-medium tracking-widest uppercase text-[#e8c49a]">
               Homecell
-            </p>
-
-            <h1 className="mt-1.5 font-serif text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
+            </span>
+            <h1 className="mt-3 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
               {homecell.name}
             </h1>
-
-            <p className="mt-2.5 max-w-xl text-sm leading-6 text-[#fde5c0]/80">
+            <div className="mt-3 w-10 h-0.5 bg-gradient-to-r from-[#e8c49a] to-transparent" />
+            <p className="mt-3 flex items-center gap-2 text-sm leading-6 text-[#fde5c0]/70">
+              <CiLocationOn className="h-4 w-4 text-[#e8c49a]" />
               {homecell.location ??
                 "Serving together with purpose and unity in Christ."}
             </p>
@@ -67,22 +74,48 @@ export default async function PublicMinistryDetailsPage({
             </p>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {/* LEADER */}
               <div className="rounded-xl bg-[#fff7ec] border border-[#f1d6b3] p-4">
                 <p className="text-[10px] uppercase tracking-wider text-[#c2620a] font-semibold">
                   Leader
                 </p>
+
                 <p className="mt-1.5 text-sm font-medium text-[#4a2008]">
+                  {homecell.leader?.prefix &&
+                    `${prefixAbbr[homecell.leader.prefix]}.`}{" "}
                   {homecell.leader?.firstName} {homecell.leader?.lastName}
                 </p>
+
+                {homecell.leader?.bio?.bio && (
+                  <div
+                    className="mt-3 text-xs leading-5 text-[#6b4c2a] prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{
+                      __html: homecell.leader.bio.bio,
+                    }}
+                  />
+                )}
               </div>
 
+              {/* OVERSEER */}
               <div className="rounded-xl bg-[#fff7ec] border border-[#f1d6b3] p-4">
                 <p className="text-[10px] uppercase tracking-wider text-[#c2620a] font-semibold">
                   Overseer
                 </p>
+
                 <p className="mt-1.5 text-sm font-medium text-[#4a2008]">
+                  {homecell.overseer?.prefix &&
+                    `${prefixAbbr[homecell.overseer.prefix]}.`}{" "}
                   {homecell.overseer?.firstName} {homecell.overseer?.lastName}
                 </p>
+
+                {homecell.overseer?.bio?.bio && (
+                  <div
+                    className="mt-3 text-xs leading-5 text-[#6b4c2a] prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{
+                      __html: homecell.overseer.bio.bio,
+                    }}
+                  />
+                )}
               </div>
             </div>
           </div>
