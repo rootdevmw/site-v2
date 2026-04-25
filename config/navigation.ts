@@ -2,58 +2,58 @@ export const navigation = [
   {
     label: "Dashboard",
     href: "/dashboard",
-    roles: ["ADMIN", "PASTOR", "DEACON", "EDITOR", "MEDIA"],
+    roles: ["VISITOR"],
   },
   {
     label: "Members",
     href: "/dashboard/members",
-    roles: ["ADMIN", "PASTOR", "DEACON"],
+    roles: ["DEACON"],
   },
   {
     label: "Ministries",
     href: "/dashboard/ministries",
-    roles: ["ADMIN", "PASTOR", "DEACON"],
+    roles: ["DEACON"],
   },
   {
     label: "Homecells",
     href: "/dashboard/homecells",
-    roles: ["ADMIN", "PASTOR", "DEACON"],
+    roles: ["DEACON"],
   },
   {
     label: "Content",
     href: "/dashboard/content",
-    roles: ["ADMIN", "EDITOR", "DEACON"],
+    roles: ["MEDIA"],
   },
   {
     label: "Events",
     href: "/dashboard/events",
-    roles: ["ADMIN", "EDITOR", "DEACON"],
+    roles: ["DEACON"],
   },
   {
     label: "Announcements",
     href: "/dashboard/announcements",
-    roles: ["ADMIN", "EDITOR", "DEACON"],
+    roles: ["DEACON"],
   },
 
   // PROGRAMS
   {
     label: "Programs",
-    roles: ["ADMIN", "PASTOR", "DEACON"],
+    roles: ["DEACON"],
     children: [
       {
         label: "Programs",
         href: "/dashboard/programs",
-        roles: ["ADMIN", "PASTOR", "DEACON"],
+        roles: ["DEACON"],
       },
       {
         label: "Templates",
         href: "/dashboard/program-templates",
-        roles: ["ADMIN", "PASTOR", "DEACON"],
+        roles: ["DEACON"],
       },
       {
         label: "Types",
         href: "/dashboard/program-types",
-        roles: ["ADMIN", "PASTOR"],
+        roles: ["DEACON"],
       },
     ],
   },
@@ -61,12 +61,12 @@ export const navigation = [
   {
     label: "Streams",
     href: "/dashboard/streams",
-    roles: ["ADMIN", "MEDIA", "DEACON"],
+    roles: ["MEDIA"],
   },
   {
     label: "Newsletters",
     href: "/dashboard/newsletters",
-    roles: ["ADMIN", "EDITOR", "MEDIA", "DEACON"],
+    roles: ["MEDIA"],
   },
 
   // AUTH
@@ -77,24 +77,24 @@ export const navigation = [
       {
         label: "users",
         href: "/dashboard/users",
-        roles: ["ADMIN", "PASTOR", "DEACON"],
+        roles: ["ADMIN"],
       },
       {
         label: "roles",
         href: "/dashboard/roles",
-        roles: ["ADMIN", "PASTOR"],
+        roles: ["ROOT"],
       },
     ],
   },
 
   {
     label: "Settings",
-    roles: ["ADMIN", "PASTOR", "DEACON", "EDITOR", "MEDIA"],
+    roles: ["VISITOR"],
     children: [
       {
         label: "Change Password",
         href: "/dashboard/settings/change-password",
-        roles: ["ADMIN", "PASTOR", "DEACON", "EDITOR", "MEDIA"],
+        roles: ["VISITOR"],
       },
     ],
   },

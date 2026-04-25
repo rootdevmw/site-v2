@@ -49,7 +49,7 @@ const ENTITIES = [
   "SERIES",
   "ATTENTION_ACTION",
 
-  "USER_ROLE",
+  "USERROLE",
 ];
 
 const formatLabel = (entity: string) => entity.toLowerCase().replace(/_/g, " ");

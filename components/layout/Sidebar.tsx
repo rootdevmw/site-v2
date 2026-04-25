@@ -5,6 +5,7 @@ import { JSX, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { navigation } from "@/config/navigation";
 import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/dashboard") return pathname === "/dashboard";
@@ -309,6 +310,7 @@ const ChevronIcon = ({ open }: { open: boolean }) => (
 export function Sidebar() {
   const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
+  const userRoles = user?.roles ?? [];
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     return navigation.reduce(
       (acc, item) => {
@@ -366,13 +368,11 @@ export function Sidebar() {
       <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
         {navigation.map((item) => {
           if (isGroup(item)) {
-            const allowedGroup = item.roles.some((r) =>
-              user?.roles?.includes(r),
-            );
+            const allowedGroup = hasRequiredRole(userRoles, item.roles);
             if (!allowedGroup) return null;
 
             const children = item.children.filter((child) =>
-              child.roles.some((r) => user?.roles?.includes(r)),
+              hasRequiredRole(userRoles, child.roles),
             );
             if (!children.length) return null;
 
@@ -425,7 +425,7 @@ export function Sidebar() {
             );
           }
 
-          const allowed = item.roles.some((r) => user?.roles?.includes(r));
+          const allowed = hasRequiredRole(userRoles, item.roles);
           if (!allowed) return null;
 
           const active = isActivePath(pathname, item.href);

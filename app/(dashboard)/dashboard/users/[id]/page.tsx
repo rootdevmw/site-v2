@@ -5,10 +5,13 @@ import { useState } from "react";
 
 import {
   useUser,
-  useAssignRole,
   useLinkUserToMember,
   useUnlinkUserFromMember,
 } from "@/app/modules/users/hooks/useUserActions";
+import {
+  useSetRole,
+  useRemoveRole,
+} from "@/app/modules/roles/hooks/useRoleActions";
 import { useRequestPasswordReset } from "@/app/modules/auth/hooks/useRequestPasswordReset";
 
 import { useRoles } from "@/app/modules/roles/hooks/useRoles";
@@ -27,7 +30,9 @@ export default function UserDetailPage() {
   const { data: rolesData } = useRoles({ limit: 100 });
   const { data: membersData } = useMembers({ page: 1, limit: 100 });
 
-  const { mutate: assignRole, isPending } = useAssignRole();
+  const { mutate: setRole, isPending: isSettingRole } = useSetRole();
+  const { mutate: removeRole, isPending: isRemovingRole } = useRemoveRole();
+
   const { mutate: linkMember, isPending: isLinking } = useLinkUserToMember();
   const { mutate: unlinkMember, isPending: isUnlinking } =
     useUnlinkUserFromMember();
@@ -50,7 +55,7 @@ export default function UserDetailPage() {
     return <div>User not found</div>;
   }
 
-  const availableRoles = roles.filter((r) => !user.roles.includes(r.name));
+  const currentRole = user.roles?.[0] || null;
 
   const memberOptions = members.map((m) => ({
     value: m.id,
@@ -103,7 +108,7 @@ export default function UserDetailPage() {
         </div>
       </div>
 
-      {/* User Info */}
+      {/* USER INFO */}
       <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6 space-y-6">
         <h2 className="text-lg font-medium text-[var(--text-primary)]">
           User Information
@@ -121,6 +126,23 @@ export default function UserDetailPage() {
 
           <div>
             <label className="text-xs text-[var(--text-secondary)]">
+              Current Role
+            </label>
+            <div className="mt-1">
+              {currentRole ? (
+                <span className="px-3 py-1 rounded-md text-xs bg-[var(--main-gold)] text-black">
+                  {currentRole}
+                </span>
+              ) : (
+                <span className="text-sm text-[var(--text-secondary)]">
+                  No role assigned
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <label className="text-xs text-[var(--text-secondary)]">
               Member
             </label>
             <p className="text-sm mt-1">
@@ -129,7 +151,7 @@ export default function UserDetailPage() {
                   onClick={() =>
                     router.push(`/dashboard/members/${user.member!.id}`)
                   }
-                  className="text-[var(--main-gold)] cursor-pointer hover:underline transition"
+                  className="text-[var(--main-gold)] cursor-pointer hover:underline"
                 >
                   {user.member.firstName} {user.member.lastName}
                 </span>
@@ -137,28 +159,6 @@ export default function UserDetailPage() {
                 <span className="text-[var(--text-secondary)]">Not linked</span>
               )}
             </p>
-          </div>
-
-          <div>
-            <label className="text-xs text-[var(--text-secondary)]">
-              Roles
-            </label>
-            <div className="flex flex-wrap gap-2 mt-1">
-              {user.roles.length > 0 ? (
-                user.roles.map((role) => (
-                  <span
-                    key={role}
-                    className="px-2 py-1 rounded-md text-xs bg-[var(--main-gold)] text-black"
-                  >
-                    {role}
-                  </span>
-                ))
-              ) : (
-                <span className="text-sm text-[var(--text-secondary)]">
-                  No roles assigned
-                </span>
-              )}
-            </div>
           </div>
 
           <div>
@@ -172,7 +172,82 @@ export default function UserDetailPage() {
         </div>
       </div>
 
-      {/* Member Linking */}
+      {/* ROLE MANAGEMENT */}
+      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6 space-y-6">
+        <h2 className="text-lg font-medium text-[var(--text-primary)]">
+          Role Management
+        </h2>
+
+        {/* SET / CHANGE ROLE */}
+        <div className="space-y-3">
+          <label className="text-xs text-[var(--text-secondary)]">
+            Set / Change Role
+          </label>
+
+          <div className="flex gap-4">
+            <select
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+              className="flex-1 px-3 py-2 rounded-lg text-sm bg-[var(--card-elevated)] border border-[var(--border-soft)]"
+            >
+              <option value="">Select role</option>
+              {roles.map((role) => (
+                <option key={role.id} value={role.id}>
+                  {role.name}
+                </option>
+              ))}
+            </select>
+
+            <button
+              onClick={() => {
+                if (!selectedRole) return;
+
+                setRole(
+                  { userId, roleId: selectedRole },
+                  {
+                    onSuccess: () => {
+                      showSuccess("Role updated");
+                      setSelectedRole("");
+                    },
+                    onError: () => showError("Failed to update role"),
+                  },
+                );
+              }}
+              disabled={!selectedRole || isSettingRole}
+              className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black disabled:opacity-60"
+            >
+              {isSettingRole
+                ? "Saving..."
+                : currentRole
+                  ? "Change Role"
+                  : "Set Role"}
+            </button>
+          </div>
+        </div>
+
+        {/* REMOVE ROLE */}
+        {currentRole && (
+          <div className="pt-2 border-t border-[var(--border-soft)]">
+            <button
+              onClick={() =>
+                removeRole(
+                  { userId },
+                  {
+                    onSuccess: () => showSuccess("Role removed"),
+                    onError: () => showError("Failed to remove role"),
+                  },
+                )
+              }
+              disabled={isRemovingRole}
+              className="px-4 py-2 rounded-lg text-sm font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 disabled:opacity-60"
+            >
+              {isRemovingRole ? "Removing..." : "Remove Role"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* MEMBER LINKING (unchanged) */}
       <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6 space-y-6">
         <h2 className="text-lg font-medium text-[var(--text-primary)]">
           Member Linking
@@ -223,45 +298,6 @@ export default function UserDetailPage() {
             </button>
           </div>
         )}
-      </div>
-
-      {/* Assign Role */}
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6 space-y-6">
-        <h2 className="text-lg font-medium text-[var(--text-primary)]">
-          Assign Role
-        </h2>
-
-        <div className="flex gap-4">
-          <select
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value)}
-            className="flex-1 px-3 py-2 rounded-lg text-sm bg-[var(--card-elevated)] border border-[var(--border-soft)]"
-          >
-            <option value="">Select a role</option>
-            {availableRoles.map((role) => (
-              <option key={role.id} value={role.id}>
-                {role.name}
-              </option>
-            ))}
-          </select>
-
-          <button
-            onClick={() => {
-              if (selectedRole) {
-                assignRole(
-                  { userId, roleId: selectedRole },
-                  {
-                    onSuccess: () => setSelectedRole(""),
-                  },
-                );
-              }
-            }}
-            disabled={!selectedRole || isPending}
-            className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black disabled:opacity-60"
-          >
-            {isPending ? "Assigning..." : "Assign Role"}
-          </button>
-        </div>
       </div>
     </div>
   );

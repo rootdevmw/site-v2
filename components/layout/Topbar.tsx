@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/app/modules/auth/store/auth.store";
 import { useLogout } from "@/app/modules/auth/hooks/useLogout";
 import { showError, showSuccess } from "@/lib/toast";
+import { getHighestRole, hasRequiredRole } from "@/lib/auth/roles";
 
 import { useAttentionNotifications } from "@/app/modules/attention/hooks/useAttentionNotifications";
 import { FaPeoplePulling } from "react-icons/fa6";
@@ -41,8 +42,11 @@ export function Topbar() {
   const notifRef = useRef<HTMLDivElement | null>(null);
 
   const pageTitle = getPageTitle(pathname);
-  const primaryRole = (user as any)?.roles?.[0] ?? null;
+  const primaryRole = getHighestRole((user as any)?.roles ?? []);
   const initials = user?.email?.[0]?.toUpperCase() ?? "?";
+  const canManageAttention = hasRequiredRole((user as any)?.roles ?? [], [
+    "DEACON",
+  ]);
 
   // ✅ Handle outside clicks (both dropdowns)
   useEffect(() => {
@@ -73,34 +77,37 @@ export function Topbar() {
       {/* RIGHT */}
       <div className="flex items-center gap-2 relative">
         {/* PRAYER */}
-        <button
-          onClick={() => setNotifOpen((prev) => !prev)}
-          className="relative p-2 rounded-lg hover:bg-[var(--hover-soft)]"
-        >
-          <GiPrayer className="text-lg" />
-          {counts.prayers > 0 && (
-            <span className="absolute -top-1 -right-1 h-4 w-4 text-[10px] flex items-center justify-center bg-orange-500 text-white rounded-full">
-              {counts.prayers}
-            </span>
-          )}
-        </button>
+        {canManageAttention && (
+          <>
+            <button
+              onClick={() => setNotifOpen((prev) => !prev)}
+              className="relative p-2 rounded-lg hover:bg-[var(--hover-soft)]"
+            >
+              <GiPrayer className="text-lg" />
+              {counts.prayers > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 w-4 text-[10px] flex items-center justify-center bg-orange-500 text-white rounded-full">
+                  {counts.prayers}
+                </span>
+              )}
+            </button>
 
-        {/* VISITORS */}
-        <button
-          onClick={() => setNotifOpen((prev) => !prev)}
-          className="relative p-2 rounded-lg hover:bg-[var(--hover-soft)]"
-        >
-          <FaPeoplePulling className="text-lg" />
-          {counts.visitors > 0 && (
-            <span className="absolute -top-1 -right-1 h-4 w-4 text-[10px] flex items-center justify-center bg-blue-500 text-white rounded-full">
-              {counts.visitors}
-            </span>
-          )}
-        </button>
+            <button
+              onClick={() => setNotifOpen((prev) => !prev)}
+              className="relative p-2 rounded-lg hover:bg-[var(--hover-soft)]"
+            >
+              <FaPeoplePulling className="text-lg" />
+              {counts.visitors > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 w-4 text-[10px] flex items-center justify-center bg-blue-500 text-white rounded-full">
+                  {counts.visitors}
+                </span>
+              )}
+            </button>
+          </>
+        )}
 
         {/* ✅ NOTIFICATIONS DROPDOWN */}
         <div ref={notifRef} className="relative">
-          {notifOpen && (
+          {canManageAttention && notifOpen && (
             <div className="absolute right-0 mt-2 w-96 bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-xl shadow-xl z-50 overflow-hidden">
               <div className="px-4 py-3 border-b border-[var(--border-soft)] text-sm font-semibold">
                 Attention Center

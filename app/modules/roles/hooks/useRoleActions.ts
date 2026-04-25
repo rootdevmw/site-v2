@@ -1,5 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getRole, createRole, updateRole, deleteRole } from "../api/roles";
+import {
+  getRole,
+  createRole,
+  updateRole,
+  deleteRole,
+  setUserRole,
+  removeUserRole,
+} from "../api/roles";
+import { showError, showSuccess } from "@/lib/toast";
 
 export function useRole(id: string) {
   return useQuery({
@@ -43,6 +51,51 @@ export function useDeleteRole() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       queryClient.invalidateQueries({ queryKey: ["role"] });
+    },
+  });
+}
+
+// -----------------------------
+// SET ROLE
+// -----------------------------
+export function useSetRole() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: setUserRole,
+
+    onSuccess: (_, variables) => {
+      showSuccess("Role updated");
+
+      // Refresh user + users list
+      queryClient.invalidateQueries({ queryKey: ["user", variables.userId] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+
+    onError: () => {
+      showError("Failed to update role");
+    },
+  });
+}
+
+// -----------------------------
+// REMOVE ROLE
+// -----------------------------
+export function useRemoveRole() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: removeUserRole,
+
+    onSuccess: (_, variables) => {
+      showSuccess("Role removed");
+
+      queryClient.invalidateQueries({ queryKey: ["user", variables.userId] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+
+    onError: () => {
+      showError("Failed to remove role");
     },
   });
 }

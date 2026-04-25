@@ -42,3 +42,28 @@ export async function deleteRole(
   const res = await api.delete(`/roles/${id}`);
   return res.data;
 }
+
+// -----------------------------
+// SET ROLE (single role system)
+// -----------------------------
+export async function setUserRole(params: {
+  userId: string;
+  roleId: string;
+}): Promise<{ success: boolean; data: any; meta: any }> {
+  const res = await api.post(
+    `/auth/users/${params.userId}/role/${params.roleId}`,
+  );
+
+  return res.data;
+}
+
+// -----------------------------
+// REMOVE ROLE
+// -----------------------------
+export async function removeUserRole(params: {
+  userId: string;
+}): Promise<{ success: boolean; data: any; meta: any }> {
+  const res = await api.delete(`/auth/users/${params.userId}/role`);
+
+  return res.data;
+}
