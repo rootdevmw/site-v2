@@ -41,7 +41,8 @@ export default async function PublicProgramDetailsPage({
           </svg>
         </div>
 
-        <div className="relative mx-auto max-w-4xl px-6 py-8 sm:px-10 lg:px-8">
+        {/* 🔥 WIDER HERO CONTAINER */}
+        <div className="relative mx-auto max-w-6xl px-6 py-8 sm:px-10 lg:px-12">
           <Link
             href="/programs"
             className="inline-flex items-center gap-1.5 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-[#e8c49a]/70 hover:text-[#e8c49a] transition-colors"
@@ -64,6 +65,7 @@ export default async function PublicProgramDetailsPage({
           <p className="mx-auto mt-3 max-w-xl text-center font-sans text-sm leading-7 text-[#fde5c0]/70">
             {program.type.name} · Structured flow of today’s service
           </p>
+
           <div className="mt-6 flex justify-center">
             <svg width="60" height="12" viewBox="0 0 60 12" fill="none">
               <circle cx="6" cy="6" r="2" fill="#e8c49a" fillOpacity="0.4" />
@@ -93,8 +95,9 @@ export default async function PublicProgramDetailsPage({
       </section>
 
       {/* ── PROGRAM FLOW ─────────────────────────────────── */}
-      <section className="bg-[#fdf6ee] px-4 py-14 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
+      <section className="bg-[#fdf6ee] px-4 py-14 sm:px-6 lg:px-10">
+        {/* 🔥 WIDER PAGE CONTAINER */}
+        <div className="mx-auto max-w-6xl">
           {/* Header */}
           <div className="text-center mb-8">
             <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.25em] text-[#c2620a]">
@@ -108,16 +111,16 @@ export default async function PublicProgramDetailsPage({
             </div>
           </div>
 
-          {/* Content Card */}
-          <div className="rounded-2xl border border-[#e8c49a] bg-white p-6 sm:p-8 shadow-sm">
+          {/* 🔥 WIDER CARD */}
+          <div className="rounded-2xl border border-[#e8c49a] bg-white p-6 sm:p-8 lg:p-10 shadow-sm">
             <div className="space-y-3">
               {items.map((item, index) => (
                 <div
                   key={index}
-                  className="group flex gap-4 rounded-xl border border-[#faebd7] bg-[#fffaf4] p-4 hover:bg-[#fdf6ee] transition"
+                  className="group flex gap-5 rounded-xl border border-[#faebd7] bg-[#fffaf4] p-5 lg:p-6 hover:bg-[#fdf6ee] transition"
                 >
                   {/* Time */}
-                  <div className="min-w-[80px] text-sm font-semibold text-[#c2620a]">
+                  <div className="min-w-[90px] text-sm font-semibold text-[#c2620a]">
                     {item.time || "—"}
                   </div>
 
@@ -141,7 +144,7 @@ export default async function PublicProgramDetailsPage({
                     )}
                   </div>
 
-                  {/* Index badge */}
+                  {/* Index */}
                   <div className="flex items-start">
                     <span className="font-serif text-sm text-[#4a2008]/40 bg-[#f3e1cf] px-2 py-1 rounded-md">
                       {String(index + 1).padStart(2, "0")}
@@ -155,7 +158,7 @@ export default async function PublicProgramDetailsPage({
       </section>
 
       {/* ── CTA ─────────────────────────────────────────── */}
-      <section className="bg-[#2b1405] px-4 py-16 sm:px-6 lg:px-8">
+      <section className="bg-[#2b1405] px-4 py-16 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-[#e8c49a]">
             Join us
