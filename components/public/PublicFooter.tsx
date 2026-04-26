@@ -10,7 +10,7 @@ export function PublicFooter() {
         {/* LEFT */}
         <div className="text-center md:text-left">
           <p className="text-lg font-semibold text-[#f7d9a8]">
-            Redcross Church of Christ
+            Church of Christ at Redcross
           </p>
 
           <p className="mt-3 text-sm leading-6 text-[#e6c79c]">
