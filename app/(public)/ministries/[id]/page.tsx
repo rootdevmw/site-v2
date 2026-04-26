@@ -68,11 +68,6 @@ function LeaderPanel({
         <h3 className="text-lg font-bold text-white leading-tight">
           {formatPrefix(person.prefix)}. {person.firstName} {person.lastName}
         </h3>
-        {person.location && (
-          <p className="font-sans text-xs text-[#fde5c0]/50 mt-0.5">
-            {person.location}
-          </p>
-        )}
       </div>
 
       {hasBioText && (
@@ -326,7 +321,9 @@ export default async function PublicMinistryDetailsPage({
                   <div className="h-3 w-3 rounded-full bg-[#c2620a]/70" />
                 </div>
                 <div className="mx-auto mt-4 mb-3 h-px w-10 bg-[#c2620a]/20" />
-                <h3 className="text-sm font-bold text-[#2b1405]">{item.title}</h3>
+                <h3 className="text-sm font-bold text-[#2b1405]">
+                  {item.title}
+                </h3>
                 <p className="mt-2 font-sans text-sm leading-6 text-[#6b4022]">
                   {item.detail}
                 </p>
