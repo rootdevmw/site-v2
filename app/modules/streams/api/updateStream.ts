@@ -5,6 +5,6 @@ export async function updateStream(
   id: string,
   data: StreamFormValues,
 ): Promise<{ data: Stream }> {
-  const res = await api.put(`/streams/${id}`, data);
+  const res = await api.patch(`/streams/${id}`, data);
   return res.data;
 }
