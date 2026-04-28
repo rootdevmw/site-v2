@@ -155,7 +155,7 @@ export default async function PublicEventsPage({
                         </div>
                       </div>
 
-                      <div className="mt-5 flex items-center gap-1 border-t border-[#faebd7] pt-4 text-xs font-semibold text-[#c2620a]">
+                      <div className="mt-5 flex items-center justify-end gap-1 border-t border-[#faebd7] pt-4 text-xs font-semibold text-[#c2620a]">
                         View details
                         <span className="transition-transform group-hover:translate-x-1">
                           →
@@ -166,7 +166,11 @@ export default async function PublicEventsPage({
                 ))}
               </div>
 
-              <Pagination page={page} totalPages={totalPages} basePath="/events" />
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                basePath="/events"
+              />
             </>
           ) : (
             <div className="rounded-2xl border border-[#e8c49a] bg-white px-8 py-20 text-center">
@@ -214,7 +218,8 @@ export default async function PublicEventsPage({
                 day: "Sunday",
                 time: "9:00 AM",
                 title: "Morning Worship",
-                detail: "Our main gathering — teaching, singing, and communion.",
+                detail:
+                  "Our main gathering — teaching, singing, and communion.",
               },
               {
                 day: "Sunday",
