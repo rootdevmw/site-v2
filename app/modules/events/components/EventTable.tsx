@@ -39,11 +39,11 @@ export function EventTable({
             e.createdAt ? new Date(e.createdAt).toLocaleDateString() : "-",
         },
       ]}
-      onRowClick={(e) => router.push(`/events/${e.id}`)}
+      onRowClick={(e) => router.push(`/dashboard/events/${e.id}`)}
       actions={(e) => (
         <>
           <button
-            onClick={() => router.push(`/events/${e.id}/edit`)}
+            onClick={() => router.push(`/dashboard/events/${e.id}/edit`)}
             className="text-[var(--main-gold)]"
           >
             Edit
