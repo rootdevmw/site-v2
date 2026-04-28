@@ -33,7 +33,7 @@ const ENTITIES = [
   "PROGRAM_TEMPLATE_ITEM",
   "PROGRAM_TYPE",
 
-  "NEWSLETTER",
+  "PUBLICATION",
   "ANNOUNCEMENT",
   "ANNOUNCEMENT_TARGET",
   "PRAYER_REQUEST",
@@ -50,6 +50,7 @@ const ENTITIES = [
   "ATTENTION_ACTION",
 
   "USERROLE",
+  "PRAYERWARRIOR",
 ];
 
 const formatLabel = (entity: string) => entity.toLowerCase().replace(/_/g, " ");

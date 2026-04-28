@@ -289,7 +289,7 @@ export default function ContactPage() {
                 </p>
                 <div className="mt-3 flex flex-wrap gap-3">
                   <a
-                    href="https://www.facebook.com/churchofchristatredcross"
+                    href="https://www.facebook.com/share/18ioYhR8RB/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-4 py-3 transition hover:border-[#1877F2]/40 hover:bg-[#1877F2]/10"
@@ -411,7 +411,7 @@ export default function ContactPage() {
               Learn about us
             </Link>
             <Link
-              href="/sermons"
+              href="/content"
               className="rounded-lg border border-[#e8c49a] bg-white px-5 py-2.5 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/30 hover:shadow-sm"
             >
               Read a sermon

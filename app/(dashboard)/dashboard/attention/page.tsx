@@ -1,6 +1,10 @@
 "use client";
 
-import { Prayer, Visitor } from "@/app/modules/attention/types/attention.types";
+import {
+  Prayer,
+  Visitor,
+  AttentionOverviewResponse,
+} from "@/app/modules/attention/types/attention.types";
 import { Table } from "@/components/ui/Table";
 import { TableLayout } from "@/components/ui/TableLayout";
 import { api } from "@/lib/api/client";
@@ -11,10 +15,7 @@ import { useEffect, useState } from "react";
 export default function ManageAttentionPage() {
   const router = useRouter();
 
-  const [data, setData] = useState<{
-    prayers: Prayer[];
-    visitors: Visitor[];
-  }>({
+  const [data, setData] = useState<AttentionOverviewResponse>({
     prayers: [],
     visitors: [],
   });
@@ -134,7 +135,12 @@ export default function ManageAttentionPage() {
             {
               header: "Visit Date",
               accessor: "visitDate",
-              render: (row) => new Date(row.visitDate).toLocaleDateString(),
+              render: (row) =>
+                new Date(row.visitDate).toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                }),
             },
             {
               header: "Status",

@@ -40,12 +40,32 @@ export default function MembersPage() {
       title="Members"
       description="Manage church members"
       actions={
-        <button
-          onClick={() => router.push("/dashboard/members/new")}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] transition-all duration-200"
-        >
-          + Add Member
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => router.push("/dashboard/members/new")}
+            className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] transition-all duration-200"
+          >
+            + Add Member
+          </button>
+
+          <button
+            onClick={() => {
+              const params = new URLSearchParams();
+              if (debouncedSearch) params.set("search", debouncedSearch);
+              if (status) params.set("status", status);
+              if (prefix) params.set("prefix", prefix);
+
+              const url = `${
+                process.env.NEXT_PUBLIC_API_URL
+              }/members/export/xlsx?${params.toString()}`;
+
+              window.open(url, "_blank");
+            }}
+            className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-primary)] hover:border-[var(--main-gold)] transition-all duration-200"
+          >
+            Export XLSX
+          </button>
+        </div>
       }
       filters={
         <div className="flex gap-4 flex-wrap">

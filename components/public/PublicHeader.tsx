@@ -11,11 +11,11 @@ const navItems = [
   { label: "About", href: "/about" },
   { label: "Ministries", href: "/ministries" },
   { label: "Homecells", href: "/homecells" },
-  { label: "Sermons", href: "/sermons" },
+  { label: "Content", href: "/content" },
   { label: "Events", href: "/events" },
   { label: "Programs", href: "/programs" },
   { label: "Live", href: "/live" },
-  { label: "Newsletters", href: "/newsletters" },
+  { label: "Publications", href: "/publications" },
   { label: "Contact", href: "/contact" },
 ];
 

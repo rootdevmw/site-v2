@@ -251,7 +251,7 @@ export default function AboutPage() {
           </div>
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/sermons"
+              href="/content"
               className="rounded-lg bg-[#c2620a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#7c3d0f]"
             >
               Watch a sermon

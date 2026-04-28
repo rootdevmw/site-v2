@@ -39,7 +39,7 @@ export default async function PublicHomePage() {
     getLiveStream(),
   ]);
 
-  const sermons = contentRes.data;
+  const content = contentRes.data;
   const events = eventsRes.data;
   const ministries = ministriesRes.data;
   const liveStream = liveRes.data;
@@ -99,9 +99,9 @@ export default async function PublicHomePage() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-8 text-[#fde5c0]">
-              Every church story begins with an invitation. Join us for
-              worship, teaching, fellowship, and practical ministry shaped by
-              the hope of the gospel.
+              Every church story begins with an invitation. Join us for worship,
+              teaching, fellowship, and practical ministry shaped by the hope of
+              the gospel.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-4">
@@ -285,19 +285,19 @@ export default async function PublicHomePage() {
               </p>
             </div>
             <Link
-              href="/sermons"
+              href="/content"
               className="hidden shrink-0 text-sm font-semibold text-[#e8c49a] underline underline-offset-4 hover:text-white sm:block"
             >
-              All sermons &rarr;
+              All content &rarr;
             </Link>
           </div>
 
           <div className="grid gap-5 md:grid-cols-3">
-            {sermons.length > 0 ? (
-              sermons.map((item, i) => (
+            {content.length > 0 ? (
+              content.map((item, i) => (
                 <Link
                   key={item.id}
-                  href={`/sermons/${item.id}`}
+                  href={`/content/${item.id}`}
                   className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:border-white/20 hover:bg-white/10"
                 >
                   <span className="font-serif pointer-events-none absolute right-5 top-3 select-none text-6xl font-bold text-white/[0.04]">

@@ -48,7 +48,7 @@ export function PublicFooter() {
 
           <div className="mt-4 flex flex-col gap-2 text-sm text-[#e6c79c] items-center md:items-end">
             {[
-              { label: "Sermons", href: "/sermons", newTab: false },
+              { label: "Content", href: "/content", newTab: false },
               { label: "Events", href: "/events", newTab: false },
               { label: "Ministries", href: "/ministries", newTab: false },
               { label: "Contact", href: "/contact", newTab: false },

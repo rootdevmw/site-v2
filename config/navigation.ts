@@ -64,8 +64,8 @@ export const navigation = [
     roles: ["MEDIA"],
   },
   {
-    label: "Newsletters",
-    href: "/dashboard/newsletters",
+    label: "Publications",
+    href: "/dashboard/publications",
     roles: ["MEDIA"],
   },
 
@@ -102,5 +102,26 @@ export const navigation = [
     label: "Audit",
     href: "/dashboard/audit",
     roles: ["ADMIN"],
+  },
+  {
+    label: "Attention",
+    roles: ["DEACON"],
+    children: [
+      {
+        label: "Prayer Requests",
+        href: "/dashboard/attention/prayers",
+        roles: ["DEACON"],
+      },
+      {
+        label: "Visitors",
+        href: "/dashboard/attention/visitors",
+        roles: ["DEACON"],
+      },
+      {
+        label: "Manage",
+        href: "/dashboard/attention/manage",
+        roles: ["DEACON"],
+      },
+    ],
   },
 ];

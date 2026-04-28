@@ -1,10 +1,28 @@
-import Link from "next/link";
-import { getPublicMinistries } from "@/lib/public-api/ministries";
+import { getPublicPublications } from "@/lib/public-api/publications";
 import { Pagination } from "@/components/public/Pagination";
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 6;
 
-export default async function PublicMinistriesPage({
+function formatDate(value: string) {
+  return new Date(value).toLocaleDateString(undefined, {
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function formatDay(value: string) {
+  return new Date(value).toLocaleDateString(undefined, { day: "numeric" });
+}
+
+function formatMonth(value: string) {
+  return new Date(value).toLocaleDateString(undefined, { month: "short" });
+}
+
+function formatYear(value: string) {
+  return new Date(value).toLocaleDateString(undefined, { year: "numeric" });
+}
+
+export default async function PublicPublicationsPage({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string }>;
@@ -12,18 +30,10 @@ export default async function PublicMinistriesPage({
   const { page: pageParam } = await searchParams;
   const page = Math.max(1, Number(pageParam) || 1);
 
-  const res = await getPublicMinistries({ page, limit: PAGE_SIZE });
-  const unosortedMinistries = res.data;
-  const ministries = [...unosortedMinistries].sort((a, b) =>
-    a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
-  );
+  const res = await getPublicPublications({ page, limit: PAGE_SIZE });
+  const publications = res.data;
   const total = res.meta?.total ?? 0;
   const totalPages = res.meta?.totalPages ?? Math.ceil(total / PAGE_SIZE);
-
-  function stripHtml(html?: string) {
-    if (!html) return "";
-    return html.replace(/<[^>]*>/g, "").trim();
-  }
 
   return (
     <div className="font-sans">
@@ -41,37 +51,39 @@ export default async function PublicMinistriesPage({
               <div className="mb-2 flex items-center gap-2.5">
                 <div className="h-px w-6 bg-[#e8c49a]" />
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e8c49a]">
-                  Ministries
+                  Publications
                 </p>
               </div>
               <h1 className="font-serif text-2xl font-semibold text-white sm:text-3xl">
-                Serve, grow, and belong
+                Stay connected with the church
               </h1>
               <p className="mt-1.5 text-sm text-[#e6c79c]">
-                Find a place where your gifts can encourage the church and bless
-                the community.
+                Updates, stories, and encouragement from church life at Red
+                Cross.
               </p>
             </div>
             {total > 0 && (
               <p className="mt-3 text-xs font-medium text-[#c2a23a] sm:mt-0">
-                {total} ministr{total !== 1 ? "ies" : "y"}
+                {total} edition{total !== 1 ? "s" : ""} published
               </p>
             )}
           </div>
         </div>
       </section>
 
-      {/* ── MINISTRIES GRID ───────────────────────────────────── */}
+      {/* ── PUBLICATIONS GRID ──────────────────────────────────── */}
       <section className="bg-[#fdf6ee] px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
-          {ministries.length > 0 ? (
+          {publications.length > 0 ? (
             <>
               <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {ministries.map((ministry, i) => (
-                  <Link
-                    key={ministry.id}
-                    href={`/ministries/${ministry.id}`}
-                    className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition hover:border-[#7c3d0f]/20 hover:shadow-lg"
+                {publications.map((publication, i) => (
+                  <a
+                    key={publication.id}
+                    href={publication.fileUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition-all duration-200 hover:border-[#7c3d0f]/20 hover:shadow-lg"
                   >
                     <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
 
@@ -83,45 +95,50 @@ export default async function PublicMinistriesPage({
                         )}
                       </span>
 
-                      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#faebd7] text-[#4a2008]">
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={1.8}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5M12 12a4 4 0 100-8 4 4 0 000 8z"
-                          />
-                        </svg>
-                      </div>
+                      {/* Date badge */}
+                      {publication.publishedAt && (
+                        <div className="mb-4 inline-flex flex-col items-center self-start rounded-xl border border-[#f0dfc0] bg-[#fdf6ee] px-3 py-2 text-center">
+                          <span className="text-[9px] font-bold uppercase tracking-widest text-[#c2620a]">
+                            {formatMonth(publication.publishedAt)}
+                          </span>
+                          <span className="font-serif text-2xl font-bold leading-none text-[#4a2008]">
+                            {formatDay(publication.publishedAt)}
+                          </span>
+                          <span className="text-[9px] font-medium text-[#8c6d3f]">
+                            {formatYear(publication.publishedAt)}
+                          </span>
+                        </div>
+                      )}
 
-                      <h2 className="font-serif flex-1 text-lg font-semibold text-[#4a2008] group-hover:text-[#7c3d0f]">
-                        {ministry.name}
+                      <h2 className="font-serif flex-1 text-lg font-semibold leading-snug text-[#4a2008] group-hover:text-[#7c3d0f]">
+                        {publication.title}
                       </h2>
 
-                      <p className="mt-2 text-sm leading-6 text-[#6b4c2a] line-clamp-3">
-                        {ministry.purpose}
-                      </p>
+                      {publication.description && (
+                        <p className="mt-2 text-sm leading-6 text-[#6b4c2a]">
+                          {publication.description}
+                        </p>
+                      )}
 
-                      <div className="mt-5 flex items-center justify-end gap-1 border-t border-[#faebd7] pt-4 text-xs font-semibold text-[#c2620a]">
-                        Learn more
-                        <span className="transition-transform group-hover:translate-x-1">
-                          →
+                      <div className="mt-5 flex items-center justify-between border-t border-[#faebd7] pt-4">
+                        <p className="text-xs text-[#8c6d3f]">
+                          {publication.publishedAt
+                            ? formatDate(publication.publishedAt)
+                            : "Published"}
+                        </p>
+                        <span className="flex items-center gap-1 text-xs font-semibold text-[#c2620a] transition-transform group-hover:translate-x-1">
+                          Open PDF →
                         </span>
                       </div>
                     </div>
-                  </Link>
+                  </a>
                 ))}
               </div>
 
               <Pagination
                 page={page}
                 totalPages={totalPages}
-                basePath="/ministries"
+                basePath="/publications"
               />
             </>
           ) : (
@@ -137,16 +154,15 @@ export default async function PublicMinistriesPage({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M17 20h5V4H2v16h5m10 0v-8H7v8m10 0H7"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
               </div>
               <p className="font-serif text-xl font-semibold text-[#4a2008]">
-                No ministries yet
+                No publications yet
               </p>
               <p className="mt-2 text-sm text-[#6b4c2a]">
-                Check back soon — new opportunities to serve are added
-                regularly.
+                Published publications will appear here. Check back soon.
               </p>
             </div>
           )}
@@ -158,25 +174,25 @@ export default async function PublicMinistriesPage({
         <div className="mx-auto max-w-screen-2xl flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
-              Get involved
+              Come as you are
             </p>
             <p className="mt-1 text-[15px] font-medium text-[#4a2008]">
-              There is a place for you — whatever your gift or season of life.
+              The best way to stay connected is to be part of the family.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link
-              href="/events"
+            <a
+              href="/content"
               className="rounded-lg bg-[#c2620a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#7c3d0f]"
             >
-              See events
-            </Link>
-            <Link
+              Read sermons
+            </a>
+            <a
               href="/contact"
               className="rounded-lg border border-[#e8c49a] bg-white px-5 py-2.5 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/30 hover:shadow-sm"
             >
-              Get in touch
-            </Link>
+              Plan a visit
+            </a>
           </div>
         </div>
       </section>

@@ -15,6 +15,11 @@ export async function getUsers(
   return res.data;
 }
 
+export async function getAllUsers(): Promise<ApiResponse<User>> {
+  const res = await api.get("/users");
+  return res.data;
+}
+
 export async function getUser(
   id: string,
 ): Promise<{ success: boolean; data: User; meta: any }> {

@@ -1,27 +1,5 @@
-type AttentionItem =
-  | {
-      id: string;
-      type: "prayer";
-      name?: string;
-      phone?: string;
-      email?: string;
-      prayerFor: string;
-      request: string;
-      status: string;
-      createdAt: string;
-    }
-  | {
-      id: string;
-      type: "visitor";
-      name: string;
-      phone?: string;
-      email?: string;
-      visitDate: string;
-      groupSize: string;
-      status: string;
-      message?: string;
-      createdAt: string;
-    };
+export type PrayerStatus = "PENDING" | "REVIEWED" | "PRAYED_FOR";
+export type VisitorStatus = "PENDING" | "CONFIRMED" | "COMPLETED";
 
 export type Prayer = {
   id: string;
@@ -30,7 +8,7 @@ export type Prayer = {
   email?: string;
   prayerFor: string;
   request: string;
-  status: string;
+  status: PrayerStatus;
   createdAt: string;
 };
 
@@ -46,6 +24,15 @@ export type Visitor = {
   hasSpecialNeeds: boolean;
   specialNeedsDetails?: string;
   message?: string;
-  status: string;
+  status: VisitorStatus;
   createdAt: string;
 };
+
+export type AttentionOverviewResponse = {
+  prayers: Prayer[];
+  visitors: Visitor[];
+};
+
+export type AttentionItem =
+  | (Prayer & { type: "prayer" })
+  | (Visitor & { type: "visitor" });

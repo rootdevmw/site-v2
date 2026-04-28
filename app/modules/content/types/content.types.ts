@@ -24,6 +24,7 @@ export type Content = {
   id: string;
   title: string;
   body: string;
+  slug:string;
   status: "Draft" | "Published";
   type: ContentType;
   author: Member;

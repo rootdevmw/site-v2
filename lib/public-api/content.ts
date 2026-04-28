@@ -34,6 +34,10 @@ export async function getPublicContent(id: string) {
   return publicApi<Content>(`/content/${id}`);
 }
 
+export async function getPublicContentBySlug(slug: string) {
+  return publicApi<Content>(`/content/${slug}`);
+}
+
 export async function getContentTypes() {
   return publicApi<{ id: string; name: string }[]>(`/content/types`);
 }

@@ -186,7 +186,7 @@ const NAV_ICONS: Record<string, JSX.Element> = {
       />
     </svg>
   ),
-  Newsletters: (
+  Publications: (
     <svg
       className="h-4 w-4"
       fill="none"
@@ -290,6 +290,21 @@ const NAV_ICONS: Record<string, JSX.Element> = {
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M9 17v-6h13M9 7h13M4 7h.01M4 17h.01"
+      />
+    </svg>
+  ),
+  Attention: (
+    <svg
+      className="h-4 w-4"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={1.8}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 22s8-4.5 8-11a8 8 0 10-16 0c0 6.5 8 11 8 11z"
       />
     </svg>
   ),

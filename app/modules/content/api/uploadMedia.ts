@@ -1,6 +1,9 @@
 import { api } from "@/lib/api/client";
 
-export async function uploadMedia(file: File): Promise<{ url: string }> {
+export async function uploadMedia(
+  file: File,
+  onProgress?: (percent: number) => void,
+): Promise<{ url: string }> {
   const formData = new FormData();
   formData.append("file", file);
 
@@ -8,7 +11,13 @@ export async function uploadMedia(file: File): Promise<{ url: string }> {
     headers: {
       "Content-Type": "multipart/form-data",
     },
+    onUploadProgress: (event) => {
+      if (onProgress && event.total) {
+        const percent = Math.round((event.loaded * 100) / event.total);
+        onProgress(percent);
+      }
+    },
   });
 
-  return res.data.data; // Must return { url }
+  return res.data.data;
 }
