@@ -15,6 +15,7 @@ import { MinistryMember } from "../types/ministry.types";
 
 import { useRouter } from "next/navigation";
 import { showLoading, dismissToast, showError } from "@/lib/toast";
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 
 export function MinistryForm({
   mode = "create",
@@ -43,8 +44,21 @@ export function MinistryForm({
 
   const form = useForm<MinistryFormValues>({
     resolver: zodResolver(ministrySchema),
-    defaultValues: initialData || {},
+    defaultValues: {
+      name: initialData?.name ?? "",
+      description: initialData?.description ?? "",
+      leaderId: initialData?.leaderId ?? "",
+      overseerId: initialData?.overseerId ?? "",
+    },
   });
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = form;
 
   const onSubmit = (data: MinistryFormValues) => {
     const toastId = showLoading(
@@ -83,7 +97,7 @@ export function MinistryForm({
     <BaseForm
       mode={mode}
       isLoading={isPending}
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
       onDelete={onDelete}
       title={
         isEdit ? "Edit Ministry" : isView ? "View Ministry" : "Create Ministry"
@@ -93,28 +107,20 @@ export function MinistryForm({
         {/* Name */}
         <Input
           label="Ministry Name"
-          {...form.register("name")}
-          error={form.formState.errors.name?.message}
-          disabled={isView}
-        />
-
-        {/* Description */}
-        <Input
-          label="Description"
-          {...form.register("description")}
+          {...register("name")}
+          error={errors.name?.message}
           disabled={isView}
         />
 
         {/* Leader */}
         <Select
           label="Leader"
-          {...form.register("leaderId")}
-          error={form.formState.errors.leaderId?.message}
+          {...register("leaderId")}
+          error={errors.leaderId?.message}
           disabled={isView}
         >
           <option value="">Select leader</option>
-
-          {members.map((m: MinistryMember, index: number) => (
+          {members.map((m, index) => (
             <option key={m.id ?? index} value={m.id}>
               {m.firstName} {m.lastName}
             </option>
@@ -124,17 +130,39 @@ export function MinistryForm({
         {/* Overseer */}
         <Select
           label="Overseer (Optional)"
-          {...form.register("overseerId")}
+          {...register("overseerId")}
           disabled={isView}
         >
           <option value="">Select overseer</option>
-
-          {members.map((m: MinistryMember, index: number) => (
+          {members.map((m, index) => (
             <option key={m.id ?? index} value={m.id}>
               {m.firstName} {m.lastName}
             </option>
           ))}
         </Select>
+      </div>
+
+      {/*  Rich Text Description */}
+      <div className="space-y-2 mt-4">
+        <label className="text-sm font-medium text-[var(--text-primary)]">
+          Description
+        </label>
+
+        {isView ? (
+          <div className="min-h-[200px] p-4 border border-[var(--border-soft)] rounded-lg bg-[var(--card-elevated)]">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: watch("description") || "",
+              }}
+            />
+          </div>
+        ) : (
+          <RichTextEditor
+            value={watch("description")}
+            onChange={(value) => setValue("description", value)}
+            error={errors.description?.message}
+          />
+        )}
       </div>
     </BaseForm>
   );

@@ -13,9 +13,17 @@ export default async function PublicMinistriesPage({
   const page = Math.max(1, Number(pageParam) || 1);
 
   const res = await getPublicMinistries({ page, limit: PAGE_SIZE });
-  const ministries = res.data;
+  const unosortedMinistries = res.data;
+  const ministries = [...unosortedMinistries].sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
+  );
   const total = res.meta?.total ?? 0;
   const totalPages = res.meta?.totalPages ?? Math.ceil(total / PAGE_SIZE);
+
+  function stripHtml(html?: string) {
+    if (!html) return "";
+    return html.replace(/<[^>]*>/g, "").trim();
+  }
 
   return (
     <div className="font-sans">
@@ -95,8 +103,8 @@ export default async function PublicMinistriesPage({
                         {ministry.name}
                       </h2>
 
-                      <p className="mt-2 text-sm leading-6 text-[#6b4c2a]">
-                        {ministry.description ||
+                      <p className="mt-2 text-sm leading-6 text-[#6b4c2a] line-clamp-3">
+                        {stripHtml(ministry.description) ||
                           "Serving together with purpose and unity."}
                       </p>
 
