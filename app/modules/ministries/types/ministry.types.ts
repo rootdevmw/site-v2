@@ -9,7 +9,7 @@ export type Ministry = {
   id: string;
   name: string;
   description?: string;
-
+  purpose: string;
   leaderId?: string;
   overseerId?: string | null;
 

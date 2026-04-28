@@ -104,8 +104,7 @@ export default async function PublicMinistriesPage({
                       </h2>
 
                       <p className="mt-2 text-sm leading-6 text-[#6b4c2a] line-clamp-3">
-                        {stripHtml(ministry.description) ||
-                          "Serving together with purpose and unity."}
+                        {ministry.purpose}
                       </p>
 
                       <div className="mt-5 flex items-center gap-1 border-t border-[#faebd7] pt-4 text-xs font-semibold text-[#c2620a]">

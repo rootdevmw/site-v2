@@ -150,6 +150,10 @@ export default async function PublicMinistryDetailsPage({
             {ministry.name}
           </h2>
 
+          <p className="mt-2 text-2xl font-bold text-[#2b1405]">
+            {ministry.purpose}
+          </p>
+
           <div className="mt-6 border-y border-[#e8c49a]/40 py-6 text-left">
             {ministry.description ? (
               <div

@@ -49,6 +49,7 @@ export function MinistryForm({
       description: initialData?.description ?? "",
       leaderId: initialData?.leaderId ?? "",
       overseerId: initialData?.overseerId ?? "",
+      purpose: initialData?.purpose ?? "",
     },
   });
 
@@ -109,6 +110,12 @@ export function MinistryForm({
           label="Ministry Name"
           {...register("name")}
           error={errors.name?.message}
+          disabled={isView}
+        />
+        <Input
+          label="Ministry Purpose"
+          {...register("purpose")}
+          error={errors.purpose?.message}
           disabled={isView}
         />
 
