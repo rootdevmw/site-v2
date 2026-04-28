@@ -35,7 +35,7 @@ export default async function PublicHomePage() {
   const [contentRes, eventsRes, ministriesRes, liveRes] = await Promise.all([
     getPublishedContent({ page: 1, limit: 3 }),
     getPublicEvents({ page: 1, limit: 3, startDate: today }),
-    getPublicMinistries({ page: 1, limit: 6 }),
+    getPublicMinistries({ page: 1, limit: 3 }),
     getLiveStream(),
   ]);
 
@@ -378,7 +378,7 @@ export default async function PublicHomePage() {
                     {ministry.name}
                   </h3>
                   <p className="mt-1.5 text-sm leading-6 text-[#6b4c2a]">
-                    {ministry.description || "Serving together with purpose."}
+                    {ministry.purpose || "Serving together with purpose."}
                   </p>
                 </div>
               </Link>
