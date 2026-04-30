@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getPublicHomecell } from "@/lib/public-api/homecells";
+import {
+  getPublicHomecell,
+  getPublicHomecellBySlug,
+} from "@/lib/public-api/homecells";
 import { CiLocationOn } from "react-icons/ci";
 
 export default async function PublicMinistryDetailsPage({
@@ -10,7 +13,7 @@ export default async function PublicMinistryDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const res = await getPublicHomecell(id);
+  const res = await getPublicHomecellBySlug(id);
   const homecell = res.data;
   const prefixAbbr: Record<string, string> = {
     BROTHER: "Br",

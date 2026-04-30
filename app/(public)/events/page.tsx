@@ -90,7 +90,7 @@ export default async function PublicEventsPage({
                 {events.map((event, i) => (
                   <Link
                     key={event.id}
-                    href={`/events/${event.id}`}
+                    href={`/events/${event.slug}`}
                     className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition-all duration-200 hover:border-[#7c3d0f]/20 hover:shadow-lg"
                   >
                     {/* Coloured top strip keyed to position */}

@@ -9,8 +9,10 @@ export type Platform = {
 export type Stream = {
   id: string;
   title: string;
+  slug: string;
   isLive: boolean;
   startsAt: string | null;
+  endsAt?: string | null;
   platforms: Platform[];
   createdAt: string;
 };

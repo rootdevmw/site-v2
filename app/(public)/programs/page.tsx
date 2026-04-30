@@ -172,7 +172,7 @@ export default async function PublicProgramsPage({
                           </span>
                         </div>
                         <Link
-                          href={`/programs/${program.id}`}
+                          href={`/programs/${program.slug}`}
                           className="shrink-0 rounded-lg border border-white/20 px-3 py-1.5 text-[11px] font-semibold text-white/80 transition hover:bg-white/10 hover:text-white"
                         >
                           Full view →

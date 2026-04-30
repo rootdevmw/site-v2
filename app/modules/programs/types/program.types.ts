@@ -21,6 +21,7 @@ export type ProgramType = {
 export type Program = {
   id: string;
   date: string;
+  slug: string;
   location?: string;
   type: {
     id: string;

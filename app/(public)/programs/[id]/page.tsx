@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getPublicProgram } from "@/lib/public-api/programs";
+import {
+  getPublicProgram,
+  getPublicProgramBySlug,
+} from "@/lib/public-api/programs";
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString(undefined, {
@@ -17,7 +20,7 @@ export default async function PublicProgramDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const res = await getPublicProgram(id);
+  const res = await getPublicProgramBySlug(id);
   const program = res.data;
 
   if (!program) {

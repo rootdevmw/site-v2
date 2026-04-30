@@ -16,3 +16,9 @@ export async function getPublicStreams(params?: {
 
   return publicApi<Stream[]>(`/streams?${searchParams.toString()}`);
 }
+
+export async function getStreamBySlug(slug: string) {
+  if (!slug) throw new Error("Stream slug is required");
+
+  return publicApi<Stream | null>(`/streams/${slug}`);
+}

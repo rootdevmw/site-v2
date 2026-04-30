@@ -5,7 +5,10 @@ export const eventSchema = z.object({
   description: z.string().optional(),
   location: z.string().optional(),
   typeId: z.string().min(1, "Event type is required"),
-  ministryIds: z.array(z.string()).optional(),
+  ministryIds: z
+    .array(z.string())
+    .default([])
+    .refine((arr) => arr.every((v) => typeof v === "string")),
   startTime: z.string().min(1, "Start time is required"),
   endTime: z.string().min(1, "End time is required"),
 });

@@ -98,7 +98,7 @@ export function EventForm({
     try {
       const data = {
         ...values,
-        ministryIds: values.ministryIds || [],
+        ministryIds: (values.ministryIds || []).filter(Boolean),
       };
 
       const res =

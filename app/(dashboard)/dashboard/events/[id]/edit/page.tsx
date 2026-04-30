@@ -52,7 +52,7 @@ export default function EditEventPage() {
         <EventForm
           mode="edit"
           initialData={formData}
-          onSuccess={() => router.push("/events")}
+          onSuccess={() => router.push("/dashboard/events")}
           onDelete={handleDelete}
         />
       </div>

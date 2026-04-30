@@ -116,6 +116,7 @@ export default async function LivePage() {
     getPublicStreams({ page: 1, limit: 3 }),
   ]);
 
+  console.log("live streams", liveRes);
   const liveStream = liveRes.data;
   const streams = streamsRes.data;
 
@@ -272,11 +273,31 @@ export default async function LivePage() {
             <div className="grid gap-5 md:grid-cols-3">
               {streams.map((stream) => {
                 const streamPlatforms = stream.platforms ?? [];
+                const now = new Date();
+
+                const startsAt = stream.startsAt
+                  ? new Date(stream.startsAt)
+                  : null;
+                const endsAt = stream.endsAt ? new Date(stream.endsAt) : null;
+
+                // A stream is "active" if:
+                // - isLive flag is true OR
+                // - it is currently between start and end time
+                const isActive =
+                  stream.isLive ||
+                  (startsAt && startsAt <= now && (!endsAt || endsAt >= now));
+
+                // CLICK RULE:
+                // If stream is active OR upcoming, it should still be clickable
+                const href = `/streams/${stream.slug}`;
+
                 return (
-                  <div
+                  <Link
                     key={stream.id}
-                    className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10"
+                    href={href}
+                    className="group relative block overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10"
                   >
+                    {/* DATE */}
                     <div className="mb-5 inline-flex flex-col items-center rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-center">
                       <span className="text-[9px] font-bold uppercase tracking-widest text-[#e8c49a]">
                         {formatMonth(stream.startsAt)}
@@ -288,11 +309,20 @@ export default async function LivePage() {
                         {formatYear(stream.startsAt)}
                       </span>
                     </div>
+                    {/* LIVE BADGE */}
+                    {isActive && (
+                      <div className="absolute right-4 top-4 z-10 inline-flex items-center gap-2 rounded-full bg-red-500/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-md">
+                        <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
+                        Live
+                      </div>
+                    )}
 
+                    {/* TITLE */}
                     <h3 className="font-serif text-lg font-semibold leading-snug text-white">
                       {stream.title}
                     </h3>
 
+                    {/* TIME */}
                     <div className="mt-3 flex items-center gap-1.5 text-sm text-[#e6c79c]">
                       <svg
                         className="h-3.5 w-3.5 shrink-0"
@@ -310,6 +340,7 @@ export default async function LivePage() {
                       {formatTime(stream.startsAt)}
                     </div>
 
+                    {/* PLATFORMS */}
                     {streamPlatforms.length > 0 && (
                       <div className="mt-4 flex flex-wrap gap-2">
                         {streamPlatforms.map((p) => {
@@ -327,7 +358,12 @@ export default async function LivePage() {
                         })}
                       </div>
                     )}
-                  </div>
+
+                    {/* CTA */}
+                    <div className="mt-4 text-xs font-semibold text-[#e8c49a]">
+                      Click to view stream →
+                    </div>
+                  </Link>
                 );
               })}
             </div>

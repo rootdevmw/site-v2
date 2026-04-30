@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getPublicEvent } from "@/lib/public-api/events";
+import { getPublicEvent, getPublicEventBySlug } from "@/lib/public-api/events";
+import { ShareButton } from "@/components/public/ShareButton";
 
 function formatFull(value: string) {
   return new Date(value).toLocaleString(undefined, {
@@ -39,7 +40,7 @@ export default async function PublicEventDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const res = await getPublicEvent(id);
+  const res = await getPublicEventBySlug(id);
   const event = res.data;
 
   if (!event) notFound();
@@ -266,31 +267,21 @@ export default async function PublicEventDetailsPage({
           )}
 
           {/* Share / add to calendar row */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#e8c49a] bg-white px-6 py-5">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-[#c2620a]">
-                Don't miss it
-              </p>
-              <p className="mt-0.5 text-sm text-[#6b4c2a]">
-                Share this event with friends and family.
-              </p>
+          <div className="rounded-2xl border border-[#e8c49a] bg-white px-6 py-5">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#c2620a]">
+                  Don't miss it
+                </p>
+                <p className="mt-0.5 text-sm text-[#6b4c2a]">
+                  Share this event with friends and family.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end">
+                <ShareButton title={event.title} />
+              </div>
             </div>
-            <button className="flex items-center gap-2 rounded-lg border border-[#e8c49a] bg-[#fdf6ee] px-4 py-2 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/20 hover:shadow-sm">
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.8}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                />
-              </svg>
-              Share event
-            </button>
           </div>
         </div>
       </section>

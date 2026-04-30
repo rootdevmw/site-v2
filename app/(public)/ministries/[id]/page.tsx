@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getPublicMinistry } from "@/lib/public-api/ministries";
+import {
+  getPublicMinistry,
+  getPublicMinistryBySlug,
+} from "@/lib/public-api/ministries";
 
 /* ---------------- Helpers ---------------- */
 
@@ -114,7 +117,7 @@ export default async function PublicMinistryDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const res = await getPublicMinistry(id);
+  const res = await getPublicMinistryBySlug(id);
   const ministry = res.data;
 
   if (!ministry) notFound();

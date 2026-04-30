@@ -25,6 +25,10 @@ export async function getPublicProgram(id: string) {
   return publicApi<Program>(`/programs/${id}`);
 }
 
+export async function getPublicProgramBySlug(slug: string) {
+  return publicApi<Program>(`/programs/${slug}`);
+}
+
 export async function getProgramTypes() {
   return publicApi<{ id: string; name: string }[]>(`/programs/types`);
 }

@@ -16,3 +16,7 @@ export async function getPublicMinistries(params?: {
 export async function getPublicMinistry(id: string) {
   return publicApi<Ministry>(`/ministries/${id}`);
 }
+
+export async function getPublicMinistryBySlug(slug: string) {
+  return publicApi<Ministry>(`/ministries/${slug}`);
+}

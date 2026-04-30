@@ -11,6 +11,7 @@ export type Ministry = {
 export type Event = {
   id: string;
   title: string;
+  slug: string;
   description?: string | null;
   location?: string | null;
   typeId: string;

@@ -14,8 +14,14 @@ type BaseFormProps = {
 
 const MODE_PILL = {
   create: { label: "New", className: "bg-emerald-500/10 text-emerald-400" },
-  edit: { label: "Editing", className: "bg-[var(--main-gold)]/10 text-[var(--main-gold)]" },
-  view: { label: "Viewing", className: "bg-[var(--card-elevated)] text-[var(--text-secondary)]" },
+  edit: {
+    label: "Editing",
+    className: "bg-[var(--main-gold)]/10 text-[var(--main-gold)]",
+  },
+  view: {
+    label: "Viewing",
+    className: "bg-[var(--card-elevated)] text-[var(--text-secondary)]",
+  },
 };
 
 export function BaseForm({

@@ -65,7 +65,7 @@ export default async function PublicHomecells({
                   return (
                     <Link
                       key={homecell.id}
-                      href={`/homecells/${homecell.id}`}
+                      href={`/homecells/${homecell.slug}`}
                       className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition hover:border-[#7c3d0f]/20 hover:shadow-lg"
                     >
                       <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />

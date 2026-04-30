@@ -4,6 +4,7 @@ export type Homecell = {
   id: string;
   name: string;
   location: string;
+  slug: string;
   leader?: {
     id: string;
     firstName: string;

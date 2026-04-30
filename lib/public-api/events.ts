@@ -21,3 +21,7 @@ export async function getPublicEvents(params?: {
 export async function getPublicEvent(id: string) {
   return publicApi<Event>(`/events/${id}`);
 }
+
+export async function getPublicEventBySlug(slug: string) {
+  return publicApi<Event>(`/events/${slug}`);
+}

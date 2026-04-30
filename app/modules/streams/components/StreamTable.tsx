@@ -33,6 +33,11 @@ export function StreamTable({
             s.startsAt ? new Date(s.startsAt).toLocaleString() : "TBD",
         },
         {
+          header: "Ends At",
+          render: (s) =>
+            s.startsAt ? new Date(s.endsAt!).toLocaleString() : "TBD",
+        },
+        {
           header: "Platforms",
           render: (s) => s.platforms.map((p) => p.name).join(", ") || "None",
         },

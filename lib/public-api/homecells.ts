@@ -16,3 +16,7 @@ export async function getPublicHomecells(params?: {
 export async function getPublicHomecell(id: string) {
   return publicApi<Homecell>(`/homecells/${id}`);
 }
+
+export async function getPublicHomecellBySlug(slug: string) {
+  return publicApi<Homecell>(`/homecells/${slug}`);
+}
