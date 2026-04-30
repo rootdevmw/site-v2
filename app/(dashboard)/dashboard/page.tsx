@@ -1,24 +1,23 @@
 "use client";
 
-import { JSX } from "react";
 import { useRouter } from "next/navigation";
+import { JSX } from "react";
 
-import { useMembers } from "@/app/modules/members/hooks/useMembers";
-import { useMinistries } from "@/app/modules/ministries/hooks/useMinistries";
-import { useHomecells } from "@/app/modules/homecells/hooks/useHomecells";
 import { useContents } from "@/app/modules/content/hooks/useContents";
 import { useContentTypes } from "@/app/modules/content/hooks/useContentTypes";
 import { useEvents } from "@/app/modules/events/hooks/useEvents";
 import { useEventTypes } from "@/app/modules/events/hooks/useEventTypes";
-import { useAnnouncements } from "@/app/modules/announcements/hooks/useAnnouncements";
+import { useHomecells } from "@/app/modules/homecells/hooks/useHomecells";
+import { useMembers } from "@/app/modules/members/hooks/useMembers";
+import { useMinistries } from "@/app/modules/ministries/hooks/useMinistries";
 import { usePrograms } from "@/app/modules/programs/hooks/usePrograms";
 import { useProgramTypes } from "@/app/modules/programs/hooks/useProgramTypes";
 import { useProgramTemplates } from "@/app/modules/programTemplates/hooks/useProgramTemplates";
-import { useStreams } from "@/app/modules/streams/hooks/useStreams";
-import { usePlatforms } from "@/app/modules/streams/hooks/usePlatforms";
 import { usePublications } from "@/app/modules/publications/hooks/usePublications";
-import { useUsers } from "@/app/modules/users/hooks/useUsers";
 import { useRoles } from "@/app/modules/roles/hooks/useRoles";
+import { usePlatforms } from "@/app/modules/streams/hooks/usePlatforms";
+import { useStreams } from "@/app/modules/streams/hooks/useStreams";
+import { useUsers } from "@/app/modules/users/hooks/useUsers";
 
 type CountSource = {
   data?: unknown[];
@@ -199,21 +198,6 @@ const icons: Record<string, JSX.Element> = {
       />
     </svg>
   ),
-  announcements: (
-    <svg
-      className="h-4 w-4"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={1.8}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
-      />
-    </svg>
-  ),
   programs: (
     <svg
       className="h-4 w-4"
@@ -344,7 +328,6 @@ export default function DashboardPage() {
   const contentTypes = useContentTypes();
   const events = useEvents({ page: 1, limit: 1 });
   const eventTypes = useEventTypes();
-  const announcements = useAnnouncements({ page: 1, limit: 1 });
   const programs = usePrograms({ page: 1, limit: 1 });
   const programTypes = useProgramTypes();
   const programTemplates = useProgramTemplates();
@@ -410,15 +393,6 @@ export default function DashboardPage() {
       count: getCount(contentTypes.data),
       isLoading: contentTypes.isLoading,
       icon: icons.contentTypes,
-    },
-    {
-      label: "Announcements",
-      description: "Notices and communication",
-      href: "/dashboard/announcements",
-      createHref: "/dashboard/announcements/new",
-      count: getCount(announcements.data),
-      isLoading: announcements.isLoading,
-      icon: icons.announcements,
     },
     {
       label: "Programs",

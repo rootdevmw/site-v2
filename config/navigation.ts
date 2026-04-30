@@ -29,11 +29,6 @@ export const navigation = [
     href: "/dashboard/events",
     roles: ["DEACON"],
   },
-  {
-    label: "Announcements",
-    href: "/dashboard/announcements",
-    roles: ["DEACON"],
-  },
 
   // PROGRAMS
   {
