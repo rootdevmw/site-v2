@@ -60,7 +60,7 @@ export default async function PublicEventDetailsPage({
           </svg>
         </div>
 
-        <div className="relative mx-auto max-w-3xl">
+        <div className="relative mx-auto max-w-5xl">
           {/* Back link */}
           <Link
             href="/events"
@@ -158,7 +158,7 @@ export default async function PublicEventDetailsPage({
 
       {/* ── EVENT DETAILS ─────────────────────────────────────── */}
       <section className="px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl space-y-5">
+        <div className="mx-auto max-w-5xl space-y-5">
           {/* Time details card */}
           <div className="overflow-hidden rounded-2xl border border-[#e8c49a] bg-white">
             <div className="border-b border-[#faebd7] bg-[#fdf6ee] px-6 py-3">
@@ -259,9 +259,13 @@ export default async function PublicEventDetailsPage({
                 </p>
               </div>
               <div className="p-6 sm:p-8">
-                <p className="text-[15px] leading-8 text-[#5c3018]">
-                  {event.description}
-                </p>
+                <div
+                  className="prose prose-sm sm:prose lg:prose-lg max-w-none text-[#5c3018]
+                  prose-img:rounded-xl prose-img:shadow-md
+                  prose-a:text-[#c2620a] prose-a:underline
+                  prose-strong:text-[#4a2008]"
+                  dangerouslySetInnerHTML={{ __html: event.description }}
+                />
               </div>
             </div>
           )}
@@ -288,7 +292,7 @@ export default async function PublicEventDetailsPage({
 
       {/* ── CLOSING CTA ───────────────────────────────────────── */}
       <section className="border-t border-[#e8c49a] bg-[#fdf6ee] px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-5xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
             See what else is on
           </p>

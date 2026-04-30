@@ -18,6 +18,7 @@ import { Select } from "@/components/ui/Select";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import { DateInput } from "@/components/ui/DateInput";
 import { showSuccess, showError } from "@/lib/toast";
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 
 type EventFormInitialData = Partial<
   Omit<EventFormValues, "description" | "location">
@@ -59,6 +60,7 @@ export function EventForm({
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<EventFormValues>({
     resolver: zodResolver(eventSchema) as Resolver<EventFormValues>,
@@ -138,9 +140,12 @@ export function EventForm({
         disabled={isView}
       />
 
-      <Input
-        label="Description (optional)"
-        {...register("description")}
+      <RichTextEditor
+        label="Description"
+        value={watch("description")}
+        onChange={(value) =>
+          setValue("description", value, { shouldValidate: true })
+        }
         error={errors.description?.message}
         disabled={isView}
       />
