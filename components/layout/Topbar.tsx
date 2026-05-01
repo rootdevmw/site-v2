@@ -33,11 +33,11 @@ export function Topbar() {
     counts = { prayers: 0, visitors: 0 },
   } = useAttentionNotifications() || {};
 
-  // ✅ Separate states
+  //  Separate states
   const [userOpen, setUserOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
 
-  // ✅ Refs
+  //  Refs
   const userRef = useRef<HTMLDivElement | null>(null);
   const notifRef = useRef<HTMLDivElement | null>(null);
 
@@ -48,7 +48,7 @@ export function Topbar() {
     "DEACON",
   ]);
 
-  // ✅ Handle outside clicks (both dropdowns)
+  //  Handle outside clicks (both dropdowns)
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -105,7 +105,7 @@ export function Topbar() {
           </>
         )}
 
-        {/* ✅ NOTIFICATIONS DROPDOWN */}
+        {/* NOTIFICATIONS DROPDOWN */}
         <div ref={notifRef} className="relative">
           {canManageAttention && notifOpen && (
             <div className="absolute right-0 mt-2 w-96 bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-xl shadow-xl z-50 overflow-hidden">

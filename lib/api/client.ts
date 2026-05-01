@@ -9,12 +9,16 @@ export const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message =
-      error?.response?.data?.errors?.message ||
-      error?.message ||
-      "Something went wrong";
+    const silent = error?.config?.silent;
 
-    showError(message);
+    if (!silent) {
+      const message =
+        error?.response?.data?.errors?.message ||
+        error?.message ||
+        "Something went wrong";
+
+      showError(message);
+    }
 
     return Promise.reject(error);
   },
