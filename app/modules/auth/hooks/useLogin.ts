@@ -6,23 +6,25 @@ import { useAuthStore } from "../store/auth.store";
 export function useLogin() {
   const queryClient = useQueryClient();
   const setUser = useAuthStore((s) => s.setUser);
+  const setLoading = useAuthStore((s) => s.setLoading); // add this
 
   return useMutation({
     mutationFn: login,
 
     onSuccess: async () => {
-      // Immediately fetch user
+      setLoading(true);
       try {
-        const res = await getMe();
-
+        const res = await getMe(false);
         if (res.success) {
           setUser(res.data);
         }
-      } catch {
+      } catch (err) {
+        console.error("getMe error:", err);
         setUser(null);
+      } finally {
+        setLoading(false);
       }
 
-      // keep React Query in sync
       queryClient.invalidateQueries({ queryKey: ["auth"] });
     },
   });
