@@ -28,7 +28,7 @@ export function PublicFooter() {
           <div className="mt-4 space-y-2 text-sm text-[#e6c79c]">
             <p>Sunday English Service — 7:00 AM</p>
             <p>Sunday Chichewa Service — 9:30 AM</p>
-            <p>Combined Service — 8:30 AM</p>
+            <p>Combined Service — 8:00 AM</p>
             <p className="text-xs text-[#c2a23a]/70">
               (Last Sunday of the month)
             </p>

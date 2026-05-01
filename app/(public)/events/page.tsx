@@ -216,20 +216,20 @@ export default async function PublicEventsPage({
             {[
               {
                 day: "Sunday",
-                time: "9:00 AM",
+                time: "7:00 AM",
                 title: "Morning Worship",
                 detail:
                   "Our main gathering — teaching, singing, and communion.",
               },
               {
                 day: "Sunday",
-                time: "11:00 AM",
+                time: "8:00 AM",
                 title: "Second Service",
                 detail: "A second opportunity to worship together as a family.",
               },
               {
                 day: "Wednesday",
-                time: "6:30 PM",
+                time: "6:00 PM",
                 title: "Bible Study",
                 detail: "Mid-week study and prayer for deeper discipleship.",
               },
