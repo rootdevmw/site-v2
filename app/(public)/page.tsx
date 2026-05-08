@@ -180,7 +180,7 @@ export default async function PublicHomePage() {
               events.map((event) => (
                 <Link
                   key={event.id}
-                  href={`/events/${event.id}`}
+                  href={`/events/${event.slug}`}
                   className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition-all duration-200 hover:border-[#7c3d0f]/20 hover:shadow-lg"
                 >
                   <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
@@ -297,7 +297,7 @@ export default async function PublicHomePage() {
               content.map((item, i) => (
                 <Link
                   key={item.id}
-                  href={`/content/${item.id}`}
+                  href={`/content/${item.slug}`}
                   className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:border-white/20 hover:bg-white/10"
                 >
                   <span className="font-serif pointer-events-none absolute right-5 top-3 select-none text-6xl font-bold text-white/[0.04]">
@@ -354,7 +354,7 @@ export default async function PublicHomePage() {
             {ministries.map((ministry) => (
               <Link
                 key={ministry.id}
-                href={`/ministries/${ministry.id}`}
+                href={`/ministries/${ministry.slug}`}
                 className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#e8c49a] bg-white transition hover:border-[#7c3d0f]/20 hover:shadow-md"
               >
                 <div className="h-1 w-full bg-gradient-to-r from-[#7c3d0f] to-[#c2a23a]" />
