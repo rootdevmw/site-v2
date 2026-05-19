@@ -234,7 +234,7 @@ export default async function PublicProgramsPage({
                           {items.length} item{items.length !== 1 ? "s" : ""}
                         </p>
                         <Link
-                          href={`/programs/${program.id}`}
+                          href={`/programs/${program.slug}`}
                           className="text-[11px] font-semibold text-[#c2620a] hover:underline"
                         >
                           View full program →
