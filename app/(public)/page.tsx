@@ -99,9 +99,9 @@ export default async function PublicHomePage() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-8 text-[#fde5c0]">
-              Every church story begins with an invitation. Join us for worship,
-              teaching, fellowship, and practical ministry shaped by the hope of
-              the gospel.
+              Red Cross Church of Christ is a congregation centered on Christ,
+              Scripture, fellowship, and practical ministry shaped by the hope
+              of the gospel.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-4">
