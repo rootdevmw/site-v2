@@ -80,6 +80,14 @@ const beliefs = [
   },
 ];
 
+const missionObjectives = [
+  "Preach the gospel of Christ and the salvation found in him.",
+  "Teach those added to the church to follow Christ's teachings through fellowship, the breaking of bread, and prayer.",
+  "Develop and teach the scriptural organization of the church in Blantyre, Malawi, and the world.",
+  "Provide relief that empowers people in need toward independence and freedom in the Lord's service.",
+  "Develop people, infrastructure, and systems that support the mission and these objectives.",
+];
+
 export default function AboutPage() {
   return (
     <div className="font-sans">
@@ -124,15 +132,17 @@ export default function AboutPage() {
                 Rooted in faith, open to all
               </h2>
               <p className="mt-4 text-[15px] leading-7 text-[#6b4c2a]">
-                Red Cross Church of Christ has been a worshipping community
-                since yyyy. We are a congregation shaped by the New Testament —
-                seeking to follow Jesus faithfully while remaining a warm,
-                welcoming home for people at every stage of their journey.
+                Red Cross Church of Christ is located on Mahatma Road in
+                Blantyre, Malawi. We are overseen by the elders of the
+                congregation and are committed to teaching the Bible and the
+                truth of God&apos;s word.
               </p>
               <p className="mt-4 text-[15px] leading-7 text-[#6b4c2a]">
-                We believe the church is not a building but a people — and every
-                person who walks through our doors is a full part of that
-                family.
+                We are a congregation shaped by the New Testament, seeking to
+                follow Jesus faithfully while remaining a warm, welcoming home
+                for people at every stage of their journey. Our calling follows
+                Christ&apos;s commission to make disciples, baptize them, and teach
+                them to observe his commands (Matthew 28:19-20).
               </p>
             </div>
             <div className="relative">
@@ -151,14 +161,45 @@ export default function AboutPage() {
               >
                 <p className="font-serif text-3xl font-bold text-white">Est.</p>
 
-                <p className="font-serif text-3xl font-bold text-[#f7d9a8]">
-                  yyyy
-                </p>
-
                 <p className="mt-1 text-[10px] font-medium uppercase tracking-widest text-[#f1e3cf]">
                   Serving the community
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#fdf6ee] px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-screen-2xl">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
+                Our mission
+              </p>
+              <h2 className="font-serif mt-2 text-2xl font-semibold text-[#4a2008] sm:text-3xl">
+                Bringing people to eternal salvation in Christ
+              </h2>
+              <p className="mt-4 text-[15px] leading-7 text-[#6b4c2a]">
+                The mission of the Red Cross Church of Christ congregation is
+                to bring people unto eternal salvation in Christ Jesus and
+                mature them into disciples thoroughly equipped for works of
+                service and the defence of the one faith in Blantyre, Malawi,
+                the region, and the world.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-serif text-lg font-semibold text-[#4a2008]">
+                Mission-based objectives
+              </h3>
+              <ol className="mt-4 space-y-3 text-sm leading-6 text-[#6b4c2a]">
+                {missionObjectives.map((objective) => (
+                  <li key={objective} className="flex gap-3">
+                    <span className="font-semibold text-[#c2620a]">•</span>
+                    <span>{objective}</span>
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
         </div>
