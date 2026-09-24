@@ -56,6 +56,7 @@ export function ContentForm({
     resolver: zodResolver(contentSchema) as Resolver<ContentFormValues>,
     defaultValues: {
       title: initialData?.title ?? "",
+      slug: initialData?.slug ?? "",
       body: initialData?.body ?? "",
       typeId: initialData?.typeId ?? "",
       authorId: initialData?.authorId ?? "",
@@ -200,6 +201,13 @@ export function ContentForm({
         label="Title"
         {...register("title")}
         error={errors.title?.message}
+        disabled={isView}
+      />
+      <Input
+        label="Stable slug (optional)"
+        placeholder="mission-statement or church-leadership"
+        {...register("slug")}
+        error={errors.slug?.message}
         disabled={isView}
       />
       <SearchableSelect

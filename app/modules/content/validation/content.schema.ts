@@ -2,6 +2,11 @@ import { z } from "zod";
 
 export const contentSchema = z.object({
   title: z.string().min(1, "Title is required"),
+  slug: z
+    .string()
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase words separated by hyphens")
+    .optional()
+    .or(z.literal("")),
   body: z.string().min(1, "Body is required"),
   typeId: z.string().min(1, "Content type is required"),
   authorId: z.string().min(1, "Author is required"),

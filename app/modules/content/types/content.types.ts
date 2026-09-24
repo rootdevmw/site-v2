@@ -24,7 +24,7 @@ export type Content = {
   id: string;
   title: string;
   body: string;
-  slug:string;
+  slug: string;
   status: "Draft" | "Published";
   type: ContentType;
   author: Member;
@@ -35,6 +35,7 @@ export type Content = {
 
 export type ContentFormValues = {
   title: string;
+  slug?: string;
   body: string;
   typeId: string;
   authorId: string;

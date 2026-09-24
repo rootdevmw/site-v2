@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getPublicContentBySlug } from "@/lib/public-api/content";
 
 const pillars = [
   {
@@ -88,7 +89,21 @@ const missionObjectives = [
   "Develop people, infrastructure, and systems that support the mission and these objectives.",
 ];
 
-export default function AboutPage() {
+async function getOptionalContent(slug: string) {
+  try {
+    const response = await getPublicContentBySlug(slug);
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export default async function AboutPage() {
+  const [missionContent, leadershipContent] = await Promise.all([
+    getOptionalContent("mission-statement"),
+    getOptionalContent("church-leadership"),
+  ]);
+
   return (
     <div className="font-sans">
       {/* ── PAGE HEADER ───────────────────────────────────────── */}
@@ -180,15 +195,22 @@ export default function AboutPage() {
               <h2 className="font-serif mt-2 text-2xl font-semibold text-[#4a2008] sm:text-3xl">
                 Bringing people to eternal salvation in Christ
               </h2>
-              <p className="mt-4 text-[15px] leading-7 text-[#6b4c2a]">
-                The mission of the Red Cross Church of Christ congregation is
-                to bring people unto eternal salvation in Christ Jesus and
-                mature them into disciples thoroughly equipped for works of
-                service and the defence of the one faith in Blantyre, Malawi,
-                the region, and the world.
-              </p>
+              {missionContent ? (
+                <div
+                  className="prose prose-sm mt-4 max-w-none leading-7 text-[#6b4c2a] [&_a]:underline [&_img]:my-4 [&_img]:rounded-xl"
+                  dangerouslySetInnerHTML={{ __html: missionContent.body }}
+                />
+              ) : (
+                <p className="mt-4 text-[15px] leading-7 text-[#6b4c2a]">
+                  The mission of the Red Cross Church of Christ congregation is
+                  to bring people unto eternal salvation in Christ Jesus and
+                  mature them into disciples thoroughly equipped for works of
+                  service and the defence of the one faith in Blantyre, Malawi,
+                  the region, and the world.
+                </p>
+              )}
             </div>
-            <div>
+            {!missionContent && <div>
               <h3 className="font-serif text-lg font-semibold text-[#4a2008]">
                 Mission-based objectives
               </h3>
@@ -200,10 +222,29 @@ export default function AboutPage() {
                   </li>
                 ))}
               </ol>
-            </div>
+            </div>}
           </div>
         </div>
       </section>
+
+      {leadershipContent && (
+        <section className="bg-white px-4 py-12 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-screen-2xl">
+            <div className="mb-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2620a]">
+                Leadership
+              </p>
+              <h2 className="font-serif mt-2 text-2xl font-semibold text-[#4a2008] sm:text-3xl">
+                Serving the congregation
+              </h2>
+            </div>
+            <div
+              className="prose max-w-none leading-7 text-[#6b4c2a] [&_img]:my-4 [&_img]:max-h-80 [&_img]:rounded-xl [&_img]:object-cover"
+              dangerouslySetInnerHTML={{ __html: leadershipContent.body }}
+            />
+          </div>
+        </section>
+      )}
 
       {/* ── THREE PILLARS ─────────────────────────────────────── */}
       <section className="px-4 py-12 sm:px-6 lg:px-8">
