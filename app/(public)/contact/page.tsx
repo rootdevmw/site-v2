@@ -58,9 +58,9 @@ export default function ContactPage() {
             hear from you.
           </h1>
           <p className="mt-6 max-w-xl text-base leading-8 text-[var(--public-muted)] sm:text-lg">
-            Planning a first visit, looking for prayer, or hoping to get
-            involved? Start a conversation with the church team. You are welcome
-            to ask questions.
+            Have a question about the Bible, baptism, a first visit or taking
+            part in church life? Start a conversation with the church team. You
+            are welcome to ask questions or request prayer.
           </p>
           <div className="mt-7 flex flex-wrap gap-x-7 gap-y-2">
             <a href="#find-us" className="public-text-link">

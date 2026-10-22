@@ -12,6 +12,7 @@ import { ServiceTimes } from "@/components/public/ServiceTimes";
 import { VisitForm } from "@/components/public/VisitForm";
 import { church, homecellGathering } from "@/config/church";
 import { getChurchDateInputValue } from "@/lib/utils/church-date";
+import { WorshipPractices } from "@/components/public/ChurchStory";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/plan-visit" },
@@ -128,8 +129,9 @@ export default function PlanVisitPage() {
           <div className="border-t border-[var(--public-line)] pt-6">
             <h3 className="text-lg font-semibold">Worship together</h3>
             <p className="mt-3 text-sm leading-7 text-[var(--public-muted)]">
-              We come together for worship, prayer, and teaching from Scripture,
-              seeking to follow Christ in our everyday lives.
+              We sing together without musical instruments, pray, learn from
+              Scripture, share the Lord&apos;s Supper each Sunday, and give from
+              the blessings God has entrusted to us.
             </p>
             <Link href="/about" className="public-text-link mt-3">
               Our faith &amp; church story <FiArrowRight aria-hidden="true" />
@@ -160,6 +162,8 @@ export default function PlanVisitPage() {
           </div>
         </div>
       </section>
+
+      <WorshipPractices />
 
       <section id="let-us-know" className="scroll-mt-36 bg-[#f0eadf]">
         <div className="public-container public-section grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">

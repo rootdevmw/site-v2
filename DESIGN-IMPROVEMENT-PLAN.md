@@ -515,6 +515,16 @@ Both production builds, frontend TypeScript, targeted lint and changed-file whit
 
 Full validation, responsive source findings, asset sizes, reproduction commands and operational limits are recorded in [FINAL-VALIDATION.md](./FINAL-VALIDATION.md). Run the updated API alongside the frontend to enable the new public library queries and role protection. This pass requires no migration or new dependency. No deployment, live data mutation, email, upload or external message was performed during verification.
 
+**Content refinement — increment 30**
+
+The church’s supplied Word document and Chichewa historical PDF now inform the public copy. About includes the stated mission, vision and all five mission objectives; an account of the Red Cross congregation’s beginnings and outreach; fuller faith-and-practice summaries; and the five worship practices described in the source. Its local story begins with the 1962 Zingwangwa home gathering and the worship building completed in 1965. The national account’s 1906 beginnings are explicitly distinguished from the congregation’s own roots.
+
+The homepage, footer, first-visit information, contact introduction and public metadata now reflect that identity. Shared copy lives in `config/church-content.ts`; purpose, history, beliefs and worship use server-rendered sections with responsive layouts, working section links and seven native expandable belief entries. The first-visit page uses the same worship descriptions as About. Existing service times, contact details and current leadership records retain their established sources. Historical nursery, clinic, farming and partnership descriptions are not turned into claims about current services.
+
+[CONTENT-SOURCES.md](./CONTENT-SOURCES.md) records source passages, page references, translation decisions and two unclear Scripture citations that were omitted without inventing replacements. The source’s positions on the authority of Scripture, grace/faith/baptism, a cappella worship, marriage/remarriage and church leadership are retained. The original documents remain unchanged and have not been uploaded as public downloads.
+
+The 87 public regression tests, frontend TypeScript, targeted lint and production build pass. A server-markup check confirms one About-page H1, unique section IDs, working in-page destinations, seven native belief disclosures and exclusion of the two ambiguous citations. All 26 read-only production HTTP checks pass again, including the revised public pages and their canonicals; the temporary frontend was stopped afterwards. The library feeds still exercised their unavailable recovery states. API and database behavior are unchanged by this content pass.
+
 **What the original implementation tells us**
 
 | Finding                                                                                                             | Evidence                                                                                                                                                                 | Design implication                                                                                                    |

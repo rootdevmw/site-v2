@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
 import { church, homecellGathering } from "@/config/church";
+import { churchContent } from "@/config/church-content";
 import { ServiceTimes } from "./ServiceTimes";
 
 export function PublicFooter() {
@@ -22,7 +23,7 @@ export function PublicFooter() {
               <Image src="/images/church-logo.webp" alt="" width={64} height={64} className="size-14 rounded-full bg-[#faf8f4] object-contain p-1" />
               <span className="text-sm font-semibold leading-6">Church of Christ<br /><span className="font-normal text-stone-300">at Red Cross</span></span>
             </Link>
-            <p className="mt-5 max-w-xs text-sm leading-7 text-stone-300">Rooted in Christ. Growing together in worship, discipleship, and service to our community.</p>
+            <p className="mt-5 max-w-xs text-sm leading-7 text-stone-300">{churchContent.footerSummary}</p>
             <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
               <a href={church.facebookUrl} target="_blank" rel="noopener noreferrer" className="public-text-link text-stone-200">Facebook <FiArrowUpRight aria-hidden="true" /></a>
               <a href={church.youtubeUrl} target="_blank" rel="noopener noreferrer" className="public-text-link text-stone-200">YouTube <FiArrowUpRight aria-hidden="true" /></a>
@@ -36,7 +37,7 @@ export function PublicFooter() {
           <nav aria-label="Footer navigation">
             <h3 className="mb-4 text-sm font-semibold">Explore</h3>
             {[
-              ["Our story", "/about"], ["Messages", "/content"], ["Ministries", "/ministries"],
+              ["Our story", "/about#our-story"], ["Faith and practice", "/about#our-beliefs"], ["Messages", "/content"], ["Ministries", "/ministries"],
               ["Homecells", "/homecells"], ["Events", "/events"], ["Prayer", "/prayer-request"],
             ].map(([label, href]) => <Link key={href} href={href} className="flex min-h-11 items-center text-sm text-stone-300 hover:text-white">{label}</Link>)}
           </nav>

@@ -13,48 +13,36 @@ import worshipPhoto from "@/public/images/worship.webp";
 import { LeadershipProfiles } from "@/components/public/LeadershipProfiles";
 import { ServiceTimes } from "@/components/public/ServiceTimes";
 import { church } from "@/config/church";
+import { churchContent } from "@/config/church-content";
+import {
+  ChurchBeliefs,
+  ChurchHistory,
+  ChurchPurpose,
+  WorshipPractices,
+} from "@/components/public/ChurchStory";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/about" },
-  title: "About our church",
+  title: "Our faith, purpose and story",
   description:
-    "Meet Church of Christ at Red Cross in Blantyre, Malawi. Discover our faith, worship, discipleship, service and church leadership, and plan your first visit.",
+    "Discover the beliefs, mission, worship and history of Church of Christ at Red Cross, from a 1962 home gathering in Zingwangwa to the congregation in Blantyre today.",
 };
 
 const pillars = [
   {
     title: "Worship",
-    text: "We gather around the goodness of God and the hope of the gospel, lifting our voices and hearts in response to his grace.",
+    text: "We gather on the first day of the week to remember Christ in the Lord’s Supper, sing a cappella, pray, learn from Scripture and give.",
     Icon: FiHeart,
   },
   {
     title: "Discipleship",
-    text: "We grow through Scripture, prayer, fellowship, and faithful practice, shaping one another into the likeness of Christ.",
+    text: "We teach the gospel and help believers mature in Christ, continuing in His teaching, fellowship, the breaking of bread and prayer.",
     Icon: FiBookOpen,
   },
   {
     title: "Service",
-    text: "We use our gifts to love the church and bless the wider community, serving as Christ served, with humility and joy.",
+    text: "We care for the poor and afflicted, seeking to offer relief and equip people and congregations to support themselves and serve the Lord.",
     Icon: FiUsers,
-  },
-];
-
-const beliefs = [
-  {
-    label: "Scripture",
-    detail: "The Bible is the inspired Word of God and our ultimate authority.",
-  },
-  {
-    label: "Baptism",
-    detail: "We practice immersion baptism for the forgiveness of sins.",
-  },
-  {
-    label: "The Lord’s Supper",
-    detail: "We share communion weekly as a memorial to Christ’s sacrifice.",
-  },
-  {
-    label: "Community",
-    detail: "We are one body, diverse, united, and called to love one another.",
   },
 ];
 
@@ -65,13 +53,14 @@ export default function AboutPage() {
         <div className="min-w-0">
           <p className="public-eyebrow">About our church · Blantyre, Malawi</p>
           <h1 className="public-display mt-5 text-[clamp(2.75rem,5vw,4.75rem)] leading-[1.1]">
-            A shared faith.
-            <br />A place to belong.
+            Following Christ.
+            <br />
+            Sharing His gospel.
           </h1>
           <p className="mt-6 max-w-xl text-base leading-8 text-[var(--public-muted)] sm:text-lg">
-            We are {church.name}, a Christ-centered church devoted to the Bible,
-            prayer, discipleship, and the mission of making disciples of all
-            nations, as commanded in Matthew 28:19–20.
+            We are {church.name}, a congregation seeking to follow Jesus and the
+            teaching of the New Testament. We share His gospel and help people
+            grow as disciples, following His command in Matthew 28:19–20.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -107,6 +96,23 @@ export default function AboutPage() {
         </figure>
       </section>
 
+      <nav
+        aria-label="On this page"
+        className="public-container flex flex-wrap gap-x-6 gap-y-1 pb-8"
+      >
+        {[
+          ["Our mission", "#our-purpose"],
+          ["Our story", "#our-story"],
+          ["Faith and practice", "#our-beliefs"],
+          ["Our worship", "#our-worship"],
+          ["Leadership", "#church-leadership"],
+        ].map(([label, href]) => (
+          <a key={href} href={href} className="public-text-link">
+            {label}
+          </a>
+        ))}
+      </nav>
+
       <section className="border-y border-[var(--public-line)] bg-white">
         <div className="public-container public-section">
           <div className="grid gap-7 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
@@ -118,18 +124,11 @@ export default function AboutPage() {
               </h2>
             </div>
             <div className="min-w-0 max-w-2xl space-y-4 text-base leading-8 text-[var(--public-muted)]">
+              <p>{churchContent.identity}</p>
               <p>
-                Red Cross Church of Christ is a worshipping community shaped by
-                the Bible and the life of Christ. We seek to restore the pattern
-                of the New Testament church in doctrine, worship, fellowship,
-                and mission, while making room for every person to come in faith
-                and belong with us.
-              </p>
-              <p>
-                We are overseen by the elders of the Church of Christ at
-                Redcross, {church.address}, and we are committed to teaching the
-                Bible and the gospel truth of God&apos;s Word as the foundation
-                of all we do.
+                Jesus Christ is our only Saviour. We seek to make His gospel
+                known, help His disciples grow in faith, and care for our
+                neighbours in Blantyre and beyond.
               </p>
             </div>
           </div>
@@ -153,50 +152,15 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section
-        id="our-beliefs"
-        className="public-container public-section grid scroll-mt-36 gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20"
-      >
-        <div className="min-w-0 max-w-lg">
-          <p className="public-eyebrow">Our beliefs</p>
-          <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
-            Scripture at the heart of our life together.
-          </h2>
-          <p className="mt-5 text-base leading-8 text-[var(--public-muted)]">
-            As a Church of Christ, we return to Scripture as our sole authority,
-            teaching the Bible and the gospel truth of God&apos;s Word, speaking
-            where the Bible speaks, and remaining silent where it is silent.
-          </p>
-          <Link href="/content" className="public-text-link mt-5">
-            Explore our messages <FiArrowRight aria-hidden="true" />
-          </Link>
-        </div>
-        <dl className="grid gap-x-8 sm:grid-cols-2">
-          {beliefs.map((belief, index) => (
-            <div
-              key={belief.label}
-              className="min-w-0 border-t border-[var(--public-line)] py-7"
-            >
-              <dt>
-                <span
-                  aria-hidden="true"
-                  className="text-xs font-semibold tabular-nums text-[var(--public-accent)]"
-                >
-                  0{index + 1}
-                </span>
-                <span className="public-display mt-3 block text-2xl leading-snug">
-                  {belief.label}
-                </span>
-              </dt>
-              <dd className="mt-3 text-sm leading-7 text-[var(--public-muted)]">
-                {belief.detail}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+      <ChurchPurpose />
+      <ChurchHistory />
+      <ChurchBeliefs />
+      <WorshipPractices />
 
-      <section className="border-y border-[var(--public-line)] bg-[#f3eee5]">
+      <section
+        id="church-leadership"
+        className="scroll-mt-36 border-y border-[var(--public-line)] bg-[#f3eee5]"
+      >
         <div className="public-container public-section">
           <div className="max-w-2xl">
             <p className="public-eyebrow">Church leadership</p>

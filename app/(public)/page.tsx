@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   title: { absolute: "Church of Christ at Red Cross | Blantyre, Malawi" },
   description:
-    "Rooted in Christ. Growing together. Join our church family in Blantyre for Sunday worship in English at 7:00 AM or Chichewa at 9:30 AM. Plan your visit.",
+    "A New Testament congregation in Blantyre, Malawi, sharing the gospel of Jesus Christ. Discover our faith and story, and join us for Sunday worship.",
 };
 
 export default function PublicRootPage() {

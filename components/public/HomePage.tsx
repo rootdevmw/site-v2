@@ -11,15 +11,16 @@ import { getPublicEvents } from "@/lib/public-api/events";
 import { getPublicMinistries } from "@/lib/public-api/ministries";
 import { formatChurchDate } from "@/lib/utils/church-date";
 import { loadHomeFeed } from "@/lib/utils/optional-feed";
+import { churchContent } from "@/config/church-content";
 
 export function HomePage() {
   return (
     <>
       <section className="public-container grid items-center gap-10 py-10 sm:py-14 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:py-16">
         <div className="min-w-0">
-          <p className="public-eyebrow">A church family in Blantyre, Malawi</p>
+          <p className="public-eyebrow">A New Testament church in Blantyre, Malawi</p>
           <h1 className="public-display mt-5 max-w-xl text-[clamp(2.75rem,5.1vw,4.8rem)] leading-[1.08]">Rooted in Christ.<br />Growing together.</h1>
-          <p className="mt-6 max-w-lg text-base leading-8 text-[var(--public-muted)] sm:text-lg">A place to worship, explore Scripture, and share life. Wherever you are on your journey of faith, you are welcome at Red Cross.</p>
+          <p className="mt-6 max-w-lg text-base leading-8 text-[var(--public-muted)] sm:text-lg">{churchContent.introduction}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/plan-visit" className="public-button public-button-primary">Plan your first visit <FiArrowUpRight aria-hidden="true" /></Link>
             <Link href="/live" className="public-button public-button-secondary">Watch online <FiArrowRight aria-hidden="true" /></Link>
@@ -54,11 +55,11 @@ export function HomePage() {
           <Image src={communityPhoto} alt="Members of the Red Cross church family smiling together with their Bibles" fill placeholder="blur" sizes="(min-width: 1280px) 600px, (min-width: 1024px) 50vw, 100vw" className="object-cover" />
         </div>
         <div className="max-w-xl">
-          <p className="public-eyebrow">Faith is a shared journey</p>
+          <p className="public-eyebrow">Our story · Our purpose</p>
           <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">Faith grows<br className="hidden sm:block" /> in community.</h2>
-          <p className="mt-6 text-base leading-8 text-[var(--public-muted)]">We are a church family seeking to follow Jesus and live out the teaching of the New Testament. We gather to worship, learn from Scripture, encourage one another, and serve.</p>
-          <p className="mt-4 text-base leading-8 text-[var(--public-muted)]">Come with your questions, your hopes, and your everyday life. There is room to grow together.</p>
-          <Link href="/about" className="public-text-link mt-5">Meet our church <FiArrowUpRight aria-hidden="true" /></Link>
+          <p className="mt-6 text-base leading-8 text-[var(--public-muted)]">{churchContent.homeStory}</p>
+          <p className="mt-4 text-base leading-8 text-[var(--public-muted)]">{churchContent.homePurpose}</p>
+          <div className="mt-5 flex flex-wrap gap-x-6 gap-y-1"><Link href="/about#our-story" className="public-text-link">Read our story <FiArrowUpRight aria-hidden="true" /></Link><Link href="/about#our-purpose" className="public-text-link">Our mission and vision <FiArrowUpRight aria-hidden="true" /></Link></div>
         </div>
       </section>
 

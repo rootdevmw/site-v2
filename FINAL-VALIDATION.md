@@ -2,7 +2,9 @@
 
 22 October 2026. Production domain: `https://churchofchrist.mw`.
 
-The agreed design implementation is complete. The [improvement plan](./DESIGN-IMPROVEMENT-PLAN.md) retains the original audit and all 29 implementation increments. Public pages, dashboard records and management tools, and invitation-based account flows now share their respective responsive design systems.
+The agreed design implementation is complete. The [improvement plan](./DESIGN-IMPROVEMENT-PLAN.md) retains the original audit, all 29 design implementation increments and the subsequent content refinement. Public pages, dashboard records and management tools, and invitation-based account flows now share their respective responsive design systems.
+
+The subsequent content pass uses the supplied history and doctrine documents for the homepage, About, first-visit information, contact guidance and footer. Its sources and editorial decisions are recorded in [CONTENT-SOURCES.md](./CONTENT-SOURCES.md). The 87 public tests, TypeScript, targeted lint, production build, all 26 read-only HTTP checks and section-link/server-markup checks passed again for this content update; the API is unchanged. The library feeds continued to exercise unavailable recovery, and the temporary frontend was stopped afterwards.
 
 ## Delivered scope
 
