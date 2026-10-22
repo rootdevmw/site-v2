@@ -1,26 +1,26 @@
 :root {
-  --bg-dark: #252525;
-  --card-bg: #2b2b2b;
-  --main-gold: #c8a96a;
-  --gold-dark: #b89655;
-  --blue: #7fb7d8;
+  --bg-dark: #f6efe6;
+  --card-bg: #fffaf4;
+  --main-gold: #c6892d;
+  --gold-dark: #9f6514;
+  --blue: #5d8db5;
 
   /* Backgrounds */
-  --bg-main: var(--bg-dark);
-  --bg-subtle: var(--card-elevated);
-  --bg-card: var(--card-bg);
+  --bg-main: #fdf9f4;
+  --bg-subtle: #fffaf3;
+  --bg-card: #fffdfb;
 
   /* Text */
-  --text-primary: #fcebce;
-  --text-secondary: #cfc6b2;
+  --text-primary: #3f1e0d;
+  --text-secondary: #6d4a2e;
 
   /* Gold Accent */
   --accent-gold: var(--main-gold);
   --accent-gold-hover: var(--gold-dark);
-  --accent-gold-soft: rgba(200, 169, 106, 0.18);
+  --accent-gold-soft: rgba(198, 137, 45, 0.12);
 
   /* UI */
-  --border-soft: #3a3a3a;
-  --hover-soft: #333333;
-  --card-elevated: #323232;
+  --border-soft: #ead7b1;
+  --hover-soft: #f5e9d5;
+  --card-elevated: #fffdf9;
 }

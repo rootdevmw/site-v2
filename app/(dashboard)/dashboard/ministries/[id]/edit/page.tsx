@@ -1,62 +1,24 @@
 "use client";
-
 import { useParams, useRouter } from "next/navigation";
-import { useMinistry } from "@/app/modules/ministries/hooks/useMinistry";
-import { useDeleteMinistry } from "@/app/modules/ministries/hooks/useDeleteMinistry";
 import { MinistryForm } from "@/app/modules/ministries/components/MinistryForm";
-import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
-
+import { useMinistry } from "@/app/modules/ministries/hooks/useMinistry";
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import { useDeleteDirectoryRecord } from "@/lib/hooks/useDirectoryRecords";
+import { RecordFeedback, RecordLoadError, RecordSkeleton } from "@/components/records/RecordLayout";
+import { GroupEditRefreshNotice } from "@/components/directories/GroupEditRefreshNotice";
 export default function EditMinistryPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const actor = useAuthStore((state) => state.user);
+  const permitted = hasRequiredRole(actor?.roles ?? [], ["DEACON"]);
+  const query = useMinistry(id, permitted);
+  const deletion = useDeleteDirectoryRecord("ministries");
   const router = useRouter();
-
-  const { data, isLoading } = useMinistry(id as string);
-  const { mutateAsync: deleteMinistry } = useDeleteMinistry();
-
-  if (isLoading) return <SpiritualLoader />;
-
-  const ministry = data?.data;
-
-  if (!ministry) return <div>Not found</div>;
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-semibold text-[var(--text-primary)]">
-            Edit Ministry
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)]">
-            Update ministry details
-          </p>
-        </div>
-
-        <button
-          onClick={() => router.push(`/dashboard/ministries/${ministry.id}`)}
-          className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200"
-        >
-          View Details
-        </button>
-      </div>
-
-      {/* Form Card */}
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-6">
-        <MinistryForm
-          mode="edit"
-          initialData={{
-            id: ministry.id,
-            name: ministry.name,
-            description: ministry.description,
-            leaderId: ministry.leaderId,
-            overseerId: ministry.overseerId || "",
-          }}
-          onDelete={async () => {
-            await deleteMinistry(ministry.id);
-            router.push("/ministries");
-          }}
-        />
-      </div>
-    </div>
-  );
+  if (!permitted) return <RecordFeedback kind="forbidden" entity="Ministry editor" backHref="/dashboard" backLabel="Return to dashboard" />;
+  if (query.isPending) return <RecordSkeleton label="Loading ministry editor…" />;
+  if (query.isError && !query.data?.data) return <RecordLoadError error={query.error} entity="Ministry" backHref="/dashboard/ministries" backLabel="Back to ministries" onRetry={() => { void query.refetch(); }} retrying={query.isFetching} />;
+  const group = query.data?.data;
+  if (!group) return <RecordFeedback kind="missing" entity="Ministry" backHref="/dashboard/ministries" backLabel="Back to ministries" />;
+  const person = (entry: typeof group.leader) => entry ? { id: entry.id, name: [entry.firstName, entry.lastName].filter(Boolean).join(" ") } : null;
+  return <><GroupEditRefreshNotice failed={query.isError} /><MinistryForm key={id} mode="edit" initialData={{ id: group.id, name: group.name, purpose: group.purpose || "", description: group.description || "", leaderId: group.leaderId || group.leader?.id || "", overseerId: group.overseerId || group.overseer?.id || "" }} initialPeople={{ leader: person(group.leader), overseer: person(group.overseer) }} onDelete={async () => { await deletion.mutateAsync(id); router.push("/dashboard/ministries"); }} /></>;
 }

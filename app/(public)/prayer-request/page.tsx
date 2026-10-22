@@ -132,24 +132,24 @@ export default function PrayerRequestPage() {
   return (
     <div className="font-sans">
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden bg-[#2b1405] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 opacity-[0.04]">
+      <section className="relative overflow-hidden bg-[#f7efe3] px-4 py-10 sm:px-6 lg:px-8">
+        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 opacity-[0.08]">
           <svg viewBox="0 0 200 200" fill="none">
-            <rect x="85" y="20" width="30" height="160" fill="white" />
-            <rect x="20" y="70" width="160" height="30" fill="white" />
+            <rect x="85" y="20" width="30" height="160" fill="#7c3d0f" />
+            <rect x="20" y="70" width="160" height="30" fill="#7c3d0f" />
           </svg>
         </div>
         <div className="relative mx-auto max-w-2xl">
           <div className="mb-2 flex items-center gap-2.5">
-            <div className="h-px w-6 bg-[#e8c49a]" />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e8c49a]">
+            <div className="h-px w-6 bg-[#c2620a]" />
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#c2620a]">
               Prayer request
             </p>
           </div>
-          <h1 className="font-serif text-2xl font-semibold text-white sm:text-3xl">
+          <h1 className="font-serif text-2xl font-semibold text-[#4a2008] sm:text-3xl">
             Bring it before God together
           </h1>
-          <p className="mt-2 text-sm text-[#e6c79c]">
+          <p className="mt-2 text-sm text-[#5f3b20]">
             Share what's on your heart. Your request is handled with care and
             confidentiality.
           </p>

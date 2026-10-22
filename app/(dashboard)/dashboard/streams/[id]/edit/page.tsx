@@ -5,55 +5,87 @@ import { StreamForm } from "@/app/modules/streams/components/StreamForm";
 import { useStream } from "@/app/modules/streams/hooks/useStream";
 import { useDeleteStream } from "@/app/modules/streams/hooks/useDeleteStream";
 import { showSuccess, showError } from "@/lib/toast";
-import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
+import {
+  RecordFeedback,
+  RecordLoadError,
+  RecordSkeleton,
+} from "@/components/records/RecordLayout";
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
 
 export default function EditStreamPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const { data, isLoading } = useStream(id as string);
+  const user = useAuthStore((state) => state.user);
+  const permitted = hasRequiredRole(user?.roles ?? [], ["MEDIA"]);
+  const { data, isPending, isError, error, refetch, isFetching } = useStream(
+    id,
+    permitted,
+  );
   const { mutateAsync: deleteStream } = useDeleteStream();
 
-  if (isLoading) return <SpiritualLoader message="Loading Stream details..." />;
+  if (!permitted)
+    return (
+      <RecordFeedback
+        kind="forbidden"
+        entity="Stream"
+        backHref="/dashboard"
+        backLabel="Return to dashboard"
+      />
+    );
+  if (isPending) return <RecordSkeleton label="Loading stream editor…" />;
+  if (isError && !data?.data)
+    return (
+      <RecordLoadError
+        error={error}
+        entity="Stream"
+        backHref="/dashboard/streams"
+        backLabel="Back to streams"
+        onRetry={() => {
+          void refetch();
+        }}
+        retrying={isFetching}
+      />
+    );
 
   const stream = data?.data;
-
-  // Transform stream data to match form values
-  const formData = stream
-    ? {
-        ...stream,
-        platformIds: stream.platforms?.map((p: any) => p.id) || [],
-      }
-    : undefined;
+  if (!stream)
+    return (
+      <RecordFeedback
+        kind="missing"
+        entity="Stream"
+        backHref="/dashboard/streams"
+        backLabel="Back to streams"
+      />
+    );
 
   const handleDelete = async () => {
     try {
-      await deleteStream(id as string);
+      await deleteStream(id);
       showSuccess("Stream deleted successfully");
       router.push("/dashboard/streams");
-    } catch {
-      showError("Failed to delete stream");
+    } catch (deleteError) {
+      showError(
+        "Stream deletion could not be confirmed. Review the list before retrying.",
+      );
+      throw deleteError;
     }
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-          Edit Stream
-        </h1>
-        <p className="text-sm text-[var(--text-secondary)]">
-          Update stream details
+    <>
+      {isError && (
+        <p role="alert" className="content-editor-notice mb-6">
+          The latest record could not be loaded. Your current editor is kept.
+          Review the saved stream before retrying a save.
         </p>
-      </div>
-
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6">
-        <StreamForm
-          mode="edit"
-          initialData={formData}
-          onSuccess={() => router.push("/dashboard/streams")}
-          onDelete={handleDelete}
-        />
-      </div>
-    </div>
+      )}
+      <StreamForm
+        key={stream.id}
+        mode="edit"
+        initialData={stream}
+        onDelete={handleDelete}
+      />
+    </>
   );
 }

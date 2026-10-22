@@ -1,28 +1,6 @@
-import { api } from "@/lib/api/client";
-import { Publication, PublicationFormValues } from "../types/publication.types";
+import { savePublicationEditor } from "@/lib/api/publication-editor";
+import type { PublicationEditorPayload } from "@/lib/utils/publication-editor";
 
-export async function updatePublication(
-  id: string,
-  data: PublicationFormValues,
-): Promise<{ data: Publication }> {
-  const formData = new FormData();
-
-  formData.append("title", data.title);
-  if (data.description) {
-    formData.append("description", data.description);
-  }
-  if (data.publishedAt) {
-    formData.append("publishedAt", data.publishedAt.toISOString());
-  }
-  if (data.file) {
-    formData.append("file", data.file);
-  }
-
-  const res = await api.patch(`/publications/${id}`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-
-  return res.data;
+export function updatePublication(id: string, data: PublicationEditorPayload) {
+  return savePublicationEditor(data, id);
 }

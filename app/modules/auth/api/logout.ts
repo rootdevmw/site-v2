@@ -1,8 +1,5 @@
-import { api } from "@/lib/api/client";
-import { useAuthStore } from "../store/auth.store";
+import { accountWrite } from "@/lib/api/account-flows";
 
-export async function logout() {
-  await api.post("/auth/logout");
-  useAuthStore.getState().setUser(null);
-  window.location.href = "/login";
+export function logout() {
+  return accountWrite("logout", undefined);
 }

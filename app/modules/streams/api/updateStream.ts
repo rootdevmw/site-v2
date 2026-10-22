@@ -1,10 +1,6 @@
-import { api } from "@/lib/api/client";
-import { Stream, StreamFormValues } from "../types/stream.types";
+import { saveStreamEditor } from "@/lib/api/stream-editor";
+import type { StreamEditorPayload } from "@/lib/utils/stream-editor";
 
-export async function updateStream(
-  id: string,
-  data: StreamFormValues,
-): Promise<{ data: Stream }> {
-  const res = await api.patch(`/streams/${id}`, data);
-  return res.data;
+export function updateStream(id: string, data: StreamEditorPayload) {
+  return saveStreamEditor(data, id);
 }

@@ -1,17 +1,14 @@
-import { useMutation } from "@tanstack/react-query";
-import { api } from "@/lib/api/client";
-
-type ItemOverride = {
-  sequence: number;
-  responsibleId: string;
-};
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createProgramFromTemplate } from "../api/createProgramFromTemplate";
 
 export function useCreateProgramFromTemplate() {
+  const client = useQueryClient();
   return useMutation({
-    mutationFn: (data: {
-      templateId: string;
-      date: string;
-      items?: ItemOverride[];
-    }) => api.post("/programs/from-template", data),
+    mutationFn: createProgramFromTemplate,
+    retry: false,
+    onMutate: () => client.cancelQueries({ queryKey: ["programs"] }),
+    onSuccess: (result) => { client.setQueryData(["program", result.data.id], result); },
+    // A lost response may still have created a record; refresh the list on either outcome.
+    onSettled: () => client.invalidateQueries({ queryKey: ["programs"] }),
   });
 }

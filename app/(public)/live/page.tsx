@@ -116,7 +116,6 @@ export default async function LivePage() {
     getPublicStreams({ page: 1, limit: 3 }),
   ]);
 
-  console.log("live streams", liveRes);
   const liveStream = liveRes.data;
   const streams = streamsRes.data;
 
@@ -128,26 +127,26 @@ export default async function LivePage() {
   return (
     <div className="font-sans">
       {/* ── PAGE HEADER ───────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#2b1405] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 opacity-[0.04]">
+      <section className="relative overflow-hidden bg-[#f7efe3] px-4 py-10 sm:px-6 lg:px-8">
+        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 opacity-[0.08]">
           <svg viewBox="0 0 200 200" fill="none">
-            <rect x="85" y="20" width="30" height="160" fill="white" />
-            <rect x="20" y="70" width="160" height="30" fill="white" />
+            <rect x="85" y="20" width="30" height="160" fill="#7c3d0f" />
+            <rect x="20" y="70" width="160" height="30" fill="#7c3d0f" />
           </svg>
         </div>
         <div className="relative mx-auto max-w-screen-2xl">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="mb-2 flex items-center gap-2.5">
-                <div className="h-px w-6 bg-[#e8c49a]" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e8c49a]">
+                <div className="h-px w-6 bg-[#c2620a]" />
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#c2620a]">
                   Live & online
                 </p>
               </div>
-              <h1 className="font-serif text-2xl font-semibold text-white sm:text-3xl">
+              <h1 className="font-serif text-2xl font-semibold text-[#4a2008] sm:text-3xl">
                 Worship with us, wherever you are
               </h1>
-              <p className="mt-1.5 text-sm text-[#e6c79c]">
+              <p className="mt-1.5 text-sm text-[#5f3b20]">
                 Join the current broadcast or find the next scheduled stream.
               </p>
             </div>
@@ -189,8 +188,9 @@ export default async function LivePage() {
                     {liveStream.title}
                   </h2>
                   <p className="mt-3 text-sm leading-7 text-[#6b4c2a]">
-                    We're streaming live right now. Join us from wherever you
-                    are and worship together with the Red Cross church family.
+                    We&apos;re streaming live right now. Join us from wherever
+                    you are and worship together with the Red Cross church
+                    family.
                   </p>
 
                   <div className="mt-7 flex flex-col gap-3">
@@ -249,7 +249,7 @@ export default async function LivePage() {
                   No stream active right now
                 </p>
                 <p className="mt-2 text-sm text-[#6b4c2a]">
-                  Check back on Sunday or see what's coming up below.
+                  Check back on Sunday or see what&apos;s coming up below.
                 </p>
               </div>
             </div>
@@ -258,13 +258,13 @@ export default async function LivePage() {
       </section>
 
       {/* ── UPCOMING STREAMS ──────────────────────────────────── */}
-      <section className="bg-[#2b1405] px-4 py-12 sm:px-6 lg:px-8">
+      <section className="bg-[#f7efe3] px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-screen-2xl">
           <div className="mb-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#e8c49a]">
-              What's next
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7c3d0f]">
+              What&apos;s next
             </p>
-            <h2 className="font-serif mt-2 text-2xl font-semibold text-white sm:text-3xl">
+            <h2 className="font-serif mt-2 text-2xl font-semibold text-[#4a2008] sm:text-3xl">
               Upcoming streams
             </h2>
           </div>
@@ -295,17 +295,17 @@ export default async function LivePage() {
                   <Link
                     key={stream.id}
                     href={href}
-                    className="group relative block overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10"
+                    className="group relative block overflow-hidden rounded-2xl border border-[#e8c49a] bg-white p-6 transition hover:border-[#7c3d0f]/30 hover:shadow-md"
                   >
                     {/* DATE */}
-                    <div className="mb-5 inline-flex flex-col items-center rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-center">
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-[#e8c49a]">
+                    <div className="mb-5 inline-flex flex-col items-center rounded-xl border border-[#f2dfbc] bg-[#fffaf4] px-3 py-2 text-center">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-[#7c3d0f]">
                         {formatMonth(stream.startsAt)}
                       </span>
-                      <span className="font-serif text-2xl font-bold leading-none text-white">
+                      <span className="font-serif text-2xl font-bold leading-none text-[#4a2008]">
                         {formatDay(stream.startsAt)}
                       </span>
-                      <span className="text-[9px] font-medium text-[#e6c79c]">
+                      <span className="text-[9px] font-medium text-[#7c3d0f]/80">
                         {formatYear(stream.startsAt)}
                       </span>
                     </div>
@@ -318,12 +318,12 @@ export default async function LivePage() {
                     )}
 
                     {/* TITLE */}
-                    <h3 className="font-serif text-lg font-semibold leading-snug text-white">
+                    <h3 className="font-serif text-lg font-semibold leading-snug text-[#4a2008]">
                       {stream.title}
                     </h3>
 
                     {/* TIME */}
-                    <div className="mt-3 flex items-center gap-1.5 text-sm text-[#e6c79c]">
+                    <div className="mt-3 flex items-center gap-1.5 text-sm text-[#5f3b20]">
                       <svg
                         className="h-3.5 w-3.5 shrink-0"
                         fill="none"
@@ -360,7 +360,7 @@ export default async function LivePage() {
                     )}
 
                     {/* CTA */}
-                    <div className="mt-4 text-xs font-semibold text-[#e8c49a]">
+                    <div className="mt-4 text-xs font-semibold text-[#7c3d0f]">
                       Click to view stream →
                     </div>
                   </Link>
@@ -368,8 +368,8 @@ export default async function LivePage() {
               })}
             </div>
           ) : (
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-8 py-14 text-center">
-              <p className="text-[#e6c79c]">
+            <div className="rounded-2xl border border-[#e8c49a] bg-white px-8 py-14 text-center">
+              <p className="text-[#5f3b20]">
                 No upcoming streams scheduled yet. Check back soon.
               </p>
             </div>
@@ -385,7 +385,7 @@ export default async function LivePage() {
               Need help?
             </p>
             <p className="mt-1 text-[15px] font-medium text-[#4a2008]">
-              Trouble joining online? We'll walk you through it.
+              Trouble joining online? We&apos;ll walk you through it.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

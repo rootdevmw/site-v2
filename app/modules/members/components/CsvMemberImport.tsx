@@ -1,13 +1,19 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useBulkCreateMembers } from "../hooks/useBulkCreateMembers";
 import { MemberFormValues } from "../types/member.types";
 
 const VALID_STATUSES = ["VISITOR", "MEMBER"] as const;
 type ValidStatus = (typeof VALID_STATUSES)[number];
-const VALID_PREFIXES = ["PASTOR", "DEACON", "SISTER", "BROTHER"] as const;
+const VALID_PREFIXES = [
+  "PASTOR",
+  "ELDER",
+  "DEACON",
+  "SISTER",
+  "BROTHER",
+] as const;
 type ValidPrefix = (typeof VALID_PREFIXES)[number];
 
 type ParsedRow = {
@@ -75,22 +81,23 @@ function parseCsv(text: string): ParsedRow[] {
     if (!lastName) issues.push("Last name required");
     if (!phone) issues.push("Phone required");
     if (!VALID_STATUSES.includes(status as ValidStatus)) {
-      issues.push(`Status must be Visitor, Member, or Baptized`);
+      issues.push(`Status must be VISITOR or MEMBER`);
     }
-    if (prefix && !VALID_PREFIXES.includes(prefix as ValidPrefix)) {
-      issues.push(`Prefix must be PASTOR, DEACON, SISTER, or BROTHER`);
+    if (!VALID_PREFIXES.includes(prefix as ValidPrefix)) {
+      issues.push(`Prefix must be PASTOR, ELDER, DEACON, SISTER, or BROTHER`);
     }
 
     return { firstName, lastName, phone, status, prefix, location, issues };
   });
 }
 
-export function CsvMemberImport() {
+export function CsvMemberImport({ onBusyChange }: { onBusyChange?: (busy: boolean) => void } = {}) {
   const router = useRouter();
   const [rows, setRows] = useState<ParsedRow[]>([]);
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const bulk = useBulkCreateMembers();
+  useEffect(() => { onBusyChange?.(bulk.isPending); }, [bulk.isPending, onBusyChange]);
 
   function processFile(file: File) {
     const reader = new FileReader();
@@ -196,9 +203,9 @@ export function CsvMemberImport() {
 
       {/* Preview */}
       {rows.length > 0 && (
-        <div className="rounded-xl border border-(--border-soft) overflow-hidden">
+        <div role="region" aria-label="CSV import preview, scroll horizontally for more columns" tabIndex={0} className="max-w-full overflow-x-auto overscroll-x-contain rounded-xl border border-(--border-soft)">
           {/* Table header */}
-          <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1.5fr] text-xs font-medium text-(--text-secondary) px-4 py-2 bg-(--card-elevated) border-b border-(--border-soft)">
+          <div className="grid min-w-[42rem] grid-cols-[1fr_1fr_1fr_1fr_1.5fr] gap-3 text-xs font-medium text-(--text-secondary) px-4 py-2 bg-(--card-elevated) border-b border-(--border-soft)">
             <span>First Name</span>
             <span>Last Name</span>
             <span>Phone</span>
@@ -206,11 +213,11 @@ export function CsvMemberImport() {
             <span>Issues</span>
           </div>
 
-          <div className="max-h-72 overflow-y-auto divide-y divide-(--border-soft)">
+          <div className="min-w-[42rem] max-h-72 overflow-y-auto divide-y divide-(--border-soft)">
             {rows.map((r, i) => (
               <div
                 key={i}
-                className="grid grid-cols-[1fr_1fr_1fr_1fr_1.5fr] items-center px-4 py-2.5 text-sm"
+                className="grid grid-cols-[1fr_1fr_1fr_1fr_1.5fr] items-center gap-3 px-4 py-2.5 text-sm [&>span]:min-w-0 [&>span]:wrap-anywhere"
               >
                 <span className={!r.firstName ? "text-red-400" : ""}>
                   {r.firstName || "—"}
@@ -247,7 +254,7 @@ export function CsvMemberImport() {
 
       {/* Footer actions */}
       {rows.length > 0 && (
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-sm text-(--text-secondary)">
             {validRows.length} of {rows.length} rows valid
             {rows.length - validRows.length > 0 && (
@@ -257,7 +264,7 @@ export function CsvMemberImport() {
             )}
           </span>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3 [&>button]:min-h-11">
             <button
               type="button"
               onClick={reset}

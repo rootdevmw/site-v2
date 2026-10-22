@@ -1,34 +1,32 @@
 "use client";
-
 import { useEffect } from "react";
 import { getMe } from "../api/me";
 import { useAuthStore } from "../store/auth.store";
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const setUser = useAuthStore((s) => s.setUser);
-  const setLoading = useAuthStore((s) => s.setLoading);
-  const setInitialized = useAuthStore((s) => s.setInitialized);
-
   useEffect(() => {
-    async function init() {
+    const controller = new AbortController(),
+      version = useAuthStore.getState().sessionVersion;
+    let active = true;
+    async function initialize() {
       try {
-        const res = await getMe();
-
-        if (res.success) {
-          setUser(res.data);
-        } else {
-          setUser(null);
-        }
-      } catch (err) {
-        setUser(null);
+        const result = await getMe(true, controller.signal);
+        if (active && useAuthStore.getState().sessionVersion === version)
+          useAuthStore.getState().setUser(result.data);
+      } catch {
+        if (active && useAuthStore.getState().sessionVersion === version)
+          useAuthStore.getState().setUser(null);
       } finally {
-        setLoading(false);
-        setInitialized(true);
+        if (active) {
+          useAuthStore.getState().setLoading(false);
+          useAuthStore.getState().setInitialized(true);
+        }
       }
     }
-
-    init();
+    void initialize();
+    return () => {
+      active = false;
+      controller.abort();
+    };
   }, []);
-
   return children;
 }

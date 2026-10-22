@@ -1,6 +1,5 @@
-import { api } from "@/lib/api/client";
+import { accountWrite } from "@/lib/api/account-flows";
 
-export async function requestPasswordReset(email: string) {
-  const res = await api.post("/auth/request-password-reset", { email });
-  return res.data;
+export function requestPasswordReset(email: string) {
+  return accountWrite("request-password-reset", { email });
 }

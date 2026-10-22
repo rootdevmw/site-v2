@@ -5,6 +5,8 @@ export type Homecell = {
   name: string;
   location: string;
   slug: string;
+  leaderId?: string | null;
+  overseerId?: string | null;
   leader?: {
     id: string;
     firstName: string;

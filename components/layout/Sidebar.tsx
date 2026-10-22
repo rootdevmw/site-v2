@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { JSX, useEffect, useState } from "react";
+import { JSX, useId, useState } from "react";
 import { usePathname } from "next/navigation";
-import { navigation } from "@/config/navigation";
+import { navigation, type NavigationGroup, type NavigationLink } from "@/config/navigation";
 import { useAuthStore } from "@/app/modules/auth/store/auth.store";
 import { hasRequiredRole } from "@/lib/auth/roles";
 
@@ -13,9 +13,9 @@ function isActivePath(pathname: string, href: string) {
 }
 
 function isGroup(
-  item: any,
-): item is { label: string; children: any[]; roles: string[] } {
-  return Array.isArray(item.children);
+  item: NavigationLink | NavigationGroup,
+): item is NavigationGroup {
+  return "children" in item;
 }
 
 /* ── Icons keyed by nav label ─────────────────────────────── */
@@ -307,7 +307,8 @@ const ChevronIcon = ({ open }: { open: boolean }) => (
   </svg>
 );
 
-export function Sidebar() {
+export function Sidebar({ onNavigate, showBrand = true }: { onNavigate?: () => void; showBrand?: boolean }) {
+  const navigationId = useId();
   const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
   const userRoles = user?.roles ?? [];
@@ -326,29 +327,14 @@ export function Sidebar() {
     );
   });
 
-  useEffect(() => {
-    setOpenGroups((current) => {
-      const next = { ...current };
-      navigation.forEach((item) => {
-        if (isGroup(item)) {
-          const activeChild = item.children.some((child) =>
-            isActivePath(pathname, child.href),
-          );
-          if (activeChild && !next[item.label]) next[item.label] = true;
-        }
-      });
-      return next;
-    });
-  }, [pathname]);
-
   const toggleGroup = (label: string) => {
     setOpenGroups((prev) => ({ ...prev, [label]: !prev[label] }));
   };
 
   return (
-    <aside className="w-64 bg-[var(--card-bg)] border-r border-[var(--border-soft)] flex flex-col h-full">
+    <aside className="flex h-full min-h-0 w-full flex-col border-r border-[var(--border-soft)] bg-[var(--card-bg)]">
       {/* Logo */}
-      <div className="h-16 flex items-center gap-3 px-5 border-b border-[var(--border-soft)] shrink-0">
+      {showBrand && <div className="h-16 flex items-center gap-3 px-5 border-b border-[var(--border-soft)] shrink-0">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--main-gold)]/15 text-[var(--main-gold)]">
           <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M13 2h-2v9H2v2h9v9h2v-9h9v-2h-9z" />
@@ -362,10 +348,10 @@ export function Sidebar() {
             Red Cross COC
           </p>
         </div>
-      </div>
+      </div>}
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
+      <nav aria-label="Portal navigation" className="min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-contain px-3 py-4">
         {navigation.map((item) => {
           if (isGroup(item)) {
             const allowedGroup = hasRequiredRole(userRoles, item.roles);
@@ -383,7 +369,9 @@ export function Sidebar() {
                 <button
                   type="button"
                   onClick={() => toggleGroup(item.label)}
-                  className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-left transition-colors text-[var(--text-secondary)] hover:bg-[var(--hover-soft)] hover:text-[var(--text-primary)]"
+                  aria-expanded={Boolean(isOpen)}
+                  aria-controls={`${navigationId}-${item.label}`}
+                  className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-[var(--text-secondary)] transition-colors hover:bg-[var(--hover-soft)] hover:text-[var(--text-primary)]"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <span className="shrink-0 opacity-60">
@@ -397,14 +385,16 @@ export function Sidebar() {
                 </button>
 
                 {isOpen && (
-                  <div className="mt-0.5 ml-3 pl-3 border-l border-[var(--border-soft)] space-y-0.5">
+                  <div id={`${navigationId}-${item.label}`} className="mt-1 ml-3 space-y-1 border-l border-[var(--border-soft)] pl-3">
                     {children.map((child) => {
                       const active = isActivePath(pathname, child.href);
                       return (
                         <Link
                           key={child.href}
                           href={child.href}
-                          className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
+                          onClick={onNavigate}
+                          aria-current={active ? "page" : undefined}
+                          className={`flex min-h-11 items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
                             active
                               ? "bg-[var(--main-gold)]/15 text-[var(--main-gold)] font-medium"
                               : "text-[var(--text-secondary)] hover:bg-[var(--hover-soft)] hover:text-[var(--text-primary)]"
@@ -434,7 +424,9 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
+              onClick={onNavigate}
+              aria-current={active ? "page" : undefined}
+              className={`flex min-h-11 items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
                 active
                   ? "bg-[var(--main-gold)]/15 text-[var(--main-gold)] font-medium"
                   : "text-[var(--text-secondary)] hover:bg-[var(--hover-soft)] hover:text-[var(--text-primary)]"

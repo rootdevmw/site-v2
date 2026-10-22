@@ -1,8 +1,8 @@
 import type { Stream } from "@/app/modules/streams/types/stream.types";
 import { publicApi } from "./client";
 
-export async function getLiveStream() {
-  return publicApi<Stream | null>("/streams/live", { revalidate: 20 });
+export async function getLiveStream(options?: RequestInit) {
+  return publicApi<Stream | null>("/streams/live", { revalidate: 20, ...options });
 }
 
 export async function getPublicStreams(params?: {

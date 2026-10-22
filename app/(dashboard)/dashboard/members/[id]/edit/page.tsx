@@ -1,85 +1,23 @@
 "use client";
-
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useMember } from "@/app/modules/members/hooks/useMember";
-import { useDeleteMember } from "@/app/modules/members/hooks/useDeleteMember";
 import { MemberForm } from "@/app/modules/members/components/MemberForm";
-import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
-
-type Ministry = {
-  id: string;
-};
-
+import { useMember } from "@/app/modules/members/hooks/useMember";
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import { useDeleteDirectoryRecord } from "@/lib/hooks/useDirectoryRecords";
+import { RecordFeedback, RecordLoadError, RecordSkeleton } from "@/components/records/RecordLayout";
 export default function EditMemberPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const actor = useAuthStore((state) => state.user);
+  const permitted = hasRequiredRole(actor?.roles ?? [], ["DEACON"]);
+  const query = useMember(id, permitted);
+  const deletion = useDeleteDirectoryRecord("members");
   const router = useRouter();
-
-  const { data, isLoading, isError } = useMember(id as string);
-  const { mutateAsync: deleteMember } = useDeleteMember();
-
-  if (isLoading) {
-    return <SpiritualLoader message="Loading Member..." />;
-  }
-
-  if (isError || !data?.data) {
-    return (
-      <div className="p-6 text-sm text-red-600">
-        Failed to load member
-        <button
-          onClick={() => router.push("/dashboard/members")}
-          className="ml-3 text-[var(--blue)] hover:opacity-90 transition-all duration-200"
-        >
-          Go back
-        </button>
-      </div>
-    );
-  }
-
-  const member = data.data;
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-            Edit Member
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)]">
-            Update member details
-          </p>
-        </div>
-
-        <button
-          onClick={() => router.push(`/dashboard/members/${member.id}`)}
-          className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200"
-        >
-          View Details
-        </button>
-      </div>
-
-      {/* Form Card */}
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-6">
-        <MemberForm
-          mode="edit"
-          initialData={{
-            id: member.id,
-            prefix: member.prefix,
-            firstName: member.firstName,
-            lastName: member.lastName,
-            phone: member.phone,
-            status: member.status,
-            location: member.location,
-            homecellId: member.homecell?.id || "",
-            ministryIds: member.ministries?.map((m: Ministry) => m.id) || [],
-            bio: member.bio || "",
-          }}
-          onDelete={async () => {
-            await deleteMember(member.id);
-            router.push("/dashboard/members");
-          }}
-        />
-      </div>
-    </div>
-  );
+  if (!permitted) return <RecordFeedback kind="forbidden" entity="Member form" backHref="/dashboard" backLabel="Return to dashboard" />;
+  if (query.isPending) return <RecordSkeleton label="Loading member editor…" />;
+  if (query.isError && !query.data?.data) return <RecordLoadError error={query.error} entity="Member" backHref="/dashboard/members" backLabel="Back to members" onRetry={() => { void query.refetch(); }} retrying={query.isFetching} />;
+  const member = query.data?.data;
+  if (!member) return <RecordFeedback kind="missing" entity="Member" backHref="/dashboard/members" backLabel="Back to members" />;
+  return <article className="record-page member-workspace" aria-labelledby="member-edit-title"><Link href={"/dashboard/members/" + encodeURIComponent(id)} className="record-back">Back to profile</Link><header className="record-header"><div><p className="record-eyebrow">Member profile · #{member.id}</p><h1 id="member-edit-title" className="record-title">Edit {member.firstName} {member.lastName}</h1><p className="record-description">Keep contact details, church connections and the member biography up to date.</p></div></header>{query.isError && <p role="alert" className="member-form-summary">The latest profile could not be checked. Your current entries are kept; review the saved profile before retrying an uncertain change.</p>}<div className="mt-6"><MemberForm key={id} mode="edit" initialConnections={{ homecell: member.homecell, ministries: member.ministries }} initialData={{ id: member.id, prefix: member.prefix, firstName: member.firstName, lastName: member.lastName, phone: member.phone || "", status: member.status, location: member.location || "", homecellId: member.homecell?.id || "", ministryIds: member.ministries.map((entry) => entry.id), bio: member.bio || "", imageUrl: member.imageUrl || "", isBaptized: member.isBaptized ?? false, baptismDate: member.baptismDate || "" }} onDelete={async () => { await deletion.mutateAsync(id); router.push("/dashboard/members"); }} /></div></article>;
 }

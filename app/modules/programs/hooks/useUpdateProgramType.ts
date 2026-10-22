@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProgramType } from "../api/updateProgramType";
+import { refreshTypeCatalog } from "@/lib/utils/type-catalog-cache";
 
 export function useUpdateProgramType() {
   const qc = useQueryClient();
@@ -8,11 +9,7 @@ export function useUpdateProgramType() {
     mutationFn: ({ id, data }: { id: string; data: { name: string } }) =>
       updateProgramType(id, data),
 
-    onSuccess: (_, variables) => {
-      qc.invalidateQueries({ queryKey: ["program-types"] });
-      qc.invalidateQueries({
-        queryKey: ["program-types", variables.id],
-      });
-    },
+    retry: false,
+    onSettled: () => refreshTypeCatalog(qc, "programs"),
   });
 }

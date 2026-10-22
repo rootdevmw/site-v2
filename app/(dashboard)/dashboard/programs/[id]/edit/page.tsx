@@ -1,82 +1,74 @@
 "use client";
-
 import { useParams, useRouter } from "next/navigation";
 import { useProgram } from "@/app/modules/programs/hooks/useProgram";
-import { useDeleteProgram } from "@/app/modules/programs/hooks/useDeleteProgram";
 import { ProgramForm } from "@/app/modules/programs/components/ProgramForm";
-import type { ProgramItem } from "@/app/modules/programs/types/program.types";
-import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
-
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import { getProgramEditorValues } from "@/lib/utils/program-records";
+import { useDeleteScheduleRecord } from "@/lib/hooks/useScheduleLists";
+import {
+  RecordFeedback,
+  RecordLoadError,
+  RecordSkeleton,
+} from "@/components/records/RecordLayout";
 export default function EditProgramPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const user = useAuthStore((state) => state.user);
+  const permitted = hasRequiredRole(user?.roles ?? [], ["DEACON"]);
+  const query = useProgram(id, permitted),
+    deletion = useDeleteScheduleRecord("programs");
   const router = useRouter();
-
-  const { data, isLoading, isError } = useProgram(id as string);
-  const { mutateAsync: deleteProgram } = useDeleteProgram();
-
-  if (isLoading) {
-    return <SpiritualLoader message="Loading Program" />;
-  }
-
-  if (isError || !data?.data) {
+  if (!permitted)
     return (
-      <div className="p-6 text-sm text-red-600">
-        Failed to load program
-        <button
-          onClick={() => router.push("/dashboard/programs")}
-          className="ml-3 text-[var(--blue)] hover:opacity-90 transition-all duration-200"
-        >
-          Go back
-        </button>
-      </div>
+      <RecordFeedback
+        kind="forbidden"
+        entity="Program editor"
+        backHref="/dashboard"
+        backLabel="Return to dashboard"
+      />
     );
-  }
-
-  const program = data.data;
-
+  if (query.isPending)
+    return <RecordSkeleton label="Loading program editor..." />;
+  if (query.isError && !query.data?.data)
+    return (
+      <RecordLoadError
+        error={query.error}
+        entity="Program"
+        backHref="/dashboard/programs"
+        backLabel="Back to programs"
+        onRetry={() => {
+          void query.refetch();
+        }}
+        retrying={query.isFetching}
+      />
+    );
+  const program = query.data?.data;
+  if (!program)
+    return (
+      <RecordFeedback
+        kind="missing"
+        entity="Program"
+        backHref="/dashboard/programs"
+        backLabel="Back to programs"
+      />
+    );
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-            Edit Program
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)]">
-            Update program details
-          </p>
-        </div>
-
-        <button
-          onClick={() => router.push(`/dashboard/programs/${program.id}`)}
-          className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200"
-        >
-          View Details
-        </button>
-      </div>
-
-      {/* Form Card */}
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-6">
-        <ProgramForm
-          mode="edit"
-          initialData={{
-            id: program.id,
-            date: program.date,
-            typeId: program.type?.id || "",
-            homecellId: program.homecell?.id || undefined,
-            items:
-              program.items?.map((item: ProgramItem) => ({
-                title: item.title,
-                time: item.time,
-                responsibleId: item.responsible?.id || "",
-              })) || [],
-          }}
-          onDelete={async () => {
-            await deleteProgram(program.id);
-            router.push("/dashboard/programs");
-          }}
-        />
-      </div>
-    </div>
+    <>
+      {query.isError && (
+        <p role="alert" className="member-form-summary mb-5">
+          The latest program details could not be checked. Your entries are
+          kept; review the saved program before retrying an uncertain change.
+        </p>
+      )}
+      <ProgramForm
+        key={id}
+        mode="edit"
+        initialData={getProgramEditorValues(program)}
+        onDelete={async () => {
+          await deletion.mutateAsync(id);
+          router.push("/dashboard/programs");
+        }}
+      />
+    </>
   );
 }

@@ -6,6 +6,15 @@ button {
   cursor: pointer;
 }
 
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--gold-dark, #7c3d0f);
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 .date-input-root {
   font-family: "Jost", sans-serif;
   width: 100%;

@@ -1,18 +1,2 @@
-import { z } from "zod";
-
-export const publicationSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
-  publishedAt: z.preprocess((value) => {
-    if (typeof value === "string" && value.trim() === "") {
-      return null;
-    }
-    if (typeof value === "string") {
-      return new Date(value);
-    }
-    return value;
-  }, z.date().nullable()),
-  file: z.instanceof(File).optional(),
-});
-
-export type PublicationFormValues = z.infer<typeof publicationSchema>;
+export { publicationEditorSchema as publicationSchema } from "@/lib/utils/publication-editor";
+export type { PublicationEditorValues as PublicationFormValues } from "@/lib/utils/publication-editor";

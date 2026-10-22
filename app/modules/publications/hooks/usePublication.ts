@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPublication } from "../api/getPublication";
-import { Publication } from "../types/publication.types";
+import { retryRecordRequest } from "@/lib/utils/record-details";
 
-export function usePublication(id: string) {
+export function usePublication(id: string, enabled = true) {
   return useQuery({
     queryKey: ["publication", id],
-    queryFn: () => getPublication(id),
-    enabled: !!id,
+    queryFn: ({ signal }) => getPublication(id, signal),
+    enabled: !!id && enabled,
+    retry: retryRecordRequest,
   });
 }

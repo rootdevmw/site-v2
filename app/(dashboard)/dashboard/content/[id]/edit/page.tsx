@@ -1,61 +1,85 @@
 "use client";
-
 import { useParams, useRouter } from "next/navigation";
 import { ContentForm } from "@/app/modules/content/components/ContentForm";
 import { useContent } from "@/app/modules/content/hooks/useContent";
-import { useDeleteContent } from "@/app/modules/content/hooks/useDeleteContent";
-import { showSuccess, showError } from "@/lib/toast";
-import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
-
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import { useDeleteEditorialRecord } from "@/lib/hooks/useEditorialLists";
+import { contentEditorValues } from "@/lib/utils/content-editor";
+import {
+  RecordFeedback,
+  RecordLoadError,
+  RecordSkeleton,
+} from "@/components/records/RecordLayout";
 export default function EditContentPage() {
-  const { id } = useParams();
-  const router = useRouter();
-  const { data, isLoading } = useContent(id as string);
-  const { mutateAsync: deleteContent } = useDeleteContent();
-
-  if (isLoading) return <SpiritualLoader message="Loading Content...." />;
-
-  const content = data?.data;
-
-  // Transform content data to match form values
-  const formData = content
+  const { id } = useParams<{ id: string }>(),
+    router = useRouter();
+  const actor = useAuthStore((state) => state.user),
+    permitted = hasRequiredRole(actor?.roles ?? [], ["MEDIA"]);
+  const query = useContent(id, permitted),
+    deletion = useDeleteEditorialRecord("content");
+  if (!permitted)
+    return (
+      <RecordFeedback
+        kind="forbidden"
+        entity="Content editor"
+        backHref="/dashboard"
+        backLabel="Return to dashboard"
+      />
+    );
+  if (query.isPending)
+    return <RecordSkeleton label="Loading content editor..." />;
+  if (query.isError && !query.data?.data)
+    return (
+      <RecordLoadError
+        error={query.error}
+        entity="Content"
+        backHref="/dashboard/content"
+        backLabel="Back to content"
+        onRetry={() => {
+          void query.refetch();
+        }}
+        retrying={query.isFetching}
+      />
+    );
+  const content = query.data?.data;
+  if (!content)
+    return (
+      <RecordFeedback
+        kind="missing"
+        entity="Content"
+        backHref="/dashboard/content"
+        backLabel="Back to content"
+      />
+    );
+  const author = content.author
     ? {
-        ...content,
-        typeId: content.type?.id,
-        authorId: content.author?.id,
-        tags: content.tags.map((tag: any) => tag.tag.name),
+        id: content.author.id,
+        name: [content.author.firstName, content.author.lastName]
+          .filter(Boolean)
+          .join(" "),
       }
-    : undefined;
-
-  const handleDelete = async () => {
-    try {
-      await deleteContent(id as string);
-      showSuccess("Content deleted successfully");
-      router.push("/dashboard/content");
-    } catch {
-      showError("Failed to delete content");
-    }
-  };
-
+    : null;
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-          Edit Content
-        </h1>
-        <p className="text-sm text-[var(--text-secondary)]">
-          Update content details
+    <>
+      {query.isError && (
+        <p className="member-form-summary mb-5" role="alert">
+          The latest message details could not be checked. Your entries are
+          kept; review the saved message before retrying an uncertain change.
         </p>
-      </div>
-
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6">
-        <ContentForm
-          mode="edit"
-          initialData={formData}
-          onSuccess={() => router.push("/dashboard/content")}
-          onDelete={handleDelete}
-        />
-      </div>
-    </div>
+      )}
+      <ContentForm
+        key={id}
+        mode="edit"
+        initialData={contentEditorValues(content)}
+        initialType={content.type}
+        initialAuthor={author}
+        status={content.status}
+        onDelete={async () => {
+          await deletion.mutateAsync(id);
+          router.push("/dashboard/content");
+        }}
+      />
+    </>
   );
 }

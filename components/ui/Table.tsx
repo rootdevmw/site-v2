@@ -75,20 +75,22 @@ export function Table<T extends { id: string | number }>({
   }
 
   return (
-    <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl overflow-hidden">
-      <table className="w-full text-sm">
+    <div className="min-w-0 max-w-full overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)]">
+      <div role="region" aria-label="Records table, scroll horizontally for more columns" tabIndex={0} className="max-w-full overflow-x-auto overscroll-x-contain">
+      <table className="w-full text-sm" style={{ minWidth: `${totalCols * 9}rem` }} aria-busy={Boolean(isLoading)}>
         <thead className="bg-[var(--card-elevated)] border-b border-[var(--border-soft)]">
           <tr>
             {columns.map((col, i) => (
               <th
                 key={i}
-                className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]"
+                scope="col"
+                className="px-4 py-3 text-left text-xs font-semibold text-[var(--text-secondary)]"
               >
                 {col.header}
               </th>
             ))}
             {actions && (
-              <th className="px-4 py-3 text-right text-[10px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
+              <th scope="col" className="px-4 py-3 text-right text-xs font-semibold text-[var(--text-secondary)]">
                 Actions
               </th>
             )}
@@ -99,10 +101,17 @@ export function Table<T extends { id: string | number }>({
           {isLoading ? (
             <SkeletonRows cols={totalCols} />
           ) : (
-            data.map((row, rowIdx) => (
+            data.map((row) => (
               <tr
                 key={row.id}
                 onClick={() => onRowClick?.(row)}
+                tabIndex={onRowClick ? 0 : undefined}
+                onKeyDown={(event) => {
+                  if (onRowClick && event.target === event.currentTarget && (event.key === "Enter" || event.key === " ")) {
+                    event.preventDefault();
+                    onRowClick(row);
+                  }
+                }}
                 className={`border-b border-[var(--border-soft)] last:border-0 transition-colors ${
                   onRowClick
                     ? "cursor-pointer hover:bg-[var(--hover-soft)]"
@@ -112,7 +121,7 @@ export function Table<T extends { id: string | number }>({
                 {columns.map((col, i) => (
                   <td
                     key={i}
-                    className="px-4 py-3 text-[var(--text-primary)]"
+                    className="max-w-xs px-4 py-3 text-[var(--text-primary)] wrap-anywhere"
                   >
                     {col.render
                       ? col.render(row)
@@ -122,10 +131,10 @@ export function Table<T extends { id: string | number }>({
 
                 {actions && (
                   <td
-                    className="px-4 py-3 text-right space-x-2"
+                    className="px-4 py-3 text-right"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {actions(row)}
+                    <div className="flex flex-wrap items-center justify-end gap-2 [&>button]:min-h-11 [&>button]:min-w-11">{actions(row)}</div>
                   </td>
                 )}
               </tr>
@@ -133,6 +142,7 @@ export function Table<T extends { id: string | number }>({
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

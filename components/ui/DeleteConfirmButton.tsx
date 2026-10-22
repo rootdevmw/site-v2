@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Dialog } from "./Dialog";
+import { InlineLoader } from "./InlineLoader";
 
 type DeleteConfirmButtonProps = {
   triggerLabel?: string;
@@ -25,14 +27,16 @@ export function DeleteConfirmButton({
 }: DeleteConfirmButtonProps) {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   async function handleConfirm() {
+    setIsDeleting(true);
+    setFailed(false);
     try {
-      setIsDeleting(true);
       await onConfirm();
       setOpen(false);
     } catch {
-      // Mutation hooks own the error toast. Keep modal open so user can retry.
+      setFailed(true);
     } finally {
       setIsDeleting(false);
     }
@@ -40,77 +44,25 @@ export function DeleteConfirmButton({
 
   return (
     <>
-      <button
-        type="button"
-        disabled={disabled}
-        onClick={() => setOpen(true)}
-        className={
-          className ||
-          "px-4 py-2 rounded-lg text-sm font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50"
-        }
-      >
+      <button type="button" disabled={disabled} onClick={() => { setFailed(false); setOpen(true); }} className={className || "min-h-11 rounded-lg bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 disabled:opacity-50"}>
         {triggerLabel}
       </button>
-
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <button
-            type="button"
-            aria-label="Close"
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setOpen(false)}
-          />
-
-          <div className="relative w-full max-w-md rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)] shadow-2xl">
-            <div className="p-6 space-y-4">
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-red-500/10">
-                <svg
-                  className="h-5 w-5 text-red-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={1.8}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  />
-                </svg>
-              </div>
-
-              <div>
-                <h2 className="text-base font-semibold text-[var(--text-primary)]">
-                  {title}
-                </h2>
-                <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
-                  {description}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 border-t border-[var(--border-soft)] px-6 py-4">
-              <button
-                type="button"
-                disabled={isDeleting}
-                onClick={() => setOpen(false)}
-                className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--card-elevated)] text-[var(--text-primary)] hover:bg-[var(--hover-soft)] transition-colors disabled:opacity-50"
-              >
-                {cancelLabel}
-              </button>
-
-              <button
-                type="button"
-                disabled={isDeleting}
-                onClick={handleConfirm}
-                className="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50"
-              >
-                {isDeleting ? "Deleting..." : confirmLabel}
-              </button>
-            </div>
+      <Dialog open={open} onClose={() => setOpen(false)} title={title} description={description} closeDisabled={isDeleting}>
+        <div className="space-y-5">
+          <div aria-hidden="true" className="flex size-12 items-center justify-center rounded-full bg-red-50 text-red-700">
+            <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 4h.01m-7.5 4h15a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0L2.8 17a2 2 0 0 0 1.7 3Z" /></svg>
+          </div>
+          {failed && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-800">This action could not be completed. Please try again.</p>}
+          <div className="flex flex-wrap justify-end gap-3">
+            <button type="button" disabled={isDeleting} onClick={() => setOpen(false)} className="min-h-11 rounded-lg border border-[var(--border-soft)] bg-[var(--card-elevated)] px-4 py-2 text-sm font-medium hover:bg-[var(--hover-soft)] disabled:opacity-50">
+              {cancelLabel}
+            </button>
+            <button type="button" disabled={isDeleting} aria-busy={isDeleting} onClick={handleConfirm} className="min-h-11 rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-800 disabled:opacity-50">
+              {isDeleting ? <InlineLoader message="Working…" /> : confirmLabel}
+            </button>
           </div>
         </div>
-      )}
+      </Dialog>
     </>
   );
 }

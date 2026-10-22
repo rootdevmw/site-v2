@@ -1,14 +1,8 @@
-import { api } from "@/lib/api/client";
-import { Platform } from "../types/stream.types";
+import { saveStreamPlatform } from "@/lib/api/stream-editor";
+import type { StreamPlatformValues } from "@/lib/utils/stream-editor";
 
-export type CreatePlatformPayload = {
-  name: string;
-  url: string;
-};
+export type CreatePlatformPayload = StreamPlatformValues;
 
-export async function createPlatform(
-  data: CreatePlatformPayload,
-): Promise<{ data: Platform }> {
-  const res = await api.post("/streams/platforms", data);
-  return res.data;
+export function createPlatform(data: StreamPlatformValues) {
+  return saveStreamPlatform(data);
 }

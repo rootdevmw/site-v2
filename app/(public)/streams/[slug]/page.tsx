@@ -124,12 +124,12 @@ export default async function StreamPage({ params }: Props) {
   return (
     <div className="font-sans">
       {/* HEADER */}
-      <section className="bg-[#2b1405] px-4 py-10">
+      <section className="bg-[#f7efe3] px-4 py-10">
         <div className="mx-auto max-w-screen-2xl">
-          <h1 className="font-serif text-2xl font-semibold text-white sm:text-3xl">
+          <h1 className="font-serif text-2xl font-semibold text-[#4a2008] sm:text-3xl">
             {stream.title}
           </h1>
-          <p className="mt-1.5 text-sm text-[#e6c79c]">
+          <p className="mt-1.5 text-sm text-[#5f3b20]">
             {formatFull(stream.startsAt)}
           </p>
         </div>

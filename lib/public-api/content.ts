@@ -1,13 +1,16 @@
-import type { Content } from "@/app/modules/content/types/content.types";
+import type { PublicMessage } from "@/lib/utils/public-messages";
 import { publicApi } from "./client";
 
-export async function getPublishedContent(params?: {
-  page?: number;
-  limit?: number;
-  typeId?: string;
-  search?: string;
-  tags?: string;
-}) {
+export async function getPublishedContent(
+  params?: {
+    page?: number;
+    limit?: number;
+    typeId?: string;
+    search?: string;
+    tags?: string;
+  },
+  options?: RequestInit,
+) {
   const searchParams = new URLSearchParams({
     page: String(params?.page ?? 1),
     limit: String(params?.limit ?? 12),
@@ -27,17 +30,26 @@ export async function getPublishedContent(params?: {
     searchParams.set("search", params.search);
   }
 
-  return publicApi<Content[]>(`/content?${searchParams.toString()}`);
+  return publicApi<PublicMessage[]>(
+    `/content?${searchParams.toString()}`,
+    options,
+  );
 }
 
-export async function getPublicContent(id: string) {
-  return publicApi<Content>(`/content/${id}`);
+export async function getPublicContent(id: string, options?: RequestInit) {
+  return getPublicContentBySlug(id, options);
 }
 
-export async function getPublicContentBySlug(slug: string) {
-  return publicApi<Content>(`/content/${slug}`);
+export async function getPublicContentBySlug(
+  slug: string,
+  options?: RequestInit,
+) {
+  return publicApi<PublicMessage>(
+    `/content/${encodeURIComponent(slug)}`,
+    options,
+  );
 }
 
-export async function getContentTypes() {
-  return publicApi<{ id: string; name: string }[]>(`/content/types`);
+export async function getContentTypes(options?: RequestInit) {
+  return publicApi<{ id: string; name: string }[]>(`/content/types`, options);
 }

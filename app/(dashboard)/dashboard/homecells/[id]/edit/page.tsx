@@ -1,61 +1,24 @@
 "use client";
-
 import { useParams, useRouter } from "next/navigation";
-import { useHomecell } from "@/app/modules/homecells/hooks/useHomecell";
-import { useDeleteHomecell } from "@/app/modules/homecells/hooks/useDeleteHomecell";
 import { HomecellForm } from "@/app/modules/homecells/components/HomecellForm";
-import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
-
+import { useHomecell } from "@/app/modules/homecells/hooks/useHomecell";
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import { useDeleteDirectoryRecord } from "@/lib/hooks/useDirectoryRecords";
+import { RecordFeedback, RecordLoadError, RecordSkeleton } from "@/components/records/RecordLayout";
+import { GroupEditRefreshNotice } from "@/components/directories/GroupEditRefreshNotice";
 export default function EditHomecellPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const actor = useAuthStore((state) => state.user);
+  const permitted = hasRequiredRole(actor?.roles ?? [], ["DEACON"]);
+  const query = useHomecell(id, permitted);
+  const deletion = useDeleteDirectoryRecord("homecells");
   const router = useRouter();
-
-  const { data, isLoading } = useHomecell(id as string);
-  const { mutateAsync: deleteHomecell } = useDeleteHomecell();
-
-  if (isLoading || !data?.data)
-    return <SpiritualLoader message="Loading homecell..." />;
-
-  const homecell = data.data;
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-            Edit Homecell
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)]">
-            Update homecell details
-          </p>
-        </div>
-
-        <button
-          onClick={() => router.push(`/dashboard/homecells/${homecell.id}`)}
-          className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200"
-        >
-          View Details
-        </button>
-      </div>
-
-      {/* Form Card */}
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-6">
-        <HomecellForm
-          mode="edit"
-          initialData={{
-            id: homecell.id,
-            name: homecell.name,
-            location: homecell.location,
-            leaderId: homecell.leader?.id || "",
-            overseerId: homecell.overseer?.id || "",
-          }}
-          onDelete={async () => {
-            await deleteHomecell(homecell.id);
-            router.push("/dashboard/homecells");
-          }}
-        />
-      </div>
-    </div>
-  );
+  if (!permitted) return <RecordFeedback kind="forbidden" entity="Homecell editor" backHref="/dashboard" backLabel="Return to dashboard" />;
+  if (query.isPending) return <RecordSkeleton label="Loading homecell editor…" />;
+  if (query.isError && !query.data?.data) return <RecordLoadError error={query.error} entity="Homecell" backHref="/dashboard/homecells" backLabel="Back to homecells" onRetry={() => { void query.refetch(); }} retrying={query.isFetching} />;
+  const group = query.data?.data;
+  if (!group) return <RecordFeedback kind="missing" entity="Homecell" backHref="/dashboard/homecells" backLabel="Back to homecells" />;
+  const person = (entry: typeof group.leader) => entry ? { id: entry.id, name: [entry.firstName, entry.lastName].filter(Boolean).join(" ") } : null;
+  return <><GroupEditRefreshNotice failed={query.isError} /><HomecellForm key={id} mode="edit" initialData={{ id: group.id, name: group.name, location: group.location || "", leaderId: group.leaderId || group.leader?.id || "", overseerId: group.overseerId || group.overseer?.id || "" }} initialPeople={{ leader: person(group.leader), overseer: person(group.overseer) }} onDelete={async () => { await deletion.mutateAsync(id); router.push("/dashboard/homecells"); }} /></>;
 }

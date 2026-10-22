@@ -2,64 +2,21 @@
 
 import { useParams } from "next/navigation";
 import { useMember } from "@/app/modules/members/hooks/useMember";
-import Link from "next/link";
-import { Info } from "@/components/ui/Info";
-
-type Ministry = {
-  id: string;
-  name: string;
-};
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import { MemberRecordView } from "@/components/records/MemberRecordView";
+import { RecordFeedback, RecordLoadError, RecordSkeleton } from "@/components/records/RecordLayout";
 
 export default function MemberDetailsPage() {
-  const { id } = useParams();
-  const { data, isLoading } = useMember(id as string);
+  const { id } = useParams<{ id: string }>();
+  const user = useAuthStore((state) => state.user);
+  const permitted = hasRequiredRole(user?.roles ?? [], ["DEACON"]);
+  const query = useMember(id, permitted);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (!permitted) return <RecordFeedback kind="forbidden" entity="Member" backHref="/dashboard" backLabel="Return to dashboard" />;
+  if (query.isPending) return <RecordSkeleton label="Loading member profile…" />;
+  if (query.isError) return <RecordLoadError error={query.error} entity="Member" backHref="/dashboard/members" backLabel="Back to members" onRetry={() => { void query.refetch(); }} retrying={query.isFetching} />;
+  if (!query.data?.data) return <RecordFeedback kind="missing" entity="Member" backHref="/dashboard/members" backLabel="Back to members" />;
 
-  const member = data?.data;
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold">
-            {member.firstName} {member.lastName}
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)]">Member details</p>
-        </div>
-
-        <Link
-          href={`/dashboard/members/${member.id}/edit`}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] transition-all duration-200"
-        >
-          Edit
-        </Link>
-      </div>
-
-      {/* Info Card */}
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-6 space-y-4">
-        <Info label="Phone" value={member.phone} />
-        <Info label="prefix" value={member.prefix} />
-        <Info label="Status" value={member.status} />
-        <Info label="Location" value={member.location} />
-        <Info label="Homecell" value={member.homecell?.name} />
-
-        {/* Ministries */}
-        <div>
-          <p className="text-sm text-[var(--text-secondary)]">Ministries</p>
-          <div className="flex gap-2 mt-1 flex-wrap">
-            {member.ministries?.map((m: Ministry, index: number) => (
-              <span
-                key={m.id ?? index}
-                className="px-2 py-1 text-xs bg-[var(--main-gold)] border border-[var(--gold-dark)] text-black rounded-full"
-              >
-                {m.name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return <MemberRecordView member={query.data.data} />;
 }

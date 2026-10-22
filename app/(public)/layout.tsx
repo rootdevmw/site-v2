@@ -1,5 +1,29 @@
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import Link from "next/link";
+import { Suspense } from "react";
 import { PublicFooter } from "@/components/public/PublicFooter";
 import { PublicHeader } from "@/components/public/PublicHeader";
+import { PublicWatchLink } from "@/components/public/PublicWatchLink";
+import "@/styles/public.css";
+
+const bodyFont = localFont({
+  src: "../../public/fonts/manrope-variable.ttf",
+  variable: "--font-public-body",
+  weight: "200 800",
+  display: "swap",
+});
+const headingFont = localFont({
+  src: "../../public/fonts/lora-variable.ttf",
+  variable: "--font-public-heading",
+  weight: "400 700",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: { default: "Church of Christ at Red Cross | Blantyre, Malawi", template: "%s | Church of Christ at Red Cross" },
+  description: "A church family in Blantyre, Malawi, growing together in Christ through worship, Scripture, fellowship, and service. Plan your visit and find a place to belong.",
+};
 
 export default function PublicLayout({
   children,
@@ -7,10 +31,15 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#fbfcf8] text-[#18342f]">
-      <PublicHeader />
-      <main>{children}</main>
+    <div className={`public-site min-h-screen ${bodyFont.variable} ${headingFont.variable}`}>
+      <a href="#public-content" className="sr-only z-50 rounded-lg bg-white p-3 focus:not-sr-only focus:absolute focus:left-4 focus:top-4">Skip to content</a>
+      <PublicHeader watchLink={<Suspense fallback={<PublicWatchLinkPlaceholder />}><PublicWatchLink /></Suspense>} />
+      <main id="public-content" tabIndex={-1}>{children}</main>
       <PublicFooter />
     </div>
   );
+}
+
+function PublicWatchLinkPlaceholder() {
+  return <Link href="/live" className="public-text-link">Watch online <span aria-hidden="true">↗</span></Link>;
 }

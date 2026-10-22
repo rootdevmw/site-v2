@@ -6,8 +6,16 @@ export function useDeletePublication() {
 
   return useMutation({
     mutationFn: (id: string) => deletePublication(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["publications"] });
-    },
+    retry: false,
+    onSettled: () =>
+      Promise.all(
+        [
+          "publications",
+          "publication",
+          "audit-logs",
+          "audit-timeline",
+          "dashboard-overview",
+        ].map((key) => queryClient.invalidateQueries({ queryKey: [key] })),
+      ),
   });
 }

@@ -1,4 +1,5 @@
 import { getPublicPublications } from "@/lib/public-api/publications";
+import Link from "next/link";
 import { Pagination } from "@/components/public/Pagination";
 
 const PAGE_SIZE = 6;
@@ -38,32 +39,32 @@ export default async function PublicPublicationsPage({
   return (
     <div className="font-sans">
       {/* ── PAGE HEADER ───────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#2b1405] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 opacity-[0.04]">
+      <section className="relative overflow-hidden bg-[#f7efe3] px-4 py-10 sm:px-6 lg:px-8">
+        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 opacity-[0.08]">
           <svg viewBox="0 0 200 200" fill="none">
-            <rect x="85" y="20" width="30" height="160" fill="white" />
-            <rect x="20" y="70" width="160" height="30" fill="white" />
+            <rect x="85" y="20" width="30" height="160" fill="#7c3d0f" />
+            <rect x="20" y="70" width="160" height="30" fill="#7c3d0f" />
           </svg>
         </div>
         <div className="relative mx-auto max-w-screen-2xl">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="mb-2 flex items-center gap-2.5">
-                <div className="h-px w-6 bg-[#e8c49a]" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e8c49a]">
+                <div className="h-px w-6 bg-[#c2620a]" />
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#c2620a]">
                   Publications
                 </p>
               </div>
-              <h1 className="font-serif text-2xl font-semibold text-white sm:text-3xl">
+              <h1 className="font-serif text-2xl font-semibold text-[#4a2008] sm:text-3xl">
                 Stay connected with the church
               </h1>
-              <p className="mt-1.5 text-sm text-[#e6c79c]">
+              <p className="mt-1.5 text-sm text-[#5f3b20]">
                 Updates, stories, and encouragement from church life at Red
                 Cross.
               </p>
             </div>
             {total > 0 && (
-              <p className="mt-3 text-xs font-medium text-[#c2a23a] sm:mt-0">
+              <p className="mt-3 text-xs font-medium text-[#7c3d0f] sm:mt-0">
                 {total} edition{total !== 1 ? "s" : ""} published
               </p>
             )}
@@ -181,18 +182,18 @@ export default async function PublicPublicationsPage({
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <a
+            <Link
               href="/content"
               className="rounded-lg bg-[#c2620a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#7c3d0f]"
             >
               Read sermons
-            </a>
-            <a
-              href="/contact"
+            </Link>
+            <Link
+              href="/plan-visit"
               className="rounded-lg border border-[#e8c49a] bg-white px-5 py-2.5 text-sm font-semibold text-[#4a2008] transition hover:border-[#7c3d0f]/30 hover:shadow-sm"
             >
               Plan a visit
-            </a>
+            </Link>
           </div>
         </div>
       </section>

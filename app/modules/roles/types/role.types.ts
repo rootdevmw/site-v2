@@ -33,5 +33,5 @@ export interface RolesResponse {
 export interface RoleResponse {
   success: boolean;
   data: Role;
-  meta: Record<string, any>;
+  meta: Record<string, unknown>;
 }
