@@ -5,6 +5,7 @@ import {
   type GroupSearchParams,
 } from "@/lib/utils/public-groups";
 export const metadata: Metadata = {
+  alternates: { canonical: "/ministries" },
   title: "Ministries",
   description:
     "Find a place to serve, grow and belong at Church of Christ at Red Cross in Blantyre. Explore our ministries and ask the church team about taking part.",

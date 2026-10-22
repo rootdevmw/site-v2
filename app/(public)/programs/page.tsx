@@ -5,6 +5,7 @@ import {
   type ProgramSearchParams,
 } from "@/lib/utils/public-programs";
 export const metadata: Metadata = {
+  alternates: { canonical: "/programs" },
   title: "Programs",
   description:
     "Explore service and homecell programs at Church of Christ at Red Cross. Find dates, venues and the planned order of activities.",

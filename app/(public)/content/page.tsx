@@ -13,6 +13,7 @@ import {
 } from "@/lib/utils/public-messages";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/content" },
   title: "Messages and teaching",
   description:
     "Explore published messages, Bible teaching and reflections from Church of Christ at Red Cross in Blantyre. Search by words, message type and topic.",

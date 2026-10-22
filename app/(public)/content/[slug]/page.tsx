@@ -42,6 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "A message from Church of Christ at Red Cross in Blantyre, Malawi.";
   return {
     title: message.title,
+    alternates: { canonical: messageHref(message.slug) },
     description,
     openGraph: { title: message.title, description, type: "article" },
   };

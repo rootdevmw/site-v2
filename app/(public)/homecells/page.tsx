@@ -5,6 +5,7 @@ import {
   type GroupSearchParams,
 } from "@/lib/utils/public-groups";
 export const metadata: Metadata = {
+  alternates: { canonical: "/homecells" },
   title: "Homecells",
   description:
     "Find a homecell at Church of Christ at Red Cross in Blantyre. Explore groups and programs, learn about midweek prayers and ask the church team about joining.",

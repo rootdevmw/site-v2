@@ -51,7 +51,7 @@ export function BaseForm({
         </div>
       )}
 
-      <form onSubmit={onSubmit} className="space-y-5">
+      <form method="post" onSubmit={onSubmit} className="space-y-5">
         <div className="min-w-0 space-y-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)] p-4 sm:p-6">
           {children}
         </div>

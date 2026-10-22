@@ -39,6 +39,7 @@ export async function eventMetadata(address: string): Promise<Metadata> {
   );
   return {
     title: event.title,
+    alternates: { canonical: eventHref(event.slug) },
     description,
     openGraph: { title: event.title, description, type: "website" },
   };

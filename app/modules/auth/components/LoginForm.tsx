@@ -119,6 +119,7 @@ export function SignInFields({
       <form
         className="account-form"
         aria-label="Sign in"
+        method="post"
         aria-busy={busy}
         noValidate
         onSubmit={form.handleSubmit(submit, () =>
@@ -226,6 +227,7 @@ export function RecoveryFields({
       <form
         className="account-form"
         aria-label="Request password reset"
+        method="post"
         aria-busy={busy}
         noValidate
         onSubmit={form.handleSubmit(submit, () =>

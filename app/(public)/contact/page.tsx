@@ -16,6 +16,7 @@ import { ServiceTimes } from "@/components/public/ServiceTimes";
 import { church, homecellGathering } from "@/config/church";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "Contact the church",
   description:
     "Contact Church of Christ at Red Cross in Blantyre by phone, WhatsApp or email. Find directions, Sunday service times, prayer and church portal invitation help.",

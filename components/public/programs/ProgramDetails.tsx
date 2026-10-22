@@ -32,6 +32,7 @@ export async function programMetadata(address: string): Promise<Metadata> {
   const description = `Read the planned activities for ${programLabel(result.program)} on ${programDateLabel(result.program)} at Church of Christ at Red Cross.`;
   return {
     title,
+    alternates: { canonical: programHref(result.program.slug) },
     description,
     openGraph: { title, description, type: "website" },
   };

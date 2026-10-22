@@ -15,6 +15,7 @@ import { ServiceTimes } from "@/components/public/ServiceTimes";
 import { church } from "@/config/church";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About our church",
   description:
     "Meet Church of Christ at Red Cross in Blantyre, Malawi. Discover our faith, worship, discipleship, service and church leadership, and plan your first visit.",

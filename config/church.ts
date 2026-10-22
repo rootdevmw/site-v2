@@ -1,8 +1,10 @@
 export const church = {
+  siteUrl: "https://churchofchrist.mw",
   name: "Church of Christ at Red Cross",
   address: "Mahatma Road, Blantyre, Malawi",
   timeZone: "Africa/Blantyre",
-  mapsUrl: "https://www.google.com/maps/search/?api=1&query=52X9%2BHGP+Blantyre+Malawi",
+  mapsUrl:
+    "https://www.google.com/maps/search/?api=1&query=52X9%2BHGP+Blantyre+Malawi",
   phone: "+265 (0) 888 565 565",
   phoneUrl: "tel:+265888565565",
   whatsappUrl: "https://wa.me/265888565565",

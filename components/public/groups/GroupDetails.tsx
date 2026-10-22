@@ -50,6 +50,7 @@ export async function publicGroupMetadata(
   );
   return {
     title: group.name,
+    alternates: { canonical: groupHref(kind, group.slug) },
     description,
     openGraph: { title: group.name, description, type: "website" },
   };
