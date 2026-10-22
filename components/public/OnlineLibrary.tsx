@@ -197,7 +197,7 @@ export function LibraryListing({
           </Suspense>
         </div>
       </section>
-      <section className="border-t border-[var(--public-line)] bg-[#f3eee5]">
+      <section className="border-t border-[var(--public-line)] bg-[var(--brand-soft)]">
         <div className="public-container flex flex-col items-start justify-between gap-7 py-12 lg:flex-row lg:items-center">
           <div className="min-w-0 max-w-xl">
             <p className="public-eyebrow">Grow through the week</p>

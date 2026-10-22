@@ -77,7 +77,7 @@ export function MessageCard({
             <li key={tag} className="min-w-0 max-w-full">
               <Link
                 href={messagesHref(filters, { page: 1, tags: tag })}
-                className="inline-flex min-h-11 max-w-full items-center rounded-full border border-[var(--public-line)] px-3 py-2 text-xs leading-5 wrap-anywhere hover:bg-[#f3eee5]"
+                className="inline-flex min-h-11 max-w-full items-center rounded-full border border-[var(--public-line)] px-3 py-2 text-xs leading-5 wrap-anywhere hover:bg-[var(--brand-soft)]"
               >
                 #{tag}
               </Link>

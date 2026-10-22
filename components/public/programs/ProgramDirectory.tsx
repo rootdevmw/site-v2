@@ -49,7 +49,7 @@ export function ProgramDirectory({ filters }: { filters: ProgramFilters }) {
             <FiArrowRight aria-hidden="true" />
           </a>
         </div>
-        <aside className="public-dark min-w-0 rounded-2xl bg-[#25221f] p-6 text-white [--public-accent:#e6c49a] sm:p-8">
+        <aside className="public-dark min-w-0 rounded-2xl bg-[var(--brand-dark)] p-6 text-white sm:p-8">
           <p className="public-eyebrow">New to Red Cross?</p>
           <h2 className="public-display mt-3 mb-5 text-3xl leading-tight">
             Join us on Sunday.
@@ -141,7 +141,7 @@ export function ProgramDirectory({ filters }: { filters: ProgramFilters }) {
           </Suspense>
         </div>
       </section>
-      <section className="border-t border-[var(--public-line)] bg-[#f3eee5]">
+      <section className="border-t border-[var(--public-line)] bg-[var(--brand-soft)]">
         <div className="public-container flex flex-col items-start justify-between gap-7 py-12 lg:flex-row lg:items-center">
           <div className="min-w-0 max-w-xl">
             <p className="public-eyebrow">Take your next step</p>

@@ -38,7 +38,7 @@ export function ContentTable({
         <>
           <button
             onClick={() => router.push(`/dashboard/content/${c.id}/edit`)}
-            className="text-[var(--main-gold)]"
+            className="text-[var(--brand-link)]"
           >
             Edit
           </button>

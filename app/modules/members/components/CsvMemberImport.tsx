@@ -170,8 +170,8 @@ export function CsvMemberImport({ onBusyChange }: { onBusyChange?: (busy: boolea
         className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-10 cursor-pointer transition
           ${
             dragging
-              ? "border-(--main-gold) bg-(--main-gold)/5"
-              : "border-(--border-soft) hover:border-(--main-gold)/50 hover:bg-(--hover-soft)"
+              ? "border-(--brand-border) bg-(--brand-soft)"
+              : "border-(--border-soft) hover:border-(--brand-border)/50 hover:bg-(--hover-soft)"
           }`}
       >
         <svg
@@ -276,7 +276,7 @@ export function CsvMemberImport({ onBusyChange }: { onBusyChange?: (busy: boolea
               type="button"
               disabled={validRows.length === 0 || bulk.isPending}
               onClick={handleImport}
-              className="px-4 py-2 rounded-lg text-sm font-medium bg-(--main-gold) text-black hover:opacity-90 transition disabled:opacity-40"
+              className="px-4 py-2 rounded-lg text-sm font-medium bg-(--brand-orange) text-(--brand-ink) hover:opacity-90 transition disabled:opacity-40"
             >
               {bulk.isPending
                 ? "Importing..."

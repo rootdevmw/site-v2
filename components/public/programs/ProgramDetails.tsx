@@ -202,7 +202,7 @@ export async function ProgramDetails({
             <ProgramAgenda program={program} />
           </section>
           <aside className="min-w-0">
-            <section className="rounded-2xl bg-[#f3eee5] p-6">
+            <section className="rounded-2xl bg-[var(--brand-soft)] p-6">
               <h2 className="public-display text-2xl">
                 Need a little guidance?
               </h2>

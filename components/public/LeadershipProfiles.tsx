@@ -3,7 +3,7 @@ import { FiArrowRight } from "react-icons/fi";
 import { getPublicElders, getPublicPastors } from "@/lib/public-api/members";
 import { loadHomeFeed } from "@/lib/utils/optional-feed";
 import { getPublicLeaders } from "@/lib/utils/public-leadership";
-import { LeaderPortrait } from "./LeaderPortrait";
+import { LeadershipProfileCard } from "./LeadershipProfileCard";
 
 export async function LeadershipProfiles({
   role,
@@ -36,27 +36,23 @@ export async function LeadershipProfiles({
   }
 
   return (
-    <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+    <ul
+      className={
+        "grid gap-6 lg:gap-8 " +
+        (profiles.data.length === 1
+          ? "max-w-4xl"
+          : profiles.data.length === 2
+            ? "max-w-5xl sm:grid-cols-2"
+            : "sm:grid-cols-2 xl:grid-cols-3")
+      }
+    >
       {profiles.data.map((person) => (
-        <li
-          key={person.id}
-          className="min-w-0 rounded-2xl border border-[var(--public-line)] bg-white p-4 sm:p-5"
-        >
-          <LeaderPortrait
-            imageUrl={person.imageUrl}
-            initials={person.initials}
+        <li key={person.id} className="min-w-0">
+          <LeadershipProfileCard
+            person={person}
+            role={role}
+            featured={profiles.data.length === 1}
           />
-          <div className="px-1 pb-1 pt-5">
-            <p className="public-eyebrow">{role}</p>
-            <h4 className="public-display mt-2 text-2xl leading-snug wrap-anywhere">
-              {person.name}
-            </h4>
-            {person.bio && (
-              <p className="mt-3 whitespace-pre-line text-sm leading-7 text-[var(--public-muted)] wrap-anywhere">
-                {person.bio}
-              </p>
-            )}
-          </div>
         </li>
       ))}
     </ul>

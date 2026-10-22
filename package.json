@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "test:foundation": "node --test tests/pagination.test.mjs",
-    "test:public": "node --test --test-concurrency=1 tests/public-site.test.mjs tests/public-welcome.test.mjs tests/public-messages.test.mjs tests/public-scriptures.test.mjs tests/public-groups.test.mjs tests/public-events.test.mjs tests/public-programs.test.mjs tests/public-finish.test.mjs",
+    "test:public": "node --test --test-concurrency=1 tests/public-site.test.mjs tests/public-welcome.test.mjs tests/about-leadership.test.mjs tests/public-messages.test.mjs tests/public-scriptures.test.mjs tests/public-groups.test.mjs tests/public-events.test.mjs tests/public-programs.test.mjs tests/public-finish.test.mjs",
     "test:records": "node --test --test-concurrency=1 tests/record-details.test.mjs tests/group-records.test.mjs tests/editorial-records.test.mjs tests/program-records.test.mjs tests/account-audit-records.test.mjs tests/directory-records.test.mjs tests/schedule-lists.test.mjs tests/editorial-lists.test.mjs tests/access-lists.test.mjs tests/type-catalogs.test.mjs tests/dashboard-overview.test.mjs tests/attention-queues.test.mjs tests/prayer-team.test.mjs tests/member-editor.test.mjs tests/group-editor.test.mjs tests/event-editor.test.mjs tests/program-editor.test.mjs tests/content-editor.test.mjs tests/publication-editor.test.mjs tests/stream-editor.test.mjs tests/account-flows.test.mjs",
     "assets:public": "node scripts/prepare-public-assets.mjs"
   },

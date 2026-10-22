@@ -93,7 +93,7 @@ export function ScripturePassage({
     if (!passage) void load();
   }
   return (
-    <div className="min-w-0 rounded-lg bg-[#f3eee5] p-4">
+    <div className="min-w-0 rounded-lg bg-[var(--brand-soft)] p-4">
       <p className="text-sm font-semibold leading-7 wrap-anywhere">
         {reference.label}
       </p>

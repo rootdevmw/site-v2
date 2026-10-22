@@ -12,7 +12,7 @@ export function MinistryRecordView({ ministry, membership }: { ministry: Ministr
   return <RecordPage>
     <RecordHeader backHref="/dashboard/ministries" backLabel="Back to ministries" eyebrow="Ministry profile" title={ministry.name}
       description="People, purpose, and service in the church community."
-      identity={<div className="flex size-24 items-center justify-center rounded-2xl border border-[#e3d4bc] bg-[#f3e8d6] text-[#743c21]"><FiUsers aria-hidden="true" className="size-9" /></div>}
+      identity={<div className="flex size-24 items-center justify-center rounded-2xl border border-[var(--brand-line)] bg-[var(--brand-soft)] text-[var(--brand-link)]"><FiUsers aria-hidden="true" className="size-9" /></div>}
       badges={<RecordStatus>{ministry.members.length} {ministry.members.length === 1 ? "member" : "members"} assigned</RecordStatus>}
       actions={<Link href={"/dashboard/ministries/" + encodeURIComponent(ministry.id) + "/edit"} className="record-button record-button-primary"><FiEdit2 aria-hidden="true" />Edit ministry</Link>}
     />

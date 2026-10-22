@@ -1,14 +1,18 @@
 .public-site {
-  --public-bg: #faf8f4;
-  --public-ink: #29241f;
+  --public-bg: var(--brand-surface);
+  --public-ink: var(--brand-ink);
   --public-muted: #6c6257;
-  --public-accent: #743c21;
+  --public-accent: var(--brand-link);
+  --public-gold: var(--brand-gold);
+  --public-gold-hover: var(--brand-gold-hover);
+  --public-orange: var(--brand-orange);
+  --public-orange-hover: var(--brand-orange-hover);
   --public-line: #e7e0d5;
   --card-bg: #fff;
   --border-soft: #e7e0d5;
-  --text-primary: #29241f;
+  --text-primary: var(--brand-ink);
   --text-secondary: #6c6257;
-  --hover-soft: #f3eee5;
+  --hover-soft: var(--brand-soft);
   font-family: var(--font-public-body), sans-serif;
   color: var(--public-ink);
   background: var(--public-bg);
@@ -32,6 +36,11 @@
 
 .public-section {
   padding-block: clamp(3.5rem, 7vw, 6.5rem);
+}
+.public-top-bar {
+  border-color: var(--brand-gold-border);
+  background: var(--public-gold);
+  color: var(--public-ink);
 }
 .public-eyebrow {
   font-size: 0.6875rem;
@@ -62,27 +71,28 @@
 }
 
 .public-button-primary {
-  background: #743c21;
-  color: #fff;
+  border-color: var(--brand-border);
+  background: var(--public-orange);
+  color: var(--public-ink);
 }
 .public-button-primary:hover {
-  background: #542914;
+  background: var(--public-orange-hover);
 }
 .public-button-secondary {
   border-color: #d9d0c3;
   background: #fff;
-  color: #29241f;
+  color: var(--brand-ink);
 }
 .public-button-secondary:hover {
-  background: #f3eee5;
-  border-color: #b5a28b;
+  background: var(--brand-soft);
+  border-color: var(--brand-border);
 }
 .public-button-light {
-  background: #efd8af;
-  color: #29241f;
+  background: var(--public-gold);
+  color: var(--public-ink);
 }
 .public-button-light:hover {
-  background: #fff0d7;
+  background: var(--public-gold-hover);
 }
 .public-button:disabled {
   opacity: 0.5;
@@ -95,6 +105,7 @@
   gap: 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
+  color: var(--public-accent);
 }
 .public-text-link:hover {
   text-decoration: underline;
@@ -106,8 +117,11 @@
 .public-live-link.is-live {
   color: #9f1d1d;
 }
+.public-dark {
+  --public-accent: var(--brand-gold);
+}
 .public-dark .public-eyebrow {
-  color: #e6c49a;
+  color: var(--brand-gold);
 }
 .public-site .date-input-root,
 .public-site .date-input-el {
@@ -123,7 +137,7 @@
   border-radius: 0.65rem;
   background: #fff;
   padding: 0.75rem;
-  color: #29241f;
+  color: var(--brand-ink);
   font: inherit;
   font-size: 1rem;
 }
@@ -131,11 +145,11 @@
   color: #7d7368;
 }
 .public-input:focus {
-  border-color: #743c21;
+  border-color: var(--brand-link);
 }
 .public-site ::selection {
-  background: #efd8af;
-  color: #29241f;
+  background: var(--brand-gold);
+  color: var(--brand-ink);
 }
 .public-site
   :where(
@@ -147,10 +161,10 @@
     summary,
     [tabindex]
   ):focus-visible {
-  outline-color: #743c21;
+  outline-color: var(--brand-link);
 }
 .public-site :where(footer, .public-dark) :focus-visible {
-  outline-color: #efd8af;
+  outline-color: var(--brand-gold);
 }
 
 .public-message-body {
@@ -202,7 +216,7 @@
   margin-block: 0.5em;
 }
 .public-message-body blockquote {
-  border-left: 3px solid #b5a28b;
+  border-left: 3px solid var(--brand-border);
   padding-left: 1.25em;
   color: var(--public-muted);
 }
@@ -231,7 +245,7 @@
   white-space: pre-wrap;
   border-radius: 0.5rem;
   padding: 1em;
-  background: #f3eee5;
+  background: var(--brand-soft);
   font-size: 0.875rem;
 }
 .public-message-body table {
@@ -249,7 +263,7 @@
   text-align: left;
 }
 .public-message-body th {
-  background: #f3eee5;
+  background: var(--brand-soft);
 }
 .public-message-body figcaption {
   font-size: 0.875rem;

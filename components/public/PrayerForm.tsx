@@ -145,7 +145,7 @@ export function PrayerForm() {
                   checked={form.shareWithElders === option.value}
                   value={option.value}
                   onChange={() => set("shareWithElders", option.value)}
-                  className="size-4 accent-[#743c21]"
+                  className="size-4 accent-[var(--brand-link)]"
                 />
                 {option.label}
               </label>
@@ -259,7 +259,7 @@ export function PrayerForm() {
               name="isUrgent"
               checked={form.isUrgent}
               onChange={(e) => set("isUrgent", e.target.checked)}
-              className="mt-1.5 size-4 shrink-0 accent-[#743c21]"
+              className="mt-1.5 size-4 shrink-0 accent-[var(--brand-link)]"
             />
             Please prioritise this request.
           </label>

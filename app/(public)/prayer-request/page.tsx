@@ -29,7 +29,7 @@ export default function PrayerRequestPage() {
           <PrayerForm />
         </div>
         <aside className="min-w-0 space-y-7">
-          <div className="rounded-2xl bg-[#f0eadf] p-6">
+          <div className="rounded-2xl bg-[var(--brand-soft)] p-6">
             <h2 className="public-display text-2xl">Handled with care.</h2>
             <p className="mt-4 text-sm leading-7 text-[var(--public-muted)]">
               Shared requests are available to authorised church staff and the

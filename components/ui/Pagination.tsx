@@ -28,7 +28,7 @@ export function Pagination({ page, total, limit, onPageChange }: Props) {
           {pages.map((value, index) => value === "…" ? (
             <span key={"ellipsis-" + index} className="flex size-11 items-center justify-center text-sm text-[var(--text-secondary)]">…</span>
           ) : (
-            <button key={value} type="button" onClick={() => onPageChange(value)} aria-label={"Page " + value} aria-current={value === currentPage ? "page" : undefined} className={"flex size-11 items-center justify-center rounded-lg text-sm font-medium transition " + (value === currentPage ? "bg-[var(--main-gold)] text-black" : "border border-[var(--border-soft)] bg-[var(--card-elevated)] text-[var(--text-secondary)] hover:bg-[var(--hover-soft)]")}>
+            <button key={value} type="button" onClick={() => onPageChange(value)} aria-label={"Page " + value} aria-current={value === currentPage ? "page" : undefined} className={"flex size-11 items-center justify-center rounded-lg text-sm font-medium transition " + (value === currentPage ? "bg-[var(--brand-gold)] text-[var(--brand-ink)]" : "border border-[var(--border-soft)] bg-[var(--card-elevated)] text-[var(--text-secondary)] hover:bg-[var(--hover-soft)]")}>
               {value}
             </button>
           ))}

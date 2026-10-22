@@ -234,7 +234,7 @@ export async function EventDetails({
             )}
           </article>
           <aside className="min-w-0">
-            <section className="rounded-2xl bg-[#f3eee5] p-6">
+            <section className="rounded-2xl bg-[var(--brand-soft)] p-6">
               <h2 className="public-display text-2xl">Have a question?</h2>
               <p className="mt-4 text-sm leading-7 text-[var(--public-muted)]">
                 Ask the church team about this event, the venue or how to take

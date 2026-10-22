@@ -211,7 +211,7 @@ export async function GroupDetails({
                   another and grow in faith. Speak to the church team about
                   visiting this group and confirming the current venue.
                 </p>
-                <div className="mt-6 rounded-xl bg-[#f3eee5] p-5 sm:p-6">
+                <div className="mt-6 rounded-xl bg-[var(--brand-soft)] p-5 sm:p-6">
                   <h3 className="flex items-center gap-2 text-base font-semibold">
                     <FiClock aria-hidden="true" />
                     Our usual homecell rhythm
@@ -250,7 +250,7 @@ export async function GroupDetails({
         </div>
         <GroupSchedule group={group} now={result.checkedAt} />
       </section>
-      <section className="border-y border-[var(--public-line)] bg-[#f3eee5]">
+      <section className="border-y border-[var(--public-line)] bg-[var(--brand-soft)]">
         <div className="public-container public-section">
           <p className="public-eyebrow">People &amp; care</p>
           <h2 className="public-display mt-4 text-3xl leading-tight sm:text-4xl">

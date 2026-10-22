@@ -25,7 +25,7 @@ export default async function Image() {
           top: 0,
           right: 0,
           height: 14,
-          background: "#743c21",
+          background: "#f6b63d",
         }}
       />
       <div
@@ -34,7 +34,7 @@ export default async function Image() {
           fontSize: 22,
           letterSpacing: 5,
           textTransform: "uppercase",
-          color: "#743c21",
+          color: "#a74300",
         }}
       >
         Faith · Fellowship · Service
@@ -68,7 +68,7 @@ export default async function Image() {
           display: "flex",
           marginTop: "auto",
           fontSize: 24,
-          color: "#743c21",
+          color: "#a74300",
         }}
       >
         All are welcome. Plan your visit at churchofchrist.mw

@@ -335,7 +335,7 @@ export function Sidebar({ onNavigate, showBrand = true }: { onNavigate?: () => v
     <aside className="flex h-full min-h-0 w-full flex-col border-r border-[var(--border-soft)] bg-[var(--card-bg)]">
       {/* Logo */}
       {showBrand && <div className="h-16 flex items-center gap-3 px-5 border-b border-[var(--border-soft)] shrink-0">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--main-gold)]/15 text-[var(--main-gold)]">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-gold)] text-[var(--brand-ink)]">
           <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M13 2h-2v9H2v2h9v9h2v-9h9v-2h-9z" />
           </svg>
@@ -396,7 +396,7 @@ export function Sidebar({ onNavigate, showBrand = true }: { onNavigate?: () => v
                           aria-current={active ? "page" : undefined}
                           className={`flex min-h-11 items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
                             active
-                              ? "bg-[var(--main-gold)]/15 text-[var(--main-gold)] font-medium"
+                              ? "bg-[var(--brand-gold)] text-[var(--brand-ink)] font-semibold"
                               : "text-[var(--text-secondary)] hover:bg-[var(--hover-soft)] hover:text-[var(--text-primary)]"
                           }`}
                         >
@@ -428,7 +428,7 @@ export function Sidebar({ onNavigate, showBrand = true }: { onNavigate?: () => v
               aria-current={active ? "page" : undefined}
               className={`flex min-h-11 items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
                 active
-                  ? "bg-[var(--main-gold)]/15 text-[var(--main-gold)] font-medium"
+                  ? "bg-[var(--brand-gold)] text-[var(--brand-ink)] font-semibold"
                   : "text-[var(--text-secondary)] hover:bg-[var(--hover-soft)] hover:text-[var(--text-primary)]"
               }`}
             >
@@ -445,7 +445,7 @@ export function Sidebar({ onNavigate, showBrand = true }: { onNavigate?: () => v
 
       {/* Footer */}
       <div className="shrink-0 border-t border-[var(--border-soft)] px-5 py-3">
-        <p className="text-[10px] text-[var(--text-secondary)] opacity-40">
+        <p className="text-[10px] text-[var(--text-secondary)]">
           v1.0 · Church of Christ
         </p>
       </div>

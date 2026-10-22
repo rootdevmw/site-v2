@@ -3,7 +3,7 @@ import { ReactNodeViewRenderer } from "@tiptap/react";
 import { ScriptureNodeView } from "./ScriptureNodeView";
 
 export interface ScriptureOptions {
-  HTMLAttributes: Record<string, any>;
+  HTMLAttributes: Record<string, unknown>;
 }
 
 declare module "@tiptap/core" {
@@ -63,7 +63,7 @@ export const Scripture = Node.create<ScriptureOptions>({
         "data-verse-from": HTMLAttributes.verseFrom,
         "data-verse-to": HTMLAttributes.verseTo || "",
         class:
-          "scripture-reference text-[var(--main-gold)] font-semibold cursor-help hover:underline transition-all",
+          "scripture-reference text-[var(--brand-link)] font-semibold cursor-help hover:underline transition-all",
       }),
       `${HTMLAttributes.book} ${HTMLAttributes.chapter}:${HTMLAttributes.verseFrom}${HTMLAttributes.verseTo ? `-${HTMLAttributes.verseTo}` : ""}`,
     ];

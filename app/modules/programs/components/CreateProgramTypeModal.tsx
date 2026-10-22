@@ -28,7 +28,7 @@ export function CreateProgramTypeModal({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="text-xs text-[var(--main-gold)] hover:underline"
+        className="text-xs text-[var(--brand-link)] hover:underline"
       >
         + Add new type
       </button>
@@ -57,7 +57,7 @@ export function CreateProgramTypeModal({
           type="button"
           onClick={handleCreate}
           disabled={isPending}
-          className="px-3 py-1 rounded-md bg-[var(--main-gold)] text-black text-sm"
+          className="px-3 py-1 rounded-md bg-[var(--brand-orange)] text-[var(--brand-ink)] text-sm"
         >
           {isPending ? "Saving..." : "Create"}
         </button>

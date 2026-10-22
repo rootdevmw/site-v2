@@ -87,7 +87,7 @@ export default function PlanVisitPage() {
             <h3 className="mb-5 text-base font-semibold">Sunday worship</h3>
             <ServiceTimes />
           </div>
-          <div className="rounded-2xl bg-[#f3eee5] p-6 md:col-span-2 lg:col-span-1">
+          <div className="rounded-2xl bg-[var(--brand-soft)] p-6 md:col-span-2 lg:col-span-1">
             <FiMapPin
               aria-hidden="true"
               className="size-6 text-[var(--public-accent)]"
@@ -165,7 +165,7 @@ export default function PlanVisitPage() {
 
       <WorshipPractices />
 
-      <section id="let-us-know" className="scroll-mt-36 bg-[#f0eadf]">
+      <section id="let-us-know" className="scroll-mt-36 bg-[var(--brand-soft)]">
         <div className="public-container public-section grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
           <div className="max-w-lg">
             <p className="public-eyebrow">An optional hello</p>

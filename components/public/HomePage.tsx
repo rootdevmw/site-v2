@@ -63,9 +63,9 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="public-dark bg-[#25221f] text-white">
+      <section className="public-dark bg-[var(--brand-dark)] text-white">
         <div className="public-container public-section">
-          <p className="public-eyebrow !text-[#efd8af]">From Scripture to everyday life</p>
+          <p className="public-eyebrow !text-[var(--brand-gold)]">From Scripture to everyday life</p>
           <Suspense fallback={<FeedLoading label="Loading recent messages…" />}><FeaturedMessages /></Suspense>
         </div>
       </section>
@@ -84,7 +84,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="bg-[#f0eadf]">
+      <section className="bg-[var(--brand-soft)]">
         <div className="public-container public-section">
           <div className="flex flex-wrap items-end justify-between gap-5"><div><p className="public-eyebrow">Life together</p><h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">Gather with us.</h2></div><Link href="/events" className="public-text-link">All upcoming gatherings <FiArrowUpRight aria-hidden="true" /></Link></div>
           <Suspense fallback={<FeedLoading label="Loading upcoming gatherings…" />}><UpcomingEvents /></Suspense>
@@ -108,8 +108,8 @@ async function FeaturedMessages() {
         {featured ? <><p className="mt-5 text-sm leading-7 text-stone-300">{[featured.author && [featured.author.firstName, featured.author.lastName].filter(Boolean).join(" "), featured.createdAt && formatChurchDate(featured.createdAt, { month: "long", day: "numeric", year: "numeric" })].filter(Boolean).join(" · ")}</p><Link href={"/content/" + (featured.slug || featured.id)} className="public-button public-button-light mt-7">Read message <FiArrowUpRight aria-hidden="true" /></Link></> : <><blockquote className="mt-6 max-w-xl text-lg leading-8 text-stone-200">“Your word is a lamp to my feet and a light to my path.”</blockquote><p className="mt-3 text-xs uppercase tracking-widest text-stone-400">Psalm 119:105</p></>}
       </div>
       <div className="min-w-0 lg:border-l lg:border-white/15 lg:pl-10"><h3 className="text-xs font-semibold uppercase tracking-widest text-stone-300">Explore the message library</h3>
-        {more.map((item) => <Link key={item.id} href={"/content/" + (item.slug || item.id)} className="flex min-h-20 items-center justify-between gap-4 border-b border-white/15 py-5 text-lg leading-7 hover:text-[#efd8af]"><span className="min-w-0 wrap-break-word">{item.title}</span><FiArrowUpRight aria-hidden="true" className="size-5 shrink-0" /></Link>)}
-        <p className="mt-5 text-sm leading-7 text-stone-300">{result.unavailable ? "Recent messages could not be loaded. You can try the message library again shortly." : "Teachings, articles, and reflections to help us follow Christ throughout the week."}</p><Link href="/content" className="public-text-link mt-4 text-[#efd8af]">Browse all messages <FiArrowRight aria-hidden="true" /></Link>
+        {more.map((item) => <Link key={item.id} href={"/content/" + (item.slug || item.id)} className="flex min-h-20 items-center justify-between gap-4 border-b border-white/15 py-5 text-lg leading-7 hover:text-[var(--brand-gold)]"><span className="min-w-0 wrap-break-word">{item.title}</span><FiArrowUpRight aria-hidden="true" className="size-5 shrink-0" /></Link>)}
+        <p className="mt-5 text-sm leading-7 text-stone-300">{result.unavailable ? "Recent messages could not be loaded. You can try the message library again shortly." : "Teachings, articles, and reflections to help us follow Christ throughout the week."}</p><Link href="/content" className="public-text-link mt-4 text-[var(--brand-gold)]">Browse all messages <FiArrowRight aria-hidden="true" /></Link>
       </div>
     </div>
   );

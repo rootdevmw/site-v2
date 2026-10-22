@@ -50,7 +50,7 @@ export function PersonPicker({ label, currentId, onClose, onSelect }: { label: s
       </div> : <>
         <fieldset className="max-h-72 overflow-y-auto overscroll-contain" onKeyDown={(event) => { if (event.key === "Enter") event.preventDefault(); }}><legend className="sr-only">Choose a {label.toLowerCase()} profile</legend>
           {people.map((person) => <label key={person.id} className="flex min-h-16 cursor-pointer items-start gap-3 border-b border-[#e7e0d5] py-3 last:border-0">
-            <input type="radio" name={inputId + "-person"} value={person.id} checked={selected?.id === person.id} onChange={() => setSelected(person)} className="mt-1 size-4 shrink-0 accent-[#743c21]" />
+            <input type="radio" name={inputId + "-person"} value={person.id} checked={selected?.id === person.id} onChange={() => setSelected(person)} className="mt-1 size-4 shrink-0 accent-[var(--brand-link)]" />
             <span className="min-w-0 text-sm leading-7 wrap-anywhere"><strong className="block">{memberName(person)}</strong><span className="text-[#6c6257]">ID {person.id}{person.location ? " · " + person.location : ""}{person.id === currentId ? " · Current filter" : ""}</span></span>
           </label>)}
           {!people.length && <p className="record-empty">No matching people. Try another name.</p>}

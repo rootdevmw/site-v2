@@ -47,7 +47,7 @@ export function MultiSelect({
               className={`px-3 py-1 rounded-full text-sm border transition-all duration-200
                 ${
                   selected
-                    ? "bg-[var(--main-gold)] text-black border-[var(--gold-dark)]"
+                    ? "bg-[var(--brand-gold)] text-[var(--brand-ink)] border-[var(--brand-border)]"
                     : "bg-[var(--card-elevated)] text-[var(--text-secondary)] border-[var(--border-soft)] hover:bg-[var(--hover-soft)]"
                 } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
             >

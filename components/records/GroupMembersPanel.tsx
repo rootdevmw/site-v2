@@ -56,7 +56,7 @@ export function RecordMemberList({ members, groupName, disabled, onRemove }: { m
     <Link href={"/dashboard/members/" + encodeURIComponent(member.id)} className="record-member-profile">
       <span aria-hidden="true" className="record-member-initials">{[member.firstName, member.lastName].map((part) => part?.charAt(0)).join("").toUpperCase()}</span>
       <span className="min-w-0 flex-1"><span className="block text-sm font-semibold wrap-anywhere">{memberName(member)}</span><span className="mt-1 block text-xs leading-6 text-[#6c6257]">{readableRecordLabel(member.status, "Assigned")} · ID {member.id}</span></span>
-      <FiArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-[#743c21]" />
+      <FiArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-[var(--brand-link)]" />
     </Link>
     <DeleteConfirmButton triggerLabel="Remove" title="Remove from this group?" confirmLabel="Remove member" description={"Remove " + memberName(member) + " from " + groupName + "? Their church directory profile will be kept."} disabled={disabled} onConfirm={() => onRemove(member)} className="min-h-11 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-800 hover:bg-red-100 disabled:opacity-50" />
   </li>)}</ul>;

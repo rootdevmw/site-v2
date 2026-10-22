@@ -50,7 +50,7 @@ export function MemberAssignmentDialog({ kind, groupId, groupName, assignedIds, 
           <legend className="sr-only">Choose a member</legend>
           <div className="max-h-72 overflow-y-auto overscroll-contain">
             {members.map((member) => <label key={member.id} className="flex min-h-16 cursor-pointer items-start gap-3 border-b border-[#e7e0d5] py-3 last:border-0">
-              <input type="radio" name={inputId + "-member"} value={member.id} checked={selected?.id === member.id} disabled={assignedIds.has(member.id)} onChange={() => setSelected(member)} className="mt-1 size-4 shrink-0 accent-[#743c21]" />
+              <input type="radio" name={inputId + "-member"} value={member.id} checked={selected?.id === member.id} disabled={assignedIds.has(member.id)} onChange={() => setSelected(member)} className="mt-1 size-4 shrink-0 accent-[var(--brand-link)]" />
               <span className="min-w-0 flex-1"><span className="block text-sm font-semibold wrap-anywhere">{memberName(member)}</span><span className="mt-1 block text-xs leading-6 text-[#6c6257]">ID {member.id}{member.location ? " · " + member.location : ""}{assignedIds.has(member.id) ? " · Already assigned" : ""}</span></span>
             </label>)}
             {!members.length && <p className="record-empty py-3">No available people on this page. Try another name or directory page.</p>}

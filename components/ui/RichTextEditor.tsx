@@ -466,7 +466,7 @@ export const RichTextEditor = forwardRef<
                           ? "text-red-500"
                           : uploadState.status === "done"
                             ? "text-green-600"
-                            : "text-[var(--main-gold)]"
+                            : "text-[var(--brand-link)]"
                       }`}
                     >
                       {uploadState.status === "error"
@@ -484,7 +484,7 @@ export const RichTextEditor = forwardRef<
                           ? "bg-red-500"
                           : uploadState.status === "done"
                             ? "bg-green-500"
-                            : "bg-[var(--main-gold)]"
+                            : "bg-[var(--brand-orange)]"
                       }`}
                       style={{ width: `${uploadState.progress}%` }}
                     />
@@ -504,7 +504,7 @@ export const RichTextEditor = forwardRef<
             onClick={() => editor.chain().focus().run()}
             className={
               editorHeightClassName +
-              " flex flex-col bg-[var(--card-bg)] focus-within:ring-2 focus-within:ring-[var(--main-gold)] cursor-text"
+              " flex flex-col bg-[var(--card-bg)] focus-within:ring-2 focus-within:ring-[var(--brand-focus)] cursor-text"
             }
           >
             <div
@@ -666,7 +666,7 @@ function ToolbarButton({
       aria-label={title}
       aria-pressed={active}
       className={`min-h-11 min-w-11 px-2 py-1 rounded text-sm flex items-center justify-center transition-colors
-        ${active ? "bg-[var(--main-gold)] text-black" : "hover:bg-[var(--hover-soft)]"}
+        ${active ? "bg-[var(--brand-gold)] text-[var(--brand-ink)]" : "hover:bg-[var(--hover-soft)]"}
         ${disabled ? "opacity-50 cursor-not-allowed" : ""}
       `}
     >

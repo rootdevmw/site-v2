@@ -16,7 +16,7 @@ const MODE_PILL = {
   create: { label: "New", className: "bg-emerald-50 text-emerald-800" },
   edit: {
     label: "Editing",
-    className: "bg-[var(--main-gold)]/10 text-[var(--main-gold)]",
+    className: "bg-[var(--brand-soft)] text-[var(--brand-link)]",
   },
   view: {
     label: "Viewing",
@@ -75,7 +75,7 @@ export function BaseForm({
               type="submit"
               aria-busy={isLoading}
               disabled={isLoading}
-              className="min-h-11 px-5 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="min-h-11 px-5 py-2 rounded-lg text-sm font-medium bg-[var(--brand-orange)] text-[var(--brand-ink)] hover:bg-[var(--brand-orange-hover)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isLoading
                 ? "Saving..."

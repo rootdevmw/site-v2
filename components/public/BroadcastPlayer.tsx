@@ -17,7 +17,7 @@ export function BroadcastPlayer({ stream }: { stream: PublicBroadcast }) {
     >
       {player ? (
         <>
-          <div className="relative aspect-video min-h-[200px] overflow-hidden rounded-xl bg-[#25221f] text-white">
+          <div className="relative aspect-video min-h-[200px] overflow-hidden rounded-xl bg-[var(--brand-dark)] text-white">
             {playing ? (
               <iframe
                 src={player.embed}
@@ -59,7 +59,7 @@ export function BroadcastPlayer({ stream }: { stream: PublicBroadcast }) {
           </p>
         </>
       ) : (
-        <div className="rounded-xl bg-[#f3eee5] p-6">
+        <div className="rounded-xl bg-[var(--brand-soft)] p-6">
           <h2 className="public-display text-2xl">
             Watch with the broadcaster.
           </h2>

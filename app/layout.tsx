@@ -24,8 +24,8 @@ export default function RootLayout({
             },
             success: {
               iconTheme: {
-                primary: "var(--main-gold)",
-                secondary: "black",
+                primary: "var(--brand-orange)",
+                secondary: "var(--brand-ink)",
               },
             },
             error: {

@@ -161,7 +161,7 @@ export default function ContactPage() {
               Join our English or Chichewa service. On the last Sunday of each
               month, we worship together in one combined service.
             </p>
-            <div className="mt-7 rounded-2xl border border-[var(--public-line)] bg-[#faf8f4] p-5 sm:p-6">
+            <div className="mt-7 rounded-2xl border border-[var(--public-line)] bg-[var(--brand-surface)] p-5 sm:p-6">
               <h3 className="mb-5 text-base font-semibold">Sunday worship</h3>
               <ServiceTimes />
             </div>
@@ -247,10 +247,10 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="public-dark bg-[#29241f] text-white">
+      <section className="public-dark bg-[var(--brand-ink)] text-white">
         <div className="public-container flex flex-col items-start justify-between gap-8 py-12 sm:py-16 lg:flex-row lg:items-center lg:gap-12">
           <div className="min-w-0 max-w-xl">
-            <p className="public-eyebrow text-[#efd8af]!">Keep in touch</p>
+            <p className="public-eyebrow text-[var(--brand-gold)]!">Keep in touch</p>
             <h2 className="public-display mt-4 text-3xl leading-tight sm:text-4xl">
               Stay connected through the week.
             </h2>
@@ -268,11 +268,11 @@ export default function ContactPage() {
             </a>
             <a
               href={church.youtubeUrl}
-              className="public-text-link text-[#efd8af]"
+              className="public-text-link text-[var(--brand-gold)]"
             >
               YouTube <FiArrowUpRight aria-hidden="true" />
             </a>
-            <Link href="/content" className="public-text-link text-[#efd8af]">
+            <Link href="/content" className="public-text-link text-[var(--brand-gold)]">
               Latest messages <FiArrowRight aria-hidden="true" />
             </Link>
           </div>

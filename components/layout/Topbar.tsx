@@ -59,7 +59,7 @@ export function Topbar({
   }
 
   return (
-    <header className="relative z-30 flex min-h-16 shrink-0 items-center justify-between gap-2 border-b border-[var(--border-soft)] bg-[var(--card-bg)] px-3 sm:px-6 lg:px-8">
+    <header className="relative z-30 flex min-h-16 shrink-0 items-center justify-between gap-2 border-b border-[var(--brand-gold-border)] bg-[var(--brand-gold)] px-3 text-[var(--brand-ink)] sm:px-6 lg:px-8">
       <div className="flex min-w-0 items-center gap-2">
         <button type="button" onClick={() => { setOpenPanel(null); onOpenNavigation(); }} aria-label="Open portal navigation" aria-haspopup="dialog" aria-expanded={navigationOpen} className="flex size-11 shrink-0 items-center justify-center rounded-lg hover:bg-[var(--hover-soft)] lg:hidden">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="size-5"><path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -76,7 +76,7 @@ export function Topbar({
             ].map(({ name, count, Icon }) => (
               <button key={name} type="button" onClick={(event) => togglePanel("attention", event.currentTarget)} aria-label={name + ": " + count + " pending"} aria-expanded={openPanel === "attention"} aria-controls={attentionId} className="relative flex size-11 items-center justify-center rounded-lg hover:bg-[var(--hover-soft)]">
                 <Icon aria-hidden="true" className="text-lg" />
-                {count > 0 && <span aria-hidden="true" className="absolute right-0 top-0 flex min-w-4 items-center justify-center rounded-full bg-[#7c3d0f] px-1 text-[10px] leading-4 text-white">{count > 99 ? "99+" : count}</span>}
+                {count > 0 && <span aria-hidden="true" className="absolute right-0 top-0 flex min-w-4 items-center justify-center rounded-full border border-[var(--brand-border)] bg-[var(--brand-orange)] px-1 text-[10px] leading-4 text-[var(--brand-ink)]">{count > 99 ? "99+" : count}</span>}
               </button>
             ))}
             {openPanel === "attention" && (
@@ -104,10 +104,10 @@ export function Topbar({
 
         <div className="relative">
           <button type="button" onClick={(event) => togglePanel("account", event.currentTarget)} aria-label="Account options" aria-expanded={openPanel === "account"} aria-controls={accountId} className="flex min-h-11 items-center gap-2 rounded-lg px-2 py-1 hover:bg-[var(--hover-soft)] sm:px-3">
-            <span aria-hidden="true" className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[var(--main-gold)] text-sm font-semibold text-black">{user?.email?.[0]?.toUpperCase() ?? "?"}</span>
+            <span aria-hidden="true" className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[var(--brand-orange)] text-sm font-semibold text-[var(--brand-ink)]">{user?.email?.[0]?.toUpperCase() ?? "?"}</span>
             <span className="hidden min-w-0 max-w-40 text-left sm:block lg:max-w-56">
               <span className="block truncate text-sm">{user?.email}</span>
-              {primaryRole && <span className="block text-xs text-[var(--text-secondary)]">{primaryRole}</span>}
+              {primaryRole && <span className="block text-xs text-[var(--brand-ink)]">{primaryRole}</span>}
             </span>
           </button>
           {openPanel === "account" && (

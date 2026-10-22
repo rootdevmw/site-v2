@@ -81,8 +81,8 @@ export function RecordSkeleton({ label }: { label: string }) {
     <span className="sr-only">{label}</span>
     <div aria-hidden="true" className="record-skeleton motion-safe:animate-pulse">
       <div className="mb-5 h-5 w-40 rounded bg-[#e7e0d5]" />
-      <div className="record-header"><div className="record-heading"><div className="size-24 shrink-0 rounded-2xl bg-[#eee8df]" /><div className="w-full min-w-0 flex-1 space-y-4"><div className="h-4 w-24 rounded bg-[#eee8df]" /><div className="h-9 w-3/4 rounded bg-[#eee8df]" /><div className="h-5 w-1/2 rounded bg-[#eee8df]" /></div></div></div>
-      <div className="record-columns mt-6">{[0, 1].map((index) => <div key={index} className="record-section space-y-6"><div className="h-6 w-1/2 rounded bg-[#eee8df]" /><div className="h-24 rounded bg-[#f4f0e9]" /><div className="h-16 rounded bg-[#f4f0e9]" /></div>)}</div>
+      <div className="record-header"><div className="record-heading"><div className="size-24 shrink-0 rounded-2xl bg-[var(--brand-warm)]" /><div className="w-full min-w-0 flex-1 space-y-4"><div className="h-4 w-24 rounded bg-[var(--brand-warm)]" /><div className="h-9 w-3/4 rounded bg-[var(--brand-warm)]" /><div className="h-5 w-1/2 rounded bg-[var(--brand-warm)]" /></div></div></div>
+      <div className="record-columns mt-6">{[0, 1].map((index) => <div key={index} className="record-section space-y-6"><div className="h-6 w-1/2 rounded bg-[var(--brand-warm)]" /><div className="h-24 rounded bg-[var(--brand-warm)]" /><div className="h-16 rounded bg-[var(--brand-warm)]" /></div>)}</div>
     </div>
   </div>;
 }

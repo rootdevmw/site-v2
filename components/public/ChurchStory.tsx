@@ -12,7 +12,8 @@ export function ChurchPurpose() {
   return (
     <section
       id="our-purpose"
-      className="scroll-mt-36 border-y border-[var(--public-line)] bg-[#f3eee5]"
+      tabIndex={-1}
+      className="scroll-mt-36 border-y border-[var(--public-line)] bg-[var(--brand-soft)]"
     >
       <div className="public-container public-section">
         <p className="public-eyebrow">Our mission and vision</p>
@@ -71,6 +72,7 @@ export function ChurchHistory() {
   return (
     <section
       id="our-story"
+      tabIndex={-1}
       className="public-container public-section scroll-mt-36"
     >
       <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
@@ -96,7 +98,7 @@ export function ChurchHistory() {
             <li key={item.date} className="relative pb-9 last:pb-0">
               <span
                 aria-hidden="true"
-                className="absolute top-2 -left-[1.9rem] size-3 rounded-full border-2 border-[#faf8f4] bg-[var(--public-accent)] sm:-left-[2.4rem]"
+                className="absolute top-2 -left-[1.9rem] size-3 rounded-full border-2 border-[var(--brand-surface)] bg-[var(--public-accent)] sm:-left-[2.4rem]"
               />
               <p className="text-sm font-semibold text-[var(--public-accent)]">
                 {item.date}
@@ -125,6 +127,7 @@ export function ChurchBeliefs() {
   return (
     <section
       id="our-beliefs"
+      tabIndex={-1}
       className="public-container public-section grid scroll-mt-36 gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20"
     >
       <div className="min-w-0 max-w-lg">
@@ -184,6 +187,7 @@ export function WorshipPractices() {
   return (
     <section
       id="our-worship"
+      tabIndex={-1}
       className="scroll-mt-36 border-y border-[var(--public-line)] bg-white"
     >
       <div className="public-container public-section">

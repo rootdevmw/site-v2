@@ -13,8 +13,12 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
-  const isActive = (href: string) =>
-    pathname === href || pathname.startsWith(href + "/");
+  const isActive = (href: string) => {
+    const path = href.split(/[?#]/)[0];
+    return pathname === path || pathname.startsWith(path + "/");
+  };
+  const currentPage = (href: string) =>
+    !href.includes("#") && isActive(href) ? ("page" as const) : undefined;
 
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 80rem)");
@@ -37,9 +41,9 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--public-line)] bg-[#faf8f4]/95 backdrop-blur-md">
-      <div className="border-b border-[var(--public-line)] bg-[#f0eadf]">
-        <div className="public-container flex min-h-9 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-1.5 text-[11px] font-medium text-[#594b3c]">
+    <header className="sticky top-0 z-40 border-b border-[var(--public-line)] bg-[var(--brand-surface)]/95 backdrop-blur-md">
+      <div className="public-top-bar border-b">
+        <div className="public-container flex min-h-9 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-1.5 text-[11px] font-semibold">
           <span>
             Mahatma Road, Blantyre{" "}
             <span aria-hidden="true" className="mx-1.5">
@@ -103,7 +107,7 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
           className="hidden items-center gap-1 xl:flex"
         >
           {publicNavigation.map((item) =>
-            "children" in item ? (
+            item.children ? (
               <details
                 key={item.label}
                 className="group relative"
@@ -119,8 +123,9 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
               >
                 <summary
                   className={
-                    "flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg px-3 text-sm font-semibold hover:bg-[#f0eadf] [&::-webkit-details-marker]:hidden " +
-                    (item.children.some((child) => isActive(child.href))
+                    "flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg px-3 text-sm font-semibold hover:bg-[var(--brand-soft)] [&::-webkit-details-marker]:hidden " +
+                    (isActive(item.href) ||
+                    item.children.some((child) => isActive(child.href))
                       ? "text-[var(--public-accent)]"
                       : "")
                   }
@@ -131,13 +136,18 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
                     className="size-3.5 transition-transform group-open:rotate-180 motion-reduce:transition-none"
                   />
                 </summary>
-                <div className="absolute left-0 top-full mt-2 w-64 rounded-xl border border-[var(--public-line)] bg-white p-2 shadow-lg">
+                <div className="absolute left-0 top-full mt-2 max-h-[calc(100dvh-9rem)] w-72 max-w-[calc(100vw-2rem)] overflow-y-auto overscroll-contain rounded-xl border border-[var(--public-line)] bg-white p-2 shadow-lg">
                   {item.children.map((child) => (
                     <Link
                       key={child.href}
                       href={child.href}
-                      aria-current={isActive(child.href) ? "page" : undefined}
-                      className="block min-h-11 rounded-lg px-3 py-3 text-sm hover:bg-[#f3eee5] aria-[current=page]:bg-[#f3eee5] aria-[current=page]:font-semibold"
+                      aria-current={currentPage(child.href)}
+                      onClick={(event) => {
+                        event.currentTarget
+                          .closest("details")
+                          ?.removeAttribute("open");
+                      }}
+                      className="block min-h-11 rounded-lg px-3 py-3 text-sm hover:bg-[var(--brand-soft)] aria-[current=page]:bg-[var(--brand-soft)] aria-[current=page]:font-semibold"
                     >
                       {child.label}
                     </Link>
@@ -149,7 +159,7 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
                 key={item.href}
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
-                className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:bg-[#f0eadf] aria-[current=page]:text-[var(--public-accent)]"
+                className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:bg-[var(--brand-soft)] aria-[current=page]:text-[var(--public-accent)]"
               >
                 {item.label}
               </Link>
@@ -171,7 +181,7 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
             aria-label="Open website navigation"
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
-            className="flex size-11 items-center justify-center rounded-lg border border-[var(--public-line)] hover:bg-[#f0eadf] xl:hidden"
+            className="flex size-11 items-center justify-center rounded-lg border border-[var(--public-line)] hover:bg-[var(--brand-soft)] xl:hidden"
           >
             <FiMenu aria-hidden="true" className="size-5" />
           </button>
@@ -194,21 +204,29 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
           </Link>
           {publicNavigation.map((item) => (
             <div key={item.label}>
-              {"children" in item ? (
-                <>
-                  <p className="public-eyebrow mb-2">{item.label}</p>
-                  {item.children.map((child) => (
-                    <Link
-                      key={child.href}
-                      href={child.href}
-                      onClick={() => setMenuOpen(false)}
-                      aria-current={isActive(child.href) ? "page" : undefined}
-                      className="flex min-h-11 items-center rounded-lg px-3 py-3 text-sm aria-[current=page]:bg-[#f3eee5] aria-[current=page]:font-semibold"
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
-                </>
+              {item.children ? (
+                <details open={isActive(item.href)} className="group">
+                  <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-lg px-3 py-3 text-base font-semibold hover:bg-[var(--brand-soft)] [&::-webkit-details-marker]:hidden">
+                    {item.label}
+                    <FiChevronDown
+                      aria-hidden="true"
+                      className="size-4 shrink-0 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+                    />
+                  </summary>
+                  <div className="mt-1 ml-3 border-l border-[var(--public-line)] pl-2">
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        onClick={() => setMenuOpen(false)}
+                        aria-current={currentPage(child.href)}
+                        className="flex min-h-11 items-center rounded-lg px-3 py-3 text-sm aria-[current=page]:bg-[var(--brand-soft)] aria-[current=page]:font-semibold"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
               ) : (
                 <Link
                   href={item.href}

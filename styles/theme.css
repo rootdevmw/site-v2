@@ -1,26 +1,43 @@
 :root {
-  --bg-dark: #f6efe6;
-  --card-bg: #fffaf4;
-  --main-gold: #c6892d;
-  --gold-dark: #9f6514;
+  /* Shared palette for the public website, account pages and church portal. */
+  --brand-ink: #29241f;
+  --brand-surface: #faf8f4;
+  --brand-dark: #25221f;
+  --brand-orange: #f7941d;
+  --brand-orange-hover: #ffac3b;
+  --brand-gold: #f6b63d;
+  --brand-gold-hover: #ffcb6b;
+  --brand-link: #a74300;
+  --brand-border: #c2690f;
+  --brand-gold-border: #dea136;
+  --brand-soft: #fff2d8;
+  --brand-soft-hover: #ffe6b2;
+  --brand-warm: #fff8ed;
+  --brand-line: #efd3a3;
+  --brand-focus: var(--brand-link);
+
+  --bg-dark: var(--brand-surface);
+  --card-bg: #fff;
+  --main-gold: var(--brand-gold);
+  --gold-dark: var(--brand-link);
   --blue: #5d8db5;
 
   /* Backgrounds */
-  --bg-main: #fdf9f4;
-  --bg-subtle: #fffaf3;
-  --bg-card: #fffdfb;
+  --bg-main: var(--brand-surface);
+  --bg-subtle: var(--brand-warm);
+  --bg-card: #fff;
 
   /* Text */
-  --text-primary: #3f1e0d;
-  --text-secondary: #6d4a2e;
+  --text-primary: var(--brand-ink);
+  --text-secondary: #6c6257;
 
   /* Gold Accent */
-  --accent-gold: var(--main-gold);
-  --accent-gold-hover: var(--gold-dark);
-  --accent-gold-soft: rgba(198, 137, 45, 0.12);
+  --accent-gold: var(--brand-gold);
+  --accent-gold-hover: var(--brand-gold-hover);
+  --accent-gold-soft: var(--brand-soft);
 
   /* UI */
-  --border-soft: #ead7b1;
-  --hover-soft: #f5e9d5;
-  --card-elevated: #fffdf9;
+  --border-soft: #e7e0d5;
+  --hover-soft: var(--brand-soft);
+  --card-elevated: #fff;
 }

@@ -141,10 +141,10 @@ export function EventDirectory({ filters }: { filters: EventFilters }) {
           </Suspense>
         </div>
       </section>
-    <section className="public-dark bg-[#25221f] text-white [--public-accent:#e6c49a]">
+    <section className="public-dark bg-[var(--brand-dark)] text-white">
         <div className="public-container public-section grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20">
           <div className="min-w-0">
-            <p className="public-eyebrow text-[#e6c49a]">Our regular rhythm</p>
+            <p className="public-eyebrow text-[var(--brand-gold)]">Our regular rhythm</p>
             <h2 className="public-display mt-4 text-3xl leading-tight sm:text-4xl">
               Join us on Sunday.
             </h2>
@@ -311,7 +311,7 @@ export function EventCard({
   return (
     <li className="flex min-w-0 flex-col rounded-2xl border border-[var(--public-line)] bg-white p-5 sm:p-7">
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="rounded-xl bg-[#f3eee5] px-4 py-3 text-center">
+        <div className="rounded-xl bg-[var(--brand-soft)] px-4 py-3 text-center">
           <span className="block text-xs font-semibold uppercase tracking-widest text-[var(--public-muted)]">
             {formatChurchDate(event.startTime, { month: "short" })}
           </span>
@@ -322,7 +322,7 @@ export function EventCard({
             {formatChurchDate(event.startTime, { year: "numeric" })}
           </span>
         </div>
-        <span className="max-w-full rounded-full bg-[#f3eee5] px-3 py-2 text-xs font-semibold wrap-anywhere">
+        <span className="max-w-full rounded-full bg-[var(--brand-soft)] px-3 py-2 text-xs font-semibold wrap-anywhere">
           {status === "ongoing"
             ? "In progress"
             : status === "past"

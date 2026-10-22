@@ -218,7 +218,7 @@ export function VisitForm({
                       onChange={(event) =>
                         set("isChurchOfChrist", event.target.value)
                       }
-                      className="size-4 accent-[#743c21]"
+                      className="size-4 accent-[var(--brand-link)]"
                     />
                     {option}
                   </label>
@@ -259,7 +259,7 @@ export function VisitForm({
                       onChange={(event) =>
                         set("hasSpecialNeeds", event.target.value)
                       }
-                      className="size-4 accent-[#743c21]"
+                      className="size-4 accent-[var(--brand-link)]"
                     />
                     {option}
                   </label>

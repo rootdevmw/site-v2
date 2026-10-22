@@ -11,7 +11,7 @@ export function HomecellRecordView({ homecell, membership, programs }: { homecel
   return <RecordPage>
     <RecordHeader backHref="/dashboard/homecells" backLabel="Back to homecells" eyebrow="Homecell · small group" title={homecell.name}
       description={<span className="inline-flex items-start gap-2"><FiMapPin aria-hidden="true" className="mt-1 shrink-0" /><span>{homecell.location || "Location not recorded"}</span></span>}
-      identity={<div className="flex size-24 items-center justify-center rounded-2xl border border-[#e3d4bc] bg-[#f3e8d6] text-[#743c21]"><FiHome aria-hidden="true" className="size-9" /></div>}
+      identity={<div className="flex size-24 items-center justify-center rounded-2xl border border-[var(--brand-line)] bg-[var(--brand-soft)] text-[var(--brand-link)]"><FiHome aria-hidden="true" className="size-9" /></div>}
       badges={<RecordStatus>{homecell.members.length} {homecell.members.length === 1 ? "person" : "people"} assigned</RecordStatus>}
       actions={<Link href={"/dashboard/homecells/" + encodeURIComponent(homecell.id) + "/edit"} className="record-button record-button-primary"><FiEdit2 aria-hidden="true" />Edit homecell</Link>}
     />

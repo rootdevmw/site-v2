@@ -14,6 +14,7 @@ import { LeadershipProfiles } from "@/components/public/LeadershipProfiles";
 import { ServiceTimes } from "@/components/public/ServiceTimes";
 import { church } from "@/config/church";
 import { churchContent } from "@/config/church-content";
+import { aboutSections } from "@/config/public-navigation";
 import {
   ChurchBeliefs,
   ChurchHistory,
@@ -98,16 +99,14 @@ export default function AboutPage() {
 
       <nav
         aria-label="On this page"
-        className="public-container flex flex-wrap gap-x-6 gap-y-1 pb-8"
+        className="public-container flex flex-wrap gap-2 pb-10"
       >
-        {[
-          ["Our mission", "#our-purpose"],
-          ["Our story", "#our-story"],
-          ["Faith and practice", "#our-beliefs"],
-          ["Our worship", "#our-worship"],
-          ["Leadership", "#church-leadership"],
-        ].map(([label, href]) => (
-          <a key={href} href={href} className="public-text-link">
+        {aboutSections.map(({ label, href }) => (
+          <a
+            key={href}
+            href={href.slice(href.indexOf("#"))}
+            className="inline-flex min-h-11 items-center rounded-full border border-[var(--public-line)] bg-white px-4 py-2 text-xs font-semibold text-[var(--public-muted)] transition-colors hover:border-[var(--brand-border)] hover:text-[var(--public-accent)] motion-reduce:transition-none"
+          >
             {label}
           </a>
         ))}
@@ -159,16 +158,24 @@ export default function AboutPage() {
 
       <section
         id="church-leadership"
-        className="scroll-mt-36 border-y border-[var(--public-line)] bg-[#f3eee5]"
+        tabIndex={-1}
+        className="scroll-mt-36 border-y border-[var(--public-line)] bg-[var(--brand-soft)]"
       >
         <div className="public-container public-section">
-          <div className="max-w-2xl">
-            <p className="public-eyebrow">Church leadership</p>
-            <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
-              Leading through prayer,
-              <br />
-              teaching and care.
-            </h2>
+          <div className="grid items-end gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+            <div className="min-w-0">
+              <p className="public-eyebrow">Church leadership</p>
+              <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
+                Leading through prayer,
+                <br />
+                teaching and care.
+              </h2>
+            </div>
+            <p className="max-w-xl text-base leading-8 text-[var(--public-muted)]">
+              Meet the people who teach, encourage and care for our church
+              family. Explore their stories and get to know the people behind
+              the names.
+            </p>
           </div>
           <div className="mt-9 grid gap-8 lg:grid-cols-2 lg:gap-16">
             <div className="min-w-0 border-t border-[#d9d0c3] pt-6">
@@ -192,15 +199,29 @@ export default function AboutPage() {
           {(["Pastor", "Elder"] as const).map((role) => (
             <section
               key={role}
+              id={`our-${role.toLowerCase()}s`}
+              tabIndex={-1}
               aria-labelledby={`about-${role.toLowerCase()}s`}
-              className="mt-12"
+              className="mt-14 scroll-mt-36 border-t border-[#d9d0c3] pt-8 sm:mt-16"
             >
-              <h3
-                id={`about-${role.toLowerCase()}s`}
-                className="public-display mb-6 text-3xl"
-              >
-                {role === "Pastor" ? "Our pastors" : "Our elders"}
-              </h3>
+              <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+                <div>
+                  <p className="public-eyebrow mb-3">
+                    People, faith &amp; service
+                  </p>
+                  <h3
+                    id={`about-${role.toLowerCase()}s`}
+                    className="public-display text-3xl sm:text-4xl"
+                  >
+                    {role === "Pastor" ? "Our pastors" : "Our elders"}
+                  </h3>
+                </div>
+                <p className="max-w-sm text-sm leading-7 text-[var(--public-muted)]">
+                  {role === "Pastor"
+                    ? "Get to know our pastors and the stories they share with our congregation."
+                    : "Meet the elders who serve and guide our church family."}
+                </p>
+              </div>
               <Suspense
                 fallback={
                   <p
@@ -218,10 +239,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="public-dark bg-[#29241f] text-white">
+      <section className="public-dark bg-[var(--brand-ink)] text-white">
         <div className="public-container public-section grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
           <div className="min-w-0 max-w-xl">
-            <p className="public-eyebrow text-[#efd8af]!">Come as you are</p>
+            <p className="public-eyebrow text-[var(--brand-gold)]!">Come as you are</p>
             <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
               You are welcome here.
             </h2>
@@ -236,7 +257,7 @@ export default function AboutPage() {
               >
                 Plan a visit <FiArrowRight aria-hidden="true" />
               </Link>
-              <Link href="/contact" className="public-text-link text-[#efd8af]">
+              <Link href="/contact" className="public-text-link text-[var(--brand-gold)]">
                 Talk to the church team <FiArrowRight aria-hidden="true" />
               </Link>
             </div>
@@ -246,7 +267,7 @@ export default function AboutPage() {
             <ServiceTimes dark />
             <a
               href={church.mapsUrl}
-              className="public-text-link mt-5 text-[#efd8af]"
+              className="public-text-link mt-5 text-[var(--brand-gold)]"
             >
               Find us in Blantyre <FiArrowUpRight aria-hidden="true" />
             </a>

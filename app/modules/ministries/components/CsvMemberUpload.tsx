@@ -69,7 +69,7 @@ function ImportDialog({ ministryId, assignedIds, onClose }: { ministryId: string
   }
 
   return <Dialog open onClose={onClose} closeDisabled={busy} title="Import ministry members" description="Match firstName and lastName columns against the complete church directory.">
-    <div onDragOver={(event) => { event.preventDefault(); if (!busy) setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={(event) => { event.preventDefault(); setDragging(false); void readFile(event.dataTransfer.files[0]); }} className={"rounded-xl border-2 border-dashed p-5 " + (dragging ? "border-[#743c21] bg-[#f3e8d6]" : "border-[#d9d0c3]")}>
+    <div onDragOver={(event) => { event.preventDefault(); if (!busy) setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={(event) => { event.preventDefault(); setDragging(false); void readFile(event.dataTransfer.files[0]); }} className={"rounded-xl border-2 border-dashed p-5 " + (dragging ? "border-[var(--brand-link)] bg-[var(--brand-soft)]" : "border-[#d9d0c3]")}>
       <label htmlFor={inputId} className="block text-sm font-semibold">Choose a CSV file or drop it here</label>
       <input id={inputId} type="file" accept=".csv,text/csv" disabled={busy} onChange={(event: ChangeEvent<HTMLInputElement>) => { void readFile(event.target.files?.[0]); }} className="mt-3 block min-h-11 w-full min-w-0 text-sm file:mr-3 file:rounded-lg file:border file:border-[#d9d0c3] file:bg-white file:px-3 file:py-2" />
       <p className="mt-3 text-xs leading-6 text-[#6c6257]">Preview the matches before importing. People with the same name must be added individually; duplicate rows are skipped.</p>

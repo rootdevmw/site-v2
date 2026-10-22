@@ -7,11 +7,11 @@ import { ServiceTimes } from "./ServiceTimes";
 
 export function PublicFooter() {
   return (
-    <footer className="bg-[#25221f] text-[#faf8f4]">
+    <footer className="public-dark bg-[var(--brand-dark)] text-[var(--brand-surface)]">
       <div className="public-container">
         <div className="flex flex-col items-start justify-between gap-6 border-b border-white/15 py-12 sm:py-16 lg:flex-row lg:items-center">
           <div>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#efd8af]">Your next Sunday</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--brand-gold)]">Your next Sunday</p>
             <h2 className="public-display max-w-xl text-3xl leading-tight sm:text-4xl">There is a place for you here.</h2>
           </div>
           <Link href="/plan-visit" className="public-button public-button-light">Come worship with us <FiArrowRight aria-hidden="true" /></Link>
@@ -20,7 +20,7 @@ export function PublicFooter() {
         <div className="grid gap-12 py-12 sm:grid-cols-2 lg:grid-cols-[1.15fr_1fr_0.65fr_1.15fr] lg:gap-10 lg:py-16">
           <div>
             <Link href="/" className="inline-flex items-center gap-3" aria-label={church.name + " home"}>
-              <Image src="/images/church-logo.webp" alt="" width={64} height={64} className="size-14 rounded-full bg-[#faf8f4] object-contain p-1" />
+              <Image src="/images/church-logo.webp" alt="" width={64} height={64} className="size-14 rounded-full bg-[var(--brand-surface)] object-contain p-1" />
               <span className="text-sm font-semibold leading-6">Church of Christ<br /><span className="font-normal text-stone-300">at Red Cross</span></span>
             </Link>
             <p className="mt-5 max-w-xs text-sm leading-7 text-stone-300">{churchContent.footerSummary}</p>
@@ -46,7 +46,7 @@ export function PublicFooter() {
             <a href={church.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex gap-2 text-sm leading-7 text-stone-300 hover:text-white">{church.address}<FiArrowUpRight aria-hidden="true" className="mt-1.5 shrink-0" /></a>
             <a href={church.phoneUrl} className="mt-4 flex min-h-11 items-center text-sm text-stone-300 hover:text-white">{church.phone}</a>
             <a href={"mailto:" + church.email} className="flex min-h-11 items-center text-sm text-stone-300 wrap-anywhere hover:text-white">{church.email}</a>
-            <Link href="/contact" className="public-text-link mt-3 text-[#efd8af]">Contact the church <FiArrowRight aria-hidden="true" /></Link>
+            <Link href="/contact" className="public-text-link mt-3 text-[var(--brand-gold)]">Contact the church <FiArrowRight aria-hidden="true" /></Link>
           </div>
         </div>
         <div className="flex flex-col gap-4 border-t border-white/15 py-6 text-xs text-stone-400 sm:flex-row sm:items-center sm:justify-between">
