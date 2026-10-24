@@ -20,7 +20,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
             ${
               error
                 ? "bg-[var(--card-elevated)] border border-red-400 text-[var(--text-primary)] focus:ring-1 focus:ring-red-400"
-                : "bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-primary)] focus:ring-1 focus:ring-[var(--main-gold)] focus:border-[var(--main-gold)]"
+                : "bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-primary)] focus:ring-1 focus:ring-[var(--brand-focus)] focus:border-[var(--brand-border)]"
             }
             ${className}
           `}

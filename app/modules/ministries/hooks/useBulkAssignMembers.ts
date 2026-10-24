@@ -1,29 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api/client";
-import { showSuccess, showError } from "@/lib/toast";
+import { assignImportedMembers } from "@/lib/utils/ministry-import";
+import { refreshGroupMembership } from "@/lib/utils/group-membership-cache";
 
-type BulkAssignVariables = {
-  ministryId: string;
-  memberIds: string[];
-};
+type BulkAssignVariables = { ministryId: string; memberIds: string[] };
 
 export function useBulkAssignMembers() {
-  const qc = useQueryClient();
-
+  const client = useQueryClient();
   return useMutation({
-    mutationFn: async ({ ministryId, memberIds }: BulkAssignVariables) => {
-      await Promise.all(
-        memberIds.map((memberId) =>
-          api.post(`/ministries/${ministryId}/members`, { memberId }),
-        ),
-      );
-    },
-    onSuccess: (_res, vars) => {
-      showSuccess(`${vars.memberIds.length} member(s) imported`);
-      qc.invalidateQueries({ queryKey: ["ministry-members", vars.ministryId] });
-    },
-    onError: () => {
-      showError("Failed to import members");
-    },
+    mutationFn: ({ ministryId, memberIds }: BulkAssignVariables) =>
+      assignImportedMembers(memberIds, (memberId) => api.post("/ministries/" + encodeURIComponent(ministryId) + "/members", { memberId }, { silent: true, timeout: 30000 })),
+    onSettled: (_data, _error, variables) =>
+      refreshGroupMembership(client, "ministry", variables.ministryId, variables.memberIds),
   });
 }

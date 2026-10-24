@@ -148,7 +148,7 @@ export const DateInput = forwardRef<HTMLInputElement, Props>(
             ${
               error
                 ? "bg-[var(--card-elevated)] border border-red-400 text-[var(--text-primary)] focus:ring-1 focus:ring-red-400"
-                : "bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-primary)] focus:ring-1 focus:ring-[var(--main-gold)] focus:border-[var(--main-gold)]"
+                : "bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-primary)] focus:ring-1 focus:ring-[var(--brand-focus)] focus:border-[var(--brand-border)]"
             }
             ${disabled ? "opacity-60 cursor-not-allowed" : ""}
           `}
@@ -159,6 +159,7 @@ export const DateInput = forwardRef<HTMLInputElement, Props>(
         {open && !disabled && (
           <div className="absolute z-50 mt-2 bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-xl p-4 shadow-lg">
             <DatePicker
+              calendarClassName="brand-calendar"
               selected={tempDate}
               onChange={(date: Date | null) => setTempDate(date)}
               showTimeSelect={type === "datetime-local"}
@@ -185,7 +186,7 @@ export const DateInput = forwardRef<HTMLInputElement, Props>(
               <button
                 type="button"
                 onClick={commitDate}
-                className="px-3 py-1 text-sm rounded-md bg-[var(--main-gold)] text-black"
+                className="px-3 py-1 text-sm rounded-md bg-[var(--brand-orange)] text-[var(--brand-ink)]"
               >
                 OK
               </button>

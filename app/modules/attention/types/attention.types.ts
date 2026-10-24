@@ -3,29 +3,34 @@ export type VisitorStatus = "PENDING" | "CONFIRMED" | "COMPLETED";
 
 export type Prayer = {
   id: string;
-  name?: string;
-  phone?: string;
-  email?: string;
+  name?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  requestType?: string | null;
+  isUrgent: boolean;
+  shareWithElders: boolean;
   prayerFor: string;
   request: string;
   status: PrayerStatus;
   createdAt: string;
+  updatedAt?: string;
 };
 
 export type Visitor = {
   id: string;
   name: string;
-  phone?: string;
-  email?: string;
+  phone?: string | null;
+  email?: string | null;
   visitDate: string;
   groupSize: string;
-  isChurchOfChrist?: string;
-  language?: string;
+  isChurchOfChrist?: string | null;
+  language?: string | null;
   hasSpecialNeeds: boolean;
-  specialNeedsDetails?: string;
-  message?: string;
+  specialNeedsDetails?: string | null;
+  message?: string | null;
   status: VisitorStatus;
   createdAt: string;
+  updatedAt?: string;
 };
 
 export type AttentionOverviewResponse = {

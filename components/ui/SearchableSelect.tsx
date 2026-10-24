@@ -75,7 +75,7 @@ export function SearchableSelect({
               ? "bg-[var(--card-elevated)] border border-[var(--border-soft)] text-[var(--text-secondary)] cursor-not-allowed opacity-60"
               : error
                 ? "bg-[var(--card-elevated)] border border-red-400 focus:ring-1 focus:ring-red-400"
-                : "bg-[var(--card-elevated)] border border-[var(--border-soft)] focus:ring-1 focus:ring-[var(--main-gold)]"
+                : "bg-[var(--card-elevated)] border border-[var(--border-soft)] focus:ring-1 focus:ring-[var(--brand-focus)]"
           }`}
         />
 

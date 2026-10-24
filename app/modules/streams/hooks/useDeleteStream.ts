@@ -6,8 +6,16 @@ export function useDeleteStream() {
 
   return useMutation({
     mutationFn: (id: string) => deleteStream(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["streams"] });
-    },
+    retry: false,
+    onSettled: () =>
+      Promise.all(
+        [
+          "streams",
+          "stream",
+          "audit-logs",
+          "audit-timeline",
+          "dashboard-overview",
+        ].map((key) => queryClient.invalidateQueries({ queryKey: [key] })),
+      ),
   });
 }

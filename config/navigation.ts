@@ -1,4 +1,7 @@
-export const navigation = [
+export type NavigationLink = { label: string; href: string; roles: string[] };
+export type NavigationGroup = { label: string; children: NavigationLink[]; roles: string[] };
+
+export const navigation: (NavigationLink | NavigationGroup)[] = [
   {
     label: "Dashboard",
     href: "/dashboard",

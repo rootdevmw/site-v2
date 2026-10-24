@@ -2,11 +2,18 @@
   "name": "site",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:foundation": "node --test tests/pagination.test.mjs",
+    "test:public": "node --test --test-concurrency=1 tests/public-site.test.mjs tests/public-welcome.test.mjs tests/about-leadership.test.mjs tests/public-messages.test.mjs tests/public-scriptures.test.mjs tests/public-groups.test.mjs tests/public-events.test.mjs tests/public-programs.test.mjs tests/public-finish.test.mjs",
+    "test:records": "node --test --test-concurrency=1 tests/record-details.test.mjs tests/group-records.test.mjs tests/editorial-records.test.mjs tests/program-records.test.mjs tests/account-audit-records.test.mjs tests/directory-records.test.mjs tests/schedule-lists.test.mjs tests/editorial-lists.test.mjs tests/access-lists.test.mjs tests/type-catalogs.test.mjs tests/dashboard-overview.test.mjs tests/attention-queues.test.mjs tests/prayer-team.test.mjs tests/member-editor.test.mjs tests/group-editor.test.mjs tests/event-editor.test.mjs tests/program-editor.test.mjs tests/content-editor.test.mjs tests/publication-editor.test.mjs tests/stream-editor.test.mjs tests/account-flows.test.mjs",
+    "assets:public": "node scripts/prepare-public-assets.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -29,6 +36,7 @@
     "react-hook-form": "^7.72.1",
     "react-hot-toast": "^2.6.0",
     "react-icons": "^5.6.0",
+    "sanitize-html": "^2.18.1",
     "tiptap-extension-resize-image": "^1.3.3",
     "zod": "^4.3.6",
     "zustand": "^5.0.12"
@@ -38,6 +46,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2.16.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
     "tailwindcss": "^4",

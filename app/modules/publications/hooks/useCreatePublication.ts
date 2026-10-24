@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPublication } from "../api/createPublication";
-import { PublicationFormValues } from "../types/publication.types";
+import type { PublicationEditorPayload } from "@/lib/utils/publication-editor";
 
 export function useCreatePublication() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: PublicationFormValues) => createPublication(data),
+    mutationFn: (data: PublicationEditorPayload) => createPublication(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["publications"] });
     },

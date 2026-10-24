@@ -1,11 +1,4 @@
 import { z } from "zod";
-
-export const ministrySchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  description: z.string().optional(),
-  leaderId: z.string().min(1, "Leader is required"),
-  overseerId: z.string().optional(),
-  purpose: z.string().min(1, "Purpose is required"),
-});
-
+import { groupEditorSchema } from "@/lib/utils/group-editor";
+export const ministrySchema = groupEditorSchema("ministry");
 export type MinistryFormValues = z.infer<typeof ministrySchema>;

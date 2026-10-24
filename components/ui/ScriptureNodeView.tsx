@@ -114,7 +114,7 @@ export function ScriptureNodeView({ node }: ReactNodeViewProps) {
         onMouseEnter={openPreview}
         onMouseLeave={closePreview}
         onClick={handleClick}
-        className="inline cursor-pointer font-semibold text-[var(--main-gold)] hover:underline"
+        className="inline cursor-pointer font-semibold text-[var(--brand-link)] hover:underline"
       >
         {reference}
       </NodeViewWrapper>
@@ -135,15 +135,15 @@ export function ScriptureNodeView({ node }: ReactNodeViewProps) {
                   left: position.left,
                   zIndex: 9999,
                 }}
-                className="w-[320px] sm:w-[380px] max-w-[90vw] rounded-xl border border-[#c2620a]/20 bg-[#1a0a02] shadow-2xl"
+                className="w-[320px] sm:w-[380px] max-w-[90vw] rounded-xl border border-[var(--brand-link)]/20 bg-[var(--brand-dark)] shadow-2xl"
               >
                 {/* HEADER */}
-                <div className="flex items-center justify-between px-4 py-3 border-b border-[#c2620a]/20">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-[#c2a23a]">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--brand-link)]/20">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-[var(--brand-gold)]">
                     {reference}
                   </p>
                   {!open && passage && (
-                    <p className="mt-3 text-[11px] text-[#c2a23a]/70 italic text-center">
+                    <p className="mt-3 text-[11px] text-[var(--brand-gold)]/70 italic text-center">
                       Click the verse to read more
                     </p>
                   )}
@@ -158,9 +158,9 @@ export function ScriptureNodeView({ node }: ReactNodeViewProps) {
                 </div>
 
                 {/* BODY */}
-                <div className="max-h-[260px] overflow-y-auto px-4 py-4 text-sm leading-relaxed text-[#fde5c0] whitespace-pre-line">
+                <div className="max-h-[260px] overflow-y-auto px-4 py-4 text-sm leading-relaxed text-[var(--brand-warm)] whitespace-pre-line">
                   {loading ? (
-                    <p className="italic text-[#e6c79c]">Loading…</p>
+                    <p className="italic text-[var(--brand-gold)]">Loading…</p>
                   ) : (
                     passage
                   )}

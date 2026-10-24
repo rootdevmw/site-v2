@@ -44,7 +44,7 @@ export function PublicationTable({
         <>
           <button
             onClick={() => router.push(`/dashboard/publications/${n.id}/edit`)}
-            className="text-[var(--main-gold)]"
+            className="text-[var(--brand-link)]"
           >
             Edit
           </button>

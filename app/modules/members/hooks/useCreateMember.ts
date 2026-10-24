@@ -1,18 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createMember } from "../api/createMember";
-import { showError, showSuccess } from "@/lib/toast";
-
+import { refreshMemberEditor } from "@/lib/utils/member-editor-cache";
 export function useCreateMember() {
-  const qc = useQueryClient();
-
-  return useMutation({
-    mutationFn: createMember,
-    onSuccess: () => {
-      showSuccess("Member created successfully");
-      qc.invalidateQueries({ queryKey: ["members"] });
-    },
-    onError: () => {
-      showError("Failed to create member");
-    },
-  });
+  const client = useQueryClient();
+  return useMutation({ mutationFn: createMember, retry: false, onSettled: () => refreshMemberEditor(client) });
 }

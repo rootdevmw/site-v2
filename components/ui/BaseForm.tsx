@@ -13,10 +13,10 @@ type BaseFormProps = {
 };
 
 const MODE_PILL = {
-  create: { label: "New", className: "bg-emerald-500/10 text-emerald-400" },
+  create: { label: "New", className: "bg-emerald-50 text-emerald-800" },
   edit: {
     label: "Editing",
-    className: "bg-[var(--main-gold)]/10 text-[var(--main-gold)]",
+    className: "bg-[var(--brand-soft)] text-[var(--brand-link)]",
   },
   view: {
     label: "Viewing",
@@ -37,10 +37,10 @@ export function BaseForm({
   const pill = MODE_PILL[mode];
 
   return (
-    <div className="space-y-5">
+    <div className="min-w-0 space-y-5">
       {title && (
-        <div className="flex items-center gap-3 pb-5 border-b border-[var(--border-soft)]">
-          <h1 className="text-xl font-semibold text-[var(--text-primary)]">
+        <div className="flex flex-wrap items-center gap-3 border-b border-[var(--border-soft)] pb-5">
+          <h1 className="text-2xl font-semibold text-[var(--text-primary)] wrap-anywhere">
             {title}
           </h1>
           <span
@@ -51,13 +51,13 @@ export function BaseForm({
         </div>
       )}
 
-      <form onSubmit={onSubmit} className="space-y-5">
-        <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-6 space-y-5">
+      <form method="post" onSubmit={onSubmit} className="space-y-5">
+        <div className="min-w-0 space-y-5 rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)] p-4 sm:p-6">
           {children}
         </div>
 
         {!isView && (
-          <div className="flex items-center justify-between pt-1">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
             <div>
               {isEdit && onDelete && (
                 <DeleteConfirmButton
@@ -73,8 +73,9 @@ export function BaseForm({
 
             <button
               type="submit"
+              aria-busy={isLoading}
               disabled={isLoading}
-              className="px-5 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="min-h-11 px-5 py-2 rounded-lg text-sm font-medium bg-[var(--brand-orange)] text-[var(--brand-ink)] hover:bg-[var(--brand-orange-hover)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isLoading
                 ? "Saving..."

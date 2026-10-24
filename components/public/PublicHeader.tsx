@@ -1,216 +1,247 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import Link from "next/link";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { FiArrowUpRight, FiChevronDown, FiMenu } from "react-icons/fi";
+import { church } from "@/config/church";
+import { publicNavigation } from "@/config/public-navigation";
+import { Dialog } from "@/components/ui/Dialog";
 
-const navItems = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Ministries", href: "/ministries" },
-  { label: "Homecells", href: "/homecells" },
-  { label: "Content", href: "/content" },
-  { label: "Events", href: "/events" },
-  { label: "Programs", href: "/programs" },
-  { label: "Live", href: "/live" },
-  { label: "Publications", href: "/publications" },
-  { label: "Contact", href: "/contact" },
-];
-
-const marqueeVerses = [
-  "Welcome — You are loved",
-  '"Come to me, all who are weary, and I will give you rest" — Matthew 11:28',
-  '"For God so loved the world that he gave his one and only Son" — John 3:16',
-  '"The Lord bless you and keep you" — Numbers 6:24',
-  '"I can do all things through Christ who strengthens me" — Philippians 4:13',
-  '"Your word is a lamp to my feet and a light to my path" — Psalm 119:105',
-];
-
-export function PublicHeader() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [verseIndex, setVerseIndex] = useState(0);
+export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
   const pathname = usePathname();
-
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const isActive = (href: string) => {
+    const path = href.split(/[?#]/)[0];
+    return pathname === path || pathname.startsWith(path + "/");
+  };
+  const currentPage = (href: string) =>
+    !href.includes("#") && isActive(href) ? ("page" as const) : undefined;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setVerseIndex((i) => (i + 1) % marqueeVerses.length);
-    }, 6000);
-    return () => clearInterval(interval);
+    const desktop = window.matchMedia("(min-width: 80rem)");
+    function closeOnDesktop() {
+      if (desktop.matches) setMenuOpen(false);
+    }
+    function closeOutside(event: PointerEvent) {
+      if (!navRef.current?.contains(event.target as Node)) {
+        navRef.current
+          ?.querySelectorAll("details[open]")
+          .forEach((item) => item.removeAttribute("open"));
+      }
+    }
+    desktop.addEventListener("change", closeOnDesktop);
+    document.addEventListener("pointerdown", closeOutside);
+    return () => {
+      desktop.removeEventListener("change", closeOnDesktop);
+      document.removeEventListener("pointerdown", closeOutside);
+    };
   }, []);
 
   return (
-    <>
-      <header
-        className={[
-          "sticky top-0 z-40 transition-all duration-300",
-          scrolled
-            ? "bg-[#fdf8f2]/98 shadow-[0_1px_24px_0_rgba(124,61,15,0.12)] backdrop-blur-md"
-            : "bg-[#fdf6ee]/95 backdrop-blur",
-        ].join(" ")}
-      >
-        {/* ── Rotating Verse Bar ─────────────────────────── */}
-        <div className="relative w-full overflow-hidden bg-linear-to-r from-[#7c3d0f] via-[#c2620a] to-[#7c3d0f]">
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-linear-to-r from-[#7c3d0f] to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-linear-to-l from-[#7c3d0f] to-transparent" />
-          <div className="relative flex min-h-8 items-center justify-center py-1.5">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={verseIndex}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="px-8 text-center text-xs font-medium uppercase tracking-widest text-[#fde5c0] sm:whitespace-nowrap"
-              >
-                {marqueeVerses[verseIndex]}
-              </motion.p>
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* Sunset gradient hairline */}
-        <div className="h-[3px] w-full bg-gradient-to-r from-[#7c3d0f] via-[#e8820c] to-[#c2a23a]" />
-
-        <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          {/* LEFT — Logo */}
-          <Link href="/" className="group flex items-center gap-3">
-            <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-[#c2620a]/30 bg-gradient-to-br from-[#c2620a] to-[#7c3d0f] transition-transform duration-200 group-hover:scale-105">
-              <span className="absolute inset-0 flex items-center justify-center">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6 text-[#fde5c0]"
-                  fill="currentColor"
-                >
-                  <path d="M11 2h2v8h8v2h-8v10h-2V12H3v-2h8z" />
-                </svg>
-              </span>
-              <Image
-                src="/logos/full-logo.png"
-                alt=""
-                fill
-                className="relative z-10 rounded-full object-cover opacity-0 transition-opacity duration-300 [&[src]]:opacity-100"
-                priority
-              />
-            </div>
-            <div className="hidden sm:block">
-              <p className="font-serif text-base font-semibold leading-tight tracking-tight text-[#4a2008]">
-                Church of Christ
-              </p>
-              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#c2620a]">
-                at Red Cross
-              </p>
-            </div>
+    <header className="sticky top-0 z-40 border-b border-[var(--public-line)] bg-[var(--brand-surface)]/95 backdrop-blur-md">
+      <div className="public-top-bar border-b">
+        <div className="public-container flex min-h-9 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-1.5 text-[11px] font-semibold">
+          <span>
+            Mahatma Road, Blantyre{" "}
+            <span aria-hidden="true" className="mx-1.5">
+              ·
+            </span>{" "}
+            All are welcome
+          </span>
+          <Link
+            href="/plan-visit#service-times"
+            className="hidden underline-offset-4 hover:underline sm:inline"
+          >
+            Sunday service times ↗
           </Link>
+        </div>
+      </div>
+      <div className="public-container flex min-h-20 items-center justify-between gap-3 py-3">
+        <Link
+          href="/"
+          aria-label={church.name + " home"}
+          className="flex shrink-0 items-center gap-3"
+        >
+          <Image
+            src="/images/church-logo.webp"
+            alt=""
+            width={52}
+            height={52}
+            className="size-11 object-contain sm:size-13"
+          />
+          <span className="hidden min-[400px]:block">
+            <span className="block text-sm font-bold tracking-tight sm:text-base">
+              Church of Christ
+            </span>
+            <span className="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--public-muted)]">
+              at Red Cross
+            </span>
+          </span>
+        </Link>
 
-          {/* CENTER — Nav */}
-          <nav className="hidden items-center lg:flex">
-            {navItems.map((item) => {
-              const active = isActive(item.href);
-              return (
+        <nav
+          key={pathname}
+          ref={navRef}
+          aria-label="Main navigation"
+          onBlur={(event) => {
+            if (
+              !event.currentTarget.contains(event.relatedTarget as Node | null)
+            ) {
+              event.currentTarget
+                .querySelectorAll("details[open]")
+                .forEach((item) => item.removeAttribute("open"));
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key !== "Escape") return;
+            const open = event.currentTarget.querySelector("details[open]");
+            if (open) {
+              open.removeAttribute("open");
+              open.querySelector("summary")?.focus();
+              event.preventDefault();
+            }
+          }}
+          className="hidden items-center gap-1 xl:flex"
+        >
+          {publicNavigation.map((item) =>
+            item.children ? (
+              <details
+                key={item.label}
+                className="group relative"
+                onToggle={(event) => {
+                  const current = event.currentTarget;
+                  if (current.open)
+                    navRef.current
+                      ?.querySelectorAll("details[open]")
+                      .forEach((other) => {
+                        if (other !== current) other.removeAttribute("open");
+                      });
+                }}
+              >
+                <summary
+                  className={
+                    "flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg px-3 text-sm font-semibold hover:bg-[var(--brand-soft)] [&::-webkit-details-marker]:hidden " +
+                    (isActive(item.href) ||
+                    item.children.some((child) => isActive(child.href))
+                      ? "text-[var(--public-accent)]"
+                      : "")
+                  }
+                >
+                  {item.label}
+                  <FiChevronDown
+                    aria-hidden="true"
+                    className="size-3.5 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+                  />
+                </summary>
+                <div className="absolute left-0 top-full mt-2 max-h-[calc(100dvh-9rem)] w-72 max-w-[calc(100vw-2rem)] overflow-y-auto overscroll-contain rounded-xl border border-[var(--public-line)] bg-white p-2 shadow-lg">
+                  {item.children.map((child) => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      aria-current={currentPage(child.href)}
+                      onClick={(event) => {
+                        event.currentTarget
+                          .closest("details")
+                          ?.removeAttribute("open");
+                      }}
+                      className="block min-h-11 rounded-lg px-3 py-3 text-sm hover:bg-[var(--brand-soft)] aria-[current=page]:bg-[var(--brand-soft)] aria-[current=page]:font-semibold"
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              </details>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold hover:bg-[var(--brand-soft)] aria-[current=page]:text-[var(--public-accent)]"
+              >
+                {item.label}
+              </Link>
+            ),
+          )}
+        </nav>
+
+        <div className="flex shrink-0 items-center gap-2 sm:gap-5">
+          <div className="hidden min-w-30 md:block">{watchLink}</div>
+          <Link
+            href="/plan-visit"
+            className="public-button public-button-primary !min-h-11 !px-3 sm:!px-5"
+          >
+            Plan a visit
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open website navigation"
+            aria-haspopup="dialog"
+            aria-expanded={menuOpen}
+            className="flex size-11 items-center justify-center rounded-lg border border-[var(--public-line)] hover:bg-[var(--brand-soft)] xl:hidden"
+          >
+            <FiMenu aria-hidden="true" className="size-5" />
+          </button>
+        </div>
+      </div>
+
+      <Dialog
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        title="Explore our church"
+        variant="drawer"
+      >
+        <nav aria-label="Mobile website navigation" className="space-y-6 p-5">
+          <Link
+            href="/"
+            onClick={() => setMenuOpen(false)}
+            className="public-text-link"
+          >
+            Home <FiArrowUpRight aria-hidden="true" />
+          </Link>
+          {publicNavigation.map((item) => (
+            <div key={item.label}>
+              {item.children ? (
+                <details open={isActive(item.href)} className="group">
+                  <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-lg px-3 py-3 text-base font-semibold hover:bg-[var(--brand-soft)] [&::-webkit-details-marker]:hidden">
+                    {item.label}
+                    <FiChevronDown
+                      aria-hidden="true"
+                      className="size-4 shrink-0 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+                    />
+                  </summary>
+                  <div className="mt-1 ml-3 border-l border-[var(--public-line)] pl-2">
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        onClick={() => setMenuOpen(false)}
+                        aria-current={currentPage(child.href)}
+                        className="flex min-h-11 items-center rounded-lg px-3 py-3 text-sm aria-[current=page]:bg-[var(--brand-soft)] aria-[current=page]:font-semibold"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
+              ) : (
                 <Link
-                  key={item.href}
                   href={item.href}
-                  className={[
-                    "relative px-3.5 py-2 text-[13px] font-medium transition-colors duration-150",
-                    "after:absolute after:bottom-0 after:left-1/2 after:h-[2px] after:-translate-x-1/2 after:bg-gradient-to-r after:from-[#c2620a] after:to-[#c2a23a] after:transition-all after:duration-200",
-                    active
-                      ? "text-[#7c3d0f] after:w-4/5"
-                      : "text-[#6b3d20] hover:text-[#7c3d0f] after:w-0 hover:after:w-4/5",
-                  ].join(" ")}
+                  onClick={() => setMenuOpen(false)}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className="flex min-h-11 items-center px-3 text-sm font-semibold"
                 >
                   {item.label}
                 </Link>
-              );
-            })}
-          </nav>
-
-          {/* RIGHT — Actions */}
-          <div className="flex items-center gap-3">
-            {/* Live badge */}
-            <Link
-              href="/live"
-              className="hidden items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-red-600 transition hover:bg-red-100 sm:flex"
-            >
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
-              </span>
-              Live
-            </Link>
-
-            {/* Mobile Toggle */}
-            <button
-              onClick={() => setOpen(!open)}
-              aria-label={open ? "Close menu" : "Open menu"}
-              className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-lg border border-[#e8c49a] bg-[#fdf6ee] transition hover:bg-[#faebd7] lg:hidden"
-            >
-              <span
-                className={`block h-[1.5px] w-5 bg-[#7c3d0f] transition-all duration-200 ${open ? "translate-y-[6.5px] rotate-45" : ""}`}
-              />
-              <span
-                className={`block h-[1.5px] w-5 bg-[#7c3d0f] transition-all duration-200 ${open ? "opacity-0" : ""}`}
-              />
-              <span
-                className={`block h-[1.5px] w-5 bg-[#7c3d0f] transition-all duration-200 ${open ? "-translate-y-[6.5px] -rotate-45" : ""}`}
-              />
-            </button>
-          </div>
-        </div>
-
-        {/* MOBILE MENU */}
-        <div
-          className={`overflow-hidden transition-all duration-300 ease-in-out lg:hidden ${open ? "max-h-[640px] opacity-100" : "max-h-0 opacity-0"}`}
-        >
-          <div className="border-t border-[#e8c49a] bg-[#fdf6ee] px-4 pb-6 pt-4">
-            <div className="mb-4 grid grid-cols-2 gap-1">
-              {navItems.map((item) => {
-                const active = isActive(item.href);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    className={[
-                      "rounded-lg px-3 py-2.5 text-sm font-medium transition",
-                      active
-                        ? "bg-gradient-to-br from-[#c2620a] to-[#7c3d0f] text-white shadow-sm"
-                        : "text-[#6b3d20] hover:bg-[#faebd7] hover:text-[#7c3d0f]",
-                    ].join(" ")}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
+              )}
             </div>
-
-            <div className="flex flex-col gap-2 border-t border-[#e8c49a] pt-4">
-              <Link
-                href="/live"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 py-2.5 text-sm font-semibold text-red-600"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
-                </span>
-                Watch Live
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
-    </>
+          ))}
+          <div onClick={() => setMenuOpen(false)}>{watchLink}</div>
+        </nav>
+      </Dialog>
+    </header>
   );
 }

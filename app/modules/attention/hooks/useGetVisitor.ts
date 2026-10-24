@@ -1,15 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/api/client";
+import { getVisitor } from "../api/getVisitor";
+import { retryRecordRequest } from "@/lib/utils/record-details";
 
-async function fetchVisitor(id: string) {
-  const res = await api.get(`/attention/visitors`);
-  return res.data.data.find((v: any) => v.id === id);
-}
-
-export function useGetVisitor(id: string) {
+export function useGetVisitor(id: string, enabled = true) {
   return useQuery({
     queryKey: ["visitor", id],
-    queryFn: () => fetchVisitor(id),
-    enabled: !!id,
+    queryFn: ({ signal }) => getVisitor(id, signal),
+    enabled: !!id && enabled,
+    retry: retryRecordRequest,
   });
 }

@@ -1,79 +1,58 @@
+import Image from "next/image";
 import Link from "next/link";
+import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
+import { church, homecellGathering } from "@/config/church";
+import { churchContent } from "@/config/church-content";
+import { ServiceTimes } from "./ServiceTimes";
 
 export function PublicFooter() {
   return (
-    <footer className="relative border-t border-[#ecd8c2] bg-[#2b1405] text-[#fde5c0]">
-      {/* Top glow line (matches header hairline) */}
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-[#7c3d0f] via-[#e8820c] to-[#c2a23a]" />
-
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-3 lg:px-8">
-        {/* LEFT */}
-        <div className="text-center md:text-left">
-          <p className="text-lg font-semibold text-[#f7d9a8]">
-            Church of Christ at Redcross
-          </p>
-
-          <p className="mt-3 text-sm leading-6 text-[#e6c79c]">
-            A church family growing in worship, discipleship, and service to our
-            community.
-          </p>
-        </div>
-
-        {/* CENTER */}
-        <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2a23a]">
-            Gatherings
-          </p>
-
-          <div className="mt-4 space-y-2 text-sm text-[#e6c79c]">
-            <p>Sunday English Service — 7:00 AM</p>
-            <p>Sunday Chichewa Service — 9:30 AM</p>
-            <p>Combined Service — 8:00 AM</p>
-            <p className="text-xs text-[#c2a23a]/70">
-              (Last Sunday of the month)
-            </p>
-
-            <p className="pt-2">Homecell Prayers — 6:00 PM (Wednesday)</p>
-            <p className="text-xs text-[#c2a23a]/70">
-              In respective homes per homecell program
-            </p>
+    <footer className="public-dark bg-[var(--brand-dark)] text-[var(--brand-surface)]">
+      <div className="public-container">
+        <div className="flex flex-col items-start justify-between gap-6 border-b border-white/15 py-12 sm:py-16 lg:flex-row lg:items-center">
+          <div>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--brand-gold)]">Your next Sunday</p>
+            <h2 className="public-display max-w-xl text-3xl leading-tight sm:text-4xl">There is a place for you here.</h2>
           </div>
+          <Link href="/plan-visit" className="public-button public-button-light">Come worship with us <FiArrowRight aria-hidden="true" /></Link>
         </div>
 
-        {/* RIGHT */}
-        <div className="text-center md:text-right">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#c2a23a]">
-            Explore
-          </p>
-
-          <div className="mt-4 flex flex-col gap-2 text-sm text-[#e6c79c] items-center md:items-end">
+        <div className="grid gap-12 py-12 sm:grid-cols-2 lg:grid-cols-[1.15fr_1fr_0.65fr_1.15fr] lg:gap-10 lg:py-16">
+          <div>
+            <Link href="/" className="inline-flex items-center gap-3" aria-label={church.name + " home"}>
+              <Image src="/images/church-logo.webp" alt="" width={64} height={64} className="size-14 rounded-full bg-[var(--brand-surface)] object-contain p-1" />
+              <span className="text-sm font-semibold leading-6">Church of Christ<br /><span className="font-normal text-stone-300">at Red Cross</span></span>
+            </Link>
+            <p className="mt-5 max-w-xs text-sm leading-7 text-stone-300">{churchContent.footerSummary}</p>
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+              <a href={church.facebookUrl} target="_blank" rel="noopener noreferrer" className="public-text-link text-stone-200">Facebook <FiArrowUpRight aria-hidden="true" /></a>
+              <a href={church.youtubeUrl} target="_blank" rel="noopener noreferrer" className="public-text-link text-stone-200">YouTube <FiArrowUpRight aria-hidden="true" /></a>
+            </div>
+          </div>
+          <div>
+            <h3 className="mb-6 text-sm font-semibold">Join us on Sunday</h3>
+            <ServiceTimes dark />
+            <p className="mt-5 border-t border-white/15 pt-4 text-sm leading-6 text-stone-300">Homecell prayers · {homecellGathering.day}, {homecellGathering.time}<br /><span className="text-xs">{homecellGathering.note}</span></p>
+          </div>
+          <nav aria-label="Footer navigation">
+            <h3 className="mb-4 text-sm font-semibold">Explore</h3>
             {[
-              { label: "Content", href: "/content", newTab: false },
-              { label: "Events", href: "/events", newTab: false },
-              { label: "Ministries", href: "/ministries", newTab: false },
-              { label: "Contact", href: "/contact", newTab: false },
-              { label: "Member Login", href: "/login", newTab: true },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                target={item.newTab ? "_blank" : undefined}
-                className="relative transition-colors duration-200 hover:text-white
-                after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 
-                after:bg-gradient-to-r after:from-[#c2620a] after:to-[#c2a23a] 
-                after:transition-all after:duration-200 hover:after:w-full"
-              >
-                {item.label}
-              </Link>
-            ))}
+              ["Our story", "/about#our-story"], ["Faith and practice", "/about#our-beliefs"], ["Messages", "/content"], ["Ministries", "/ministries"],
+              ["Homecells", "/homecells"], ["Events", "/events"], ["Prayer", "/prayer-request"],
+            ].map(([label, href]) => <Link key={href} href={href} className="flex min-h-11 items-center text-sm text-stone-300 hover:text-white">{label}</Link>)}
+          </nav>
+          <div>
+            <h3 className="mb-4 text-sm font-semibold">Find us & get in touch</h3>
+            <a href={church.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex gap-2 text-sm leading-7 text-stone-300 hover:text-white">{church.address}<FiArrowUpRight aria-hidden="true" className="mt-1.5 shrink-0" /></a>
+            <a href={church.phoneUrl} className="mt-4 flex min-h-11 items-center text-sm text-stone-300 hover:text-white">{church.phone}</a>
+            <a href={"mailto:" + church.email} className="flex min-h-11 items-center text-sm text-stone-300 wrap-anywhere hover:text-white">{church.email}</a>
+            <Link href="/contact" className="public-text-link mt-3 text-[var(--brand-gold)]">Contact the church <FiArrowRight aria-hidden="true" /></Link>
           </div>
         </div>
-      </div>
-
-      {/* Bottom strip */}
-      <div className="border-t border-[#7c3d0f]/40 py-4 text-center text-xs text-[#c2a23a]/80">
-        © {new Date().getFullYear()} Church of Christ at Red Cross. All rights
-        reserved.
+        <div className="flex flex-col gap-4 border-t border-white/15 py-6 text-xs text-stone-400 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} {church.name}. All rights reserved.</p>
+          <Link href="/login" className="inline-flex min-h-11 items-center gap-2 text-stone-300 hover:text-white">Member & staff login <FiArrowUpRight aria-hidden="true" /></Link>
+        </div>
       </div>
     </footer>
   );

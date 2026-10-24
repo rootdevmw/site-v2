@@ -44,7 +44,7 @@ export function EventTable({
         <>
           <button
             onClick={() => router.push(`/dashboard/events/${e.id}/edit`)}
-            className="text-[var(--main-gold)]"
+            className="text-[var(--brand-link)]"
           >
             Edit
           </button>

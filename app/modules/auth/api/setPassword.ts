@@ -1,6 +1,5 @@
-import { api } from "@/lib/api/client";
+import { accountWrite } from "@/lib/api/account-flows";
 
-export async function setPassword(token: string, password: string) {
-  const res = await api.post("/auth/set-password", { token, password });
-  return res.data;
+export function setPassword(token: string, password: string) {
+  return accountWrite("set-password", { token, password });
 }

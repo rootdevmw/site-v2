@@ -1,6 +1,7 @@
 "use client";
 
 import { Node } from "@tiptap/core";
+import { getYouTubePreview } from "@/lib/utils/editorial-records";
 
 export const SafeYoutube = Node.create({
   name: "youtube",
@@ -22,6 +23,10 @@ export const SafeYoutube = Node.create({
 
   parseHTML() {
     return [
+      {
+        tag: "iframe[src*='youtube-nocookie.com']",
+        getAttrs: (dom: HTMLElement) => ({ src: dom.getAttribute("src") }),
+      },
       {
         tag: "div[data-youtube-video]",
         getAttrs: (dom: HTMLElement) => {
@@ -72,17 +77,20 @@ export const SafeYoutube = Node.create({
       ];
     }
 
-    const embedUrl = src.includes("youtube.com/embed/")
-      ? src.split("&")[0]
-      : src.includes("watch?v=")
-        ? src.replace("watch?v=", "embed/").split("&")[0]
-        : src.includes("youtu.be/")
-          ? src.replace("youtu.be/", "www.youtube.com/embed/").split("?")[0]
-          : src;
-
-    const watchUrl = embedUrl.includes("/embed/")
-      ? embedUrl.replace("/embed/", "/watch?v=")
-      : src;
+    let embedUrl = getYouTubePreview(src);
+    if (!embedUrl) return ["p", {}, "Invalid YouTube video"];
+    const start =
+      new URL(src).searchParams.get("start") ||
+      String(HTMLAttributes.start || "");
+    if (
+      /^\d+$/.test(start) &&
+      Number.isSafeInteger(Number(start)) &&
+      Number(start) > 0
+    )
+      embedUrl += "?start=" + Number(start);
+    const watchUrl =
+      "https://www.youtube.com/watch?v=" +
+      new URL(embedUrl).pathname.split("/").pop();
 
     return [
       "div",

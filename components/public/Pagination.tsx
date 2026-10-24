@@ -1,103 +1,41 @@
 import Link from "next/link";
+import { getPaginationHref, getPaginationPages } from "@/lib/utils/pagination";
 
-function getPages(current: number, total: number): (number | "…")[] {
-  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-
-  const pages: (number | "…")[] = [1];
-  if (current > 3) pages.push("…");
-  for (
-    let p = Math.max(2, current - 1);
-    p <= Math.min(total - 1, current + 1);
-    p++
-  ) {
-    pages.push(p);
-  }
-  if (current < total - 2) pages.push("…");
-  pages.push(total);
-  return pages;
-}
-
-function buildHref(basePath: string, p: number, typeId?: string) {
-  const params = new URLSearchParams();
-  if (p > 1) params.set("page", String(p));
-  if (typeId) params.set("typeId", typeId);
-  const qs = params.toString();
-  return `${basePath}${qs ? `?${qs}` : ""}`;
-}
-
-export function Pagination({
-  page,
-  totalPages,
-  basePath,
-  typeId,
-}: {
+type Props = {
   page: number;
   totalPages: number;
   basePath: string;
-  typeId?: string; // optional so it works on pages without filtering
+  typeId?: string;
   search?: string;
   tags?: string;
-}) {
-  if (totalPages <= 1) return null;
+};
 
-  const pages = getPages(page, totalPages);
+export function Pagination({ page, totalPages, basePath, typeId, search, tags }: Props) {
+  if (totalPages <= 1) return null;
+  const currentPage = Math.min(totalPages, Math.max(1, page));
+  const pages = getPaginationPages(currentPage, totalPages);
+  const href = (value: number) => getPaginationHref(basePath, value, { typeId, q: search, tags });
+  const linkClass = "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg border border-[var(--brand-line)] bg-white px-3 py-2 text-sm font-medium text-[var(--brand-ink)] transition hover:bg-[var(--brand-soft)] sm:px-4";
+  const disabledClass = linkClass + " opacity-40";
 
   return (
-    <nav
-      className="mt-10 flex items-center justify-center gap-2"
-      aria-label="Pagination"
-    >
-      <Link
-        href={page > 1 ? buildHref(basePath, page - 1, typeId) : "#"}
-        aria-disabled={page <= 1}
-        className={[
-          "rounded-lg border px-4 py-2 text-sm font-medium transition",
-          page <= 1
-            ? "pointer-events-none border-[#e8c49a] bg-[#fdf6ee] text-[#c4a882]"
-            : "border-[#e8c49a] bg-white text-[#4a2008] hover:border-[#7c3d0f]/30 hover:shadow-sm",
-        ].join(" ")}
-      >
-        ← Prev
-      </Link>
-
-      <div className="flex items-center gap-1">
-        {pages.map((p, i) =>
-          p === "…" ? (
-            <span
-              key={`ellipsis-${i}`}
-              className="flex h-9 w-7 items-center justify-center text-sm text-[#c2a23a]"
-            >
-              …
-            </span>
+    <nav className="@container mt-10" aria-label="Pagination">
+      <div className="flex items-center justify-between gap-2 @2xl:justify-center">
+        {currentPage > 1 ? <Link href={href(currentPage - 1)} rel="prev" className={linkClass}>Previous</Link> : <span aria-disabled="true" className={disabledClass}>Previous</span>}
+        <p className="min-w-0 text-center text-xs text-[var(--text-secondary)] tabular-nums @2xl:hidden">
+          Page {currentPage} of {totalPages}
+        </p>
+        <div className="hidden flex-wrap items-center justify-center gap-1 @2xl:flex">
+          {pages.map((value, index) => value === "…" ? (
+            <span key={"ellipsis-" + index} className="flex size-11 items-center justify-center text-sm text-[var(--text-secondary)]">…</span>
           ) : (
-            <Link
-              key={p}
-              href={buildHref(basePath, p, typeId)}
-              className={[
-                "flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition",
-                p === page
-                  ? "bg-[#c2620a] text-white"
-                  : "border border-[#e8c49a] bg-white text-[#6b4c2a] hover:border-[#7c3d0f]/30",
-              ].join(" ")}
-            >
-              {p}
+            <Link key={value} href={href(value)} aria-label={"Page " + value} aria-current={value === currentPage ? "page" : undefined} className={"flex size-11 items-center justify-center rounded-lg text-sm font-medium transition " + (value === currentPage ? "bg-[var(--brand-gold)] text-[var(--brand-ink)]" : "border border-[var(--brand-line)] bg-white text-[var(--text-secondary)] hover:bg-[var(--brand-soft)]")}>
+              {value}
             </Link>
-          ),
-        )}
+          ))}
+        </div>
+        {currentPage < totalPages ? <Link href={href(currentPage + 1)} rel="next" className={linkClass}>Next</Link> : <span aria-disabled="true" className={disabledClass}>Next</span>}
       </div>
-
-      <Link
-        href={page < totalPages ? buildHref(basePath, page + 1, typeId) : "#"}
-        aria-disabled={page >= totalPages}
-        className={[
-          "rounded-lg border px-4 py-2 text-sm font-medium transition",
-          page >= totalPages
-            ? "pointer-events-none border-[#e8c49a] bg-[#fdf6ee] text-[#c4a882]"
-            : "border-[#e8c49a] bg-white text-[#4a2008] hover:border-[#7c3d0f]/30 hover:shadow-sm",
-        ].join(" ")}
-      >
-        Next →
-      </Link>
     </nav>
   );
 }

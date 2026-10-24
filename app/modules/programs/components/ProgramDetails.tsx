@@ -1,61 +1,26 @@
-"use client";
+import Link from "next/link";
+import type { ProgramDisplay } from "../types/programDisplay.types";
+import { getOrderedProgramItems, getProgramPerson, getProgramTime } from "@/lib/utils/program-records";
 
-import { ProgramDisplay } from "../types/programDisplay.types";
+export function ProgramDetails({ program, emptyMessage = "No activities have been added. Edit the program to plan its order of service." }: { program: ProgramDisplay; emptyMessage?: string }) {
+  const items = getOrderedProgramItems(program.items);
+  if (!items.length) return <p className="record-empty">{emptyMessage}</p>;
 
-export function ProgramDetails({ program }: { program: ProgramDisplay }) {
-  const items = [...program.items].sort(
-    (a, b) => a.sequence - b.sequence
-  );
-
-  if (!items.length) {
-    return (
-      <div className="text-sm text-[var(--text-secondary)]">
-        No program items
-      </div>
-    );
-  }
-
-  return (
-    <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl overflow-hidden">
-      <table className="w-full text-sm">
-        <thead className="text-xs uppercase text-[var(--text-secondary)] bg-[var(--card-elevated)]">
-          <tr>
-            <th className="px-4 py-3 text-left">#</th>
-            <th className="px-4 py-3 text-left">Activity</th>
-            <th className="px-4 py-3 text-left">Time</th>
-            <th className="px-4 py-3 text-left">Responsible</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {items.map((item, index) => (
-            <tr key={item.id || index} className="hover:bg-[var(--hover-soft)]">
-              <td className="px-4 py-3">{item.sequence}</td>
-
-              <td className="px-4 py-3">
-                <div className="font-medium">{item.title}</div>
-                {item.description && (
-                  <div className="text-xs text-[var(--text-secondary)]">
-                    {item.description}
-                  </div>
-                )}
-              </td>
-
-              <td className="px-4 py-3 text-[var(--text-secondary)]">
-                {item.time || "—"}
-              </td>
-
-              <td className="px-4 py-3">
-                {item.responsible ? (
-                  `${item.responsible.firstName} ${item.responsible.lastName}`
-                ) : (
-                  <span className="text-[var(--text-secondary)]">—</span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+  return <ol className="record-program-agenda" role="list" aria-label="Activities in planned sequence">
+    {items.map((item, index) => {
+      const time = getProgramTime(item.time);
+      const person = getProgramPerson(item);
+      return <li key={item.id ?? index} className="record-program-item">
+        <span className="record-program-position" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+        <div className="min-w-0">
+          <h3>{item.title || "Untitled activity"}</h3>
+          {item.description?.trim() && <p>{item.description}</p>}
+          <dl className="record-program-meta">
+            <div><dt>Time</dt><dd>{time.dateTime ? <time dateTime={time.dateTime}>{time.label}</time> : time.label}</dd></div>
+            <div><dt>Responsible person</dt><dd>{person.id ? <Link href={"/dashboard/members/" + encodeURIComponent(person.id)}>{person.name}</Link> : person.name}</dd></div>
+          </dl>
+        </div>
+      </li>;
+    })}
+  </ol>;
 }

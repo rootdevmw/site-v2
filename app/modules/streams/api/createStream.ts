@@ -1,9 +1,6 @@
-import { api } from "@/lib/api/client";
-import { Stream, StreamFormValues } from "../types/stream.types";
+import { saveStreamEditor } from "@/lib/api/stream-editor";
+import type { StreamEditorPayload } from "@/lib/utils/stream-editor";
 
-export async function createStream(
-  data: StreamFormValues,
-): Promise<{ data: Stream }> {
-  const res = await api.post("/streams", data);
-  return res.data;
+export function createStream(data: StreamEditorPayload) {
+  return saveStreamEditor(data);
 }

@@ -8,6 +8,7 @@ interface UploadMediaVariables {
 
 export function useUploadMedia() {
   return useMutation({
+    retry: false,
     mutationFn: ({ file, onProgress }: UploadMediaVariables) =>
       uploadMedia(file, onProgress),
   });

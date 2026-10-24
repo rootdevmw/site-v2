@@ -6,6 +6,20 @@ button {
   cursor: pointer;
 }
 
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand-focus);
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  background: var(--brand-gold);
+  color: var(--brand-ink);
+}
+
 .date-input-root {
   font-family: "Jost", sans-serif;
   width: 100%;
@@ -33,7 +47,7 @@ button {
 .date-input-label.floated {
   top: 14px;
   transform: translateY(0) scale(0.72);
-  color: var(--main-gold, #c9a84c);
+  color: var(--brand-link);
   letter-spacing: 0.12em;
 }
 
@@ -72,12 +86,12 @@ button {
 }
 
 .date-input-el:hover {
-  border-color: rgba(201, 168, 76, 0.35);
+  border-color: var(--brand-border);
 }
 
 .date-input-el:focus {
-  border-color: var(--main-gold, #c9a84c);
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+  border-color: var(--brand-focus);
+  box-shadow: 0 0 0 3px var(--brand-soft-hover);
 }
 
 .date-input-el.has-error {
@@ -105,7 +119,7 @@ button {
 }
 
 .date-input-field:focus-within .date-input-icon {
-  color: var(--main-gold, #c9a84c);
+  color: var(--brand-link);
 }
 
 /* Bottom accent line */
@@ -116,7 +130,7 @@ button {
   left: 10%;
   width: 0;
   height: 1px;
-  background: var(--main-gold, #c9a84c);
+  background: var(--brand-orange);
   transition:
     width 0.3s ease,
     left 0.3s ease;
@@ -132,4 +146,59 @@ button {
   margin-top: 6px;
   font-size: 0.72rem;
   color: rgba(248, 113, 113, 0.9);
+}
+
+/* Keep the shared date/time picker in the same palette as its surrounding form. */
+.brand-calendar.react-datepicker {
+  border-color: var(--brand-line);
+  background: var(--card-bg);
+  color: var(--brand-ink);
+  font-family: inherit;
+}
+.brand-calendar.react-datepicker .react-datepicker__header {
+  border-color: var(--brand-line);
+  background: var(--brand-soft);
+}
+.brand-calendar.react-datepicker
+  :is(
+    .react-datepicker__current-month,
+    .react-datepicker-time__header,
+    .react-datepicker__day-name
+  ) {
+  color: var(--brand-ink);
+}
+.brand-calendar.react-datepicker
+  :is(
+    .react-datepicker__day--selected,
+    .react-datepicker__day--keyboard-selected,
+    .react-datepicker__day--in-selecting-range,
+    .react-datepicker__day--in-range
+  ) {
+  background: var(--brand-gold);
+  color: var(--brand-ink);
+}
+.brand-calendar.react-datepicker
+  :is(
+    .react-datepicker__day--selected,
+    .react-datepicker__day--keyboard-selected,
+    .react-datepicker__day--in-range
+  ):not([aria-disabled="true"]):hover {
+  background: var(--brand-gold-hover);
+}
+.brand-calendar.react-datepicker
+  .react-datepicker__time-container
+  .react-datepicker__time
+  .react-datepicker__time-box
+  ul.react-datepicker__time-list
+  li.react-datepicker__time-list-item--selected {
+  background: var(--brand-gold);
+  color: var(--brand-ink);
+}
+.brand-calendar.react-datepicker
+  .react-datepicker__time-container
+  .react-datepicker__time
+  .react-datepicker__time-box
+  ul.react-datepicker__time-list
+  li.react-datepicker__time-list-item--selected:hover {
+  background: var(--brand-gold-hover);
 }

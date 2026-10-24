@@ -6,12 +6,15 @@ export type UserFilters = {
   page?: number;
   limit?: number;
   search?: string;
+  role?: string;
+  linked?: string;
 };
 
 export async function getUsers(
   params: UserFilters,
+  signal?: AbortSignal,
 ): Promise<ApiResponse<User>> {
-  const res = await api.get("/users", { params });
+  const res = await api.get("/users", { params, signal, timeout: 15000, silent: true });
   return res.data;
 }
 
@@ -22,15 +25,16 @@ export async function getAllUsers(): Promise<ApiResponse<User>> {
 
 export async function getUser(
   id: string,
-): Promise<{ success: boolean; data: User; meta: any }> {
-  const res = await api.get(`/users/${id}`);
+  signal?: AbortSignal,
+): Promise<{ success: boolean; data: User; meta: unknown }> {
+  const res = await api.get(`/users/${id}`, { signal, timeout: 15000, silent: true });
   return res.data;
 }
 
 export async function updateUser(
   id: string,
   data: { email: string },
-): Promise<{ success: boolean; data: User; meta: any }> {
+): Promise<{ success: boolean; data: User; meta: unknown }> {
   const res = await api.patch(`/users/${id}`, data);
   return res.data;
 }
@@ -38,14 +42,14 @@ export async function updateUser(
 export async function createUser(data: {
   email: string;
   password: string;
-}): Promise<{ success: boolean; data: User; meta: any }> {
+}): Promise<{ success: boolean; data: User; meta: unknown }> {
   const res = await api.post("/users", data);
   return res.data;
 }
 
 export async function deleteUser(
   id: string,
-): Promise<{ success: boolean; data: any; meta: any }> {
+): Promise<{ success: boolean; data: unknown; meta: unknown }> {
   const res = await api.delete(`/users/${id}`);
   return res.data;
 }
@@ -53,7 +57,7 @@ export async function deleteUser(
 export async function assignRole(
   userId: string,
   roleId: string,
-): Promise<{ success: boolean; data: any; meta: any }> {
+): Promise<{ success: boolean; data: unknown; meta: unknown }> {
   const res = await api.post(`/auth/assign-role/${userId}/${roleId}`);
   return res.data;
 }
@@ -64,10 +68,10 @@ export async function assignRole(
 export async function linkUserToMember(
   userId: string,
   memberId: string,
-): Promise<{ success: boolean; data: any; meta: any }> {
+): Promise<{ success: boolean; data: unknown; meta: unknown }> {
   const res = await api.post(`/users/${userId}/member`, {
     memberId,
-  });
+  }, { timeout: 30000, silent: true });
 
   return res.data;
 }
@@ -77,8 +81,8 @@ export async function linkUserToMember(
 // -----------------------------
 export async function unlinkUserFromMember(
   userId: string,
-): Promise<{ success: boolean; data: any; meta: any }> {
-  const res = await api.delete(`/users/${userId}/member`);
+): Promise<{ success: boolean; data: unknown; meta: unknown }> {
+  const res = await api.delete(`/users/${userId}/member`, { timeout: 30000, silent: true });
 
   return res.data;
 }

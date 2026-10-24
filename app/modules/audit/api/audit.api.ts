@@ -1,60 +1,22 @@
 import { api } from "@/lib/api/client";
+import type { AuditEntry } from "../types/audit.types";
+import { getAuditEntity } from "@/config/audit-entities";
+import { sanitizeAuditEntry } from "@/lib/utils/audit-records";
 
-// -----------------------------
-// NORMALIZER
-// -----------------------------
-function normalizeEntity(entity: string) {
-  return entity
-    .trim()
-    .replace(/-/g, "_")
-    .replace(/([a-z])([A-Z])/g, "$1_$2")
-    .toUpperCase();
-}
-
-// -----------------------------
-// GET ENTITY AUDIT LOGS
-// -----------------------------
-export async function getAuditLogs(params: {
-  entity: string;
-  page?: number;
-  limit?: number;
-  action?: string;
-  search?: string;
-}) {
-  const res = await api.get(`/audit/${normalizeEntity(params.entity)}`, {
-    params: {
-      page: params.page,
-      limit: params.limit,
-      action: params.action,
-      search: params.search,
-    },
+export async function getAuditLogs(params: { entity: string; page?: number; limit?: number; action?: string; search?: string; actionSearch?: string; actorId?: string; from?: string; to?: string }, signal?: AbortSignal) {
+  const response = await api.get<{ data: AuditEntry[]; meta: { page: number; limit: number; total: number } }>("/audit/" + encodeURIComponent(getAuditEntity(params.entity).key), {
+    params: { page: params.page, limit: params.limit, action: params.action, search: params.search, actionSearch: params.actionSearch, actorId: params.actorId, from: params.from, to: params.to },
+    signal, timeout: 15000, silent: true,
   });
-
-  return res.data; //  keep meta + data
+  return { ...response.data, data: response.data.data.map(sanitizeAuditEntry) };
 }
 
-// -----------------------------
-// GET ENTITY TIMELINE
-// -----------------------------
-export async function getAuditTimeline(params: { entity: string; id: string }) {
-  const res = await api.get(
-    `/audit/${normalizeEntity(params.entity)}/${params.id}`,
-  );
-
-  return res.data.data;
+export async function getAuditTimeline(params: { entity: string; id: string }, signal?: AbortSignal) {
+  const response = await api.get<{ data: AuditEntry[] }>("/audit/" + encodeURIComponent(getAuditEntity(params.entity).key) + "/" + encodeURIComponent(params.id), { signal, timeout: 15000, silent: true });
+  return response.data.data.map(sanitizeAuditEntry);
 }
 
-// -----------------------------
-// GLOBAL SEARCH
-// -----------------------------
-export async function searchAuditLogs(params: {
-  search: string;
-  page?: number;
-  limit?: number;
-}) {
-  const res = await api.get("/audit/search", {
-    params,
-  });
-
-  return res.data;
+export async function searchAuditLogs(params: { search: string; page?: number; limit?: number }) {
+  const response = await api.get("/audit/search", { params });
+  return response.data;
 }

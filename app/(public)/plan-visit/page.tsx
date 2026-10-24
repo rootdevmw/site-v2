@@ -1,349 +1,233 @@
-"use client";
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  FiArrowRight,
+  FiArrowUpRight,
+  FiMapPin,
+  FiMessageCircle,
+} from "react-icons/fi";
+import welcomePhoto from "@/public/images/welcome.webp";
+import { ServiceTimes } from "@/components/public/ServiceTimes";
+import { VisitForm } from "@/components/public/VisitForm";
+import { church, homecellGathering } from "@/config/church";
+import { getChurchDateInputValue } from "@/lib/utils/church-date";
+import { WorshipPractices } from "@/components/public/ChurchStory";
 
-import { useState } from "react";
-import { publicApi } from "@/lib/public-api/client";
-import { showSuccess, showError } from "@/lib/toast";
-import { useVisitor } from "@/lib/public-api/attention";
+export const metadata: Metadata = {
+  alternates: { canonical: "/plan-visit" },
+  title: "Plan your visit",
+  description:
+    "Join Church of Christ at Red Cross on Mahatma Road in Blantyre. Find Sunday service times, directions, and information for your first visit.",
+};
 
 export default function PlanVisitPage() {
-  const { submitVisitor, isSubmitting } = useVisitor();
-  const [submitted, setSubmitted] = useState(false);
-
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    visitDate: "",
-    groupSize: "1",
-    isChurchOfChrist: "",
-    language: "",
-    hasSpecialNeeds: "",
-    specialNeedsDetails: "",
-    message: "",
-  });
-
-  function set(key: keyof typeof form, value: string) {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!form.name || !form.visitDate) return;
-
-    try {
-      await submitVisitor(form);
-      setSubmitted(true);
-      showSuccess("We'll be expecting you!");
-    } catch {
-      showError("Something went wrong. Please try again.");
-    }
-  }
-
-  if (submitted) {
-    return (
-      <div className="font-serif bg-[#fdf8f2]">
-        <section className="relative overflow-hidden bg-[#fdf8f2]">
-          <div className="relative mx-auto max-w-2xl px-6 py-12 sm:px-10 text-center">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <div className="h-px w-12 bg-[#e8c49a]/50" />
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#faebd7] text-[#c2620a]">
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4.5 12.75l6 6 9-13.5"
-                  />
-                </svg>
-              </div>
-              <div className="h-px w-12 bg-[#e8c49a]/50" />
-            </div>
-
-            <h2 className="text-2xl font-bold text-[#2b1405]">
-              You're expected!
-            </h2>
-            <p className="mt-2 font-sans text-sm leading-6 text-[#6b4c2a]">
-              Thank you for letting us know you're coming. We'll do our best to
-              make you feel at home.
-            </p>
-
-            <div className="mt-5 flex justify-center gap-3">
-              <a
-                href="/"
-                className="rounded-lg bg-[#c2620a] px-6 py-2.5 font-sans text-sm font-semibold text-white hover:bg-[#7c3d0f] transition-colors"
-              >
-                Back to home
-              </a>
-              <a
-                href="/events"
-                className="rounded-lg border border-[#e8c49a] bg-white px-6 py-2.5 font-sans text-sm font-semibold text-[#4a2008] hover:bg-[#fdf0e0] transition-colors"
-              >
-                See upcoming events
-              </a>
-            </div>
-
-            <div className="mt-6 flex justify-center">
-              <svg width="60" height="12" viewBox="0 0 60 12" fill="none">
-                <circle cx="6" cy="6" r="2" fill="#c2620a" fillOpacity="0.35" />
-                <line
-                  x1="12"
-                  y1="6"
-                  x2="48"
-                  y2="6"
-                  stroke="#c2620a"
-                  strokeOpacity="0.25"
-                  strokeWidth="0.75"
-                />
-                <circle
-                  cx="30"
-                  cy="6"
-                  r="3"
-                  fill="#c2620a"
-                  fillOpacity="0.55"
-                />
-                <line
-                  x1="12"
-                  y1="6"
-                  x2="48"
-                  y2="6"
-                  stroke="#c2620a"
-                  strokeOpacity="0.25"
-                  strokeWidth="0.75"
-                />
-                <circle
-                  cx="54"
-                  cy="6"
-                  r="2"
-                  fill="#c2620a"
-                  fillOpacity="0.35"
-                />
-              </svg>
-            </div>
-          </div>
-        </section>
-      </div>
-    );
-  }
   return (
-    <div className="font-sans">
-      {/* ── HERO ── */}
-      <section className="relative overflow-hidden bg-[#2b1405] px-4 py-10 sm:px-6 lg:px-8">
-        <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 opacity-[0.04]">
-          <svg viewBox="0 0 200 200" fill="none">
-            <rect x="85" y="20" width="30" height="160" fill="white" />
-            <rect x="20" y="70" width="160" height="30" fill="white" />
-          </svg>
-        </div>
-        <div className="relative mx-auto max-w-2xl">
-          <div className="mb-2 flex items-center gap-2.5">
-            <div className="h-px w-6 bg-[#e8c49a]" />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#e8c49a]">
-              Plan a visit
-            </p>
-          </div>
-          <h1 className="font-serif text-2xl font-semibold text-white sm:text-3xl">
-            We'd love to meet you
+    <>
+      <section className="public-container grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+        <div>
+          <p className="public-eyebrow">Your first Sunday</p>
+          <h1 className="public-display mt-5 text-[clamp(2.75rem,5vw,4.75rem)] leading-[1.1]">
+            Come as you are.
+            <br />
+            You are welcome here.
           </h1>
-          <p className="mt-2 text-sm text-[#e6c79c]">
-            Let us know you're coming so we can prepare a warm welcome.
+          <p className="mt-6 max-w-xl text-base leading-8 text-[var(--public-muted)] sm:text-lg">
+            A new place can feel unfamiliar. Here is what you need to find us,
+            choose a service, and feel a little more at home before you arrive.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a
+              href="#service-times"
+              className="public-button public-button-primary"
+            >
+              Sunday times <FiArrowRight aria-hidden="true" />
+            </a>
+            <a
+              href={church.mapsUrl}
+              className="public-button public-button-secondary"
+            >
+              Get directions <FiArrowUpRight aria-hidden="true" />
+            </a>
+          </div>
+          <p className="mt-5 text-sm leading-7 text-[var(--public-muted)]">
+            There is no need to register. You can simply come along.
           </p>
         </div>
-      </section>
-
-      {/* ── FORM ── */}
-      <section className="bg-[#fdf6ee] px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Personal details */}
-            <div className="rounded-2xl border border-[#e8c49a] bg-white p-6">
-              <h2 className="font-serif text-base font-semibold text-[#4a2008] mb-5">
-                About you
-              </h2>
-              <div className="space-y-4">
-                <Field label="Your name" required>
-                  <input
-                    value={form.name}
-                    onChange={(e) => set("name", e.target.value)}
-                    placeholder="Full name"
-                    required
-                    className={inputCls}
-                  />
-                </Field>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Phone number">
-                    <input
-                      value={form.phone}
-                      onChange={(e) => set("phone", e.target.value)}
-                      placeholder="+265 ..."
-                      type="tel"
-                      className={inputCls}
-                    />
-                  </Field>
-                  <Field label="Email">
-                    <input
-                      value={form.email}
-                      onChange={(e) => set("email", e.target.value)}
-                      placeholder="you@example.com"
-                      type="email"
-                      className={inputCls}
-                    />
-                  </Field>
-                </div>
-              </div>
-            </div>
-
-            {/* Visit details */}
-            <div className="rounded-2xl border border-[#e8c49a] bg-white p-6">
-              <h2 className="font-serif text-base font-semibold text-[#4a2008] mb-5">
-                Your visit
-              </h2>
-              <div className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Planned visit date" required>
-                    <input
-                      value={form.visitDate}
-                      onChange={(e) => set("visitDate", e.target.value)}
-                      type="date"
-                      required
-                      className={inputCls}
-                    />
-                  </Field>
-                  <Field label="How many people are coming?">
-                    <select
-                      value={form.groupSize}
-                      onChange={(e) => set("groupSize", e.target.value)}
-                      className={inputCls}
-                    >
-                      {["1", "2", "3", "4", "5", "6–10", "10+"].map((n) => (
-                        <option key={n} value={n}>
-                          {n}
-                        </option>
-                      ))}
-                    </select>
-                  </Field>
-                </div>
-
-                <Field label="Are you a member of the Church of Christ?">
-                  <div className="flex gap-4 mt-1">
-                    {["Yes", "No", "Not sure"].map((opt) => (
-                      <label
-                        key={opt}
-                        className="flex items-center gap-2 text-sm text-[#4a2008] cursor-pointer"
-                      >
-                        <input
-                          type="radio"
-                          name="isChurchOfChrist"
-                          value={opt}
-                          checked={form.isChurchOfChrist === opt}
-                          onChange={(e) =>
-                            set("isChurchOfChrist", e.target.value)
-                          }
-                          className="accent-[#c2620a]"
-                        />
-                        {opt}
-                      </label>
-                    ))}
-                  </div>
-                </Field>
-
-                <Field label="Preferred language for worship">
-                  <select
-                    value={form.language}
-                    onChange={(e) => set("language", e.target.value)}
-                    className={inputCls}
-                  >
-                    <option value="">No preference</option>
-                    <option value="English">English</option>
-                    <option value="Chichewa">Chichewa</option>
-                    <option value="Tumbuka">Tumbuka</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </Field>
-
-                <Field label="Any accessibility or special needs?">
-                  <div className="flex gap-4 mt-1">
-                    {["Yes", "No"].map((opt) => (
-                      <label
-                        key={opt}
-                        className="flex items-center gap-2 text-sm text-[#4a2008] cursor-pointer"
-                      >
-                        <input
-                          type="radio"
-                          name="hasSpecialNeeds"
-                          value={opt}
-                          checked={form.hasSpecialNeeds === opt}
-                          onChange={(e) =>
-                            set("hasSpecialNeeds", e.target.value)
-                          }
-                          className="accent-[#c2620a]"
-                        />
-                        {opt}
-                      </label>
-                    ))}
-                  </div>
-                  {form.hasSpecialNeeds === "Yes" && (
-                    <textarea
-                      value={form.specialNeedsDetails}
-                      onChange={(e) =>
-                        set("specialNeedsDetails", e.target.value)
-                      }
-                      placeholder="Please share any details so we can prepare..."
-                      rows={3}
-                      className={`${inputCls} mt-3 resize-none`}
-                    />
-                  )}
-                </Field>
-
-                <Field label="Anything else you'd like us to know?">
-                  <textarea
-                    value={form.message}
-                    onChange={(e) => set("message", e.target.value)}
-                    placeholder="Questions, requests, or anything on your mind..."
-                    rows={3}
-                    className={`${inputCls} resize-none`}
-                  />
-                </Field>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting || !form.name || !form.visitDate}
-              className="w-full rounded-lg bg-[#c2620a] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#7c3d0f] disabled:opacity-50"
-            >
-              {isSubmitting ? "Sending…" : "Let us know you're coming →"}
-            </button>
-          </form>
+        <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-[#e7e0d5]">
+          <Image
+            src={welcomePhoto}
+            alt="Members and families arriving outside the church building at Red Cross"
+            fill
+            preload
+            placeholder="blur"
+            sizes="(min-width: 1280px) 640px, (min-width: 1024px) 50vw, 100vw"
+            className="object-cover"
+          />
         </div>
       </section>
-    </div>
+
+      <section
+        id="service-times"
+        className="scroll-mt-36 border-y border-[var(--public-line)] bg-white"
+      >
+        <div className="public-container public-section grid gap-10 md:grid-cols-2 lg:grid-cols-[1fr_1fr_1.1fr] lg:gap-16">
+          <div>
+            <p className="public-eyebrow">Make yourself at home</p>
+            <h2 className="public-display mt-4 text-4xl leading-tight">
+              See you
+              <br className="hidden lg:block" /> on Sunday.
+            </h2>
+            <p className="mt-5 text-sm leading-7 text-[var(--public-muted)]">
+              Choose our English or Chichewa service. On the last Sunday of the
+              month, the whole church gathers for a combined service.
+            </p>
+          </div>
+          <div>
+            <h3 className="mb-5 text-base font-semibold">Sunday worship</h3>
+            <ServiceTimes />
+          </div>
+          <div className="rounded-2xl bg-[var(--brand-soft)] p-6 md:col-span-2 lg:col-span-1">
+            <FiMapPin
+              aria-hidden="true"
+              className="size-6 text-[var(--public-accent)]"
+            />
+            <h3 className="mt-4 text-base font-semibold">
+              Find us in Blantyre
+            </h3>
+            <address className="mt-3 text-sm not-italic leading-7 text-[var(--public-muted)]">
+              {church.name}
+              <br />
+              {church.address}
+            </address>
+            <a href={church.mapsUrl} className="public-text-link mt-3">
+              Open map &amp; directions <FiArrowUpRight aria-hidden="true" />
+            </a>
+            <p className="mt-3 text-xs leading-6 text-[var(--public-muted)]">
+              Need a hand finding us?{" "}
+              <a
+                href={church.phoneUrl}
+                className="font-semibold underline underline-offset-4"
+              >
+                Call {church.phone}
+              </a>
+              .
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="public-container public-section">
+        <div className="max-w-2xl">
+          <p className="public-eyebrow">A little about us</p>
+          <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
+            A shared faith.
+            <br />A warm welcome.
+          </h2>
+        </div>
+        <div className="mt-10 grid gap-8 md:grid-cols-3 md:gap-10">
+          <div className="border-t border-[var(--public-line)] pt-6">
+            <h3 className="text-lg font-semibold">Worship together</h3>
+            <p className="mt-3 text-sm leading-7 text-[var(--public-muted)]">
+              We sing together without musical instruments, pray, learn from
+              Scripture, share the Lord&apos;s Supper each Sunday, and give from
+              the blessings God has entrusted to us.
+            </p>
+            <Link href="/about" className="public-text-link mt-3">
+              Our faith &amp; church story <FiArrowRight aria-hidden="true" />
+            </Link>
+          </div>
+          <div className="border-t border-[var(--public-line)] pt-6">
+            <h3 className="text-lg font-semibold">
+              Keep the conversation going
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-[var(--public-muted)]">
+              Homecells are smaller groups that share life and encouragement.
+              They meet on {homecellGathering.day}s at {homecellGathering.time},
+              according to each group&apos;s program.
+            </p>
+            <Link href="/homecells" className="public-text-link mt-3">
+              Explore homecells <FiArrowRight aria-hidden="true" />
+            </Link>
+          </div>
+          <div className="border-t border-[var(--public-line)] pt-6">
+            <h3 className="text-lg font-semibold">Ask us anything</h3>
+            <p className="mt-3 text-sm leading-7 text-[var(--public-muted)]">
+              Have a question about bringing children, getting here, or
+              accessibility? Please contact us so we can help you plan.
+            </p>
+            <Link href="/contact" className="public-text-link mt-3">
+              Contact the church <FiArrowRight aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <WorshipPractices />
+
+      <section id="let-us-know" className="scroll-mt-36 bg-[var(--brand-soft)]">
+        <div className="public-container public-section grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+          <div className="max-w-lg">
+            <p className="public-eyebrow">An optional hello</p>
+            <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
+              Let us know
+              <br />
+              you are coming.
+            </h2>
+            <p className="mt-5 text-base leading-8 text-[var(--public-muted)]">
+              If you would like to introduce yourself before you arrive, send us
+              a few details. You are just as welcome to come without filling
+              this in.
+            </p>
+            <div className="mt-7 border-t border-[#d9d0c3] pt-6">
+              <p className="text-sm font-semibold">Prefer a conversation?</p>
+              <a href={church.whatsappUrl} className="public-text-link mt-2">
+                <FiMessageCircle aria-hidden="true" /> Chat with us on WhatsApp{" "}
+                <FiArrowUpRight aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+          <div className="min-w-0">
+            <VisitForm earliestVisitDate={getChurchDateInputValue()} />
+          </div>
+        </div>
+      </section>
+
+      <section className="public-container public-section">
+        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+          <h2 className="public-display text-3xl leading-tight sm:text-4xl">
+            Before you come.
+          </h2>
+          <div className="divide-y divide-[var(--public-line)] border-y border-[var(--public-line)]">
+            {[
+              [
+                "Do I need to register?",
+                "No. The visit form is optional. You are welcome to attend a service without sending us your details first.",
+              ],
+              [
+                "Which language should I choose?",
+                "You are welcome at either the English or Chichewa service. Check the Sunday times above, including the combined service on the last Sunday of the month.",
+              ],
+              [
+                "What if I have a specific question?",
+                "Please contact the church about children, accessibility, travel, or anything else you would like to discuss before visiting.",
+              ],
+            ].map(([question, answer]) => (
+              <details key={question} className="group py-1">
+                <summary className="cursor-pointer py-5 pr-5 text-sm font-semibold sm:text-base">
+                  {question}
+                </summary>
+                <p className="max-w-2xl pb-5 text-sm leading-7 text-[var(--public-muted)]">
+                  {answer}
+                </p>
+              </details>
+            ))}
+            <Link href="/contact" className="public-text-link py-5">
+              Talk to us before your visit <FiArrowUpRight aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
-
-function Field({
-  label,
-  required,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <label className="text-xs font-semibold uppercase tracking-wider text-[#c2620a]">
-        {label}
-        {required && <span className="ml-1 text-[#c2620a]">*</span>}
-      </label>
-      {children}
-    </div>
-  );
-}
-
-const inputCls =
-  "w-full rounded-lg border border-[#e8c49a] bg-[#fdf6ee] px-3.5 py-2.5 text-sm text-[#4a2008] placeholder:text-[#c4a882] focus:border-[#c2620a] focus:outline-none transition";

@@ -8,6 +8,7 @@ import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import { SafeYoutube } from "./SafeYoutubeExtension";
 import { Scripture } from "./ScriptureExtension";
+import { NativeAudio, NativeVideo } from "./NativeMediaExtension";
 
 interface ContentViewerProps {
   content: string;
@@ -24,6 +25,8 @@ export function ContentViewer({ content }: ContentViewerProps) {
       Image,
       SafeYoutube,
       Scripture,
+      NativeAudio,
+      NativeVideo,
     ],
     [],
   );

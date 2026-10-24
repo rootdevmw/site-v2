@@ -1,12 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import type { PrayerSubmission } from "@/lib/utils/public-prayer";
 import { publicApi } from "@/lib/public-api/client";
 
 export function usePrayerRequest() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const busy = useRef(false);
 
-  async function submitPrayerRequest(form: any) {
+  async function submitPrayerRequest(form: PrayerSubmission) {
+    if (form.shareWithElders === "No")
+      throw new Error("Private prayers are not submitted.");
+    if (busy.current) throw new Error("A submission is already pending.");
+    busy.current = true;
     setIsSubmitting(true);
 
     try {
@@ -18,9 +24,12 @@ export function usePrayerRequest() {
         body: JSON.stringify(form),
       });
 
+      if (res.success === false)
+        throw new Error("Submission could not be confirmed.");
       return res;
     } finally {
       setIsSubmitting(false);
+      busy.current = false;
     }
   }
 
@@ -33,7 +42,7 @@ export function usePrayerRequest() {
 export function useVisitor() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function submitVisitor(form: any) {
+  async function submitVisitor(form: Record<string, unknown>) {
     setIsSubmitting(true);
 
     try {

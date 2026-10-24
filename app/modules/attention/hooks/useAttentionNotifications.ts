@@ -1,55 +1,30 @@
+import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api/client";
-import { useEffect, useState } from "react";
+import type { AttentionOverviewResponse } from "../types/attention.types";
 
-export function useAttentionNotifications() {
-  const [notifications, setNotifications] = useState<any[]>([]);
-  const [counts, setCounts] = useState({
-    prayers: 0,
-    visitors: 0,
+type NotificationResponse = {
+  data: AttentionOverviewResponse;
+  meta?: { counts?: { prayers: number; visitors: number } };
+};
+
+export function useAttentionNotifications(enabled = true) {
+  const query = useQuery({
+    queryKey: ["attention", "notifications"],
+    queryFn: async ({ signal }) => {
+      const response = await api.get<NotificationResponse>("/attention/manage", { signal, silent: true });
+      return response.data;
+    },
+    enabled,
+    refetchInterval: 15_000,
   });
 
-  const [prayers, setPrayers] = useState<any[]>([]);
-  const [visitors, setVisitors] = useState<any[]>([]);
+  const prayers = query.data?.data.prayers ?? [];
+  const visitors = query.data?.data.visitors ?? [];
+  const counts = query.data?.meta?.counts ?? { prayers: prayers.length, visitors: visitors.length };
+  const notifications = [
+    ...prayers.map((entry) => ({ ...entry, type: "prayer" as const })),
+    ...visitors.map((entry) => ({ ...entry, type: "visitor" as const })),
+  ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
 
-  async function fetchNotifications() {
-    const res = await api.get("/attention/manage");
-    const { prayers, visitors } = res.data.data;
-    const counts = res.data.meta.counts;
-    setCounts(counts);
-    setPrayers(prayers);
-    setVisitors(visitors);
-
-    const merged = [
-      ...prayers.map((p: any) => ({
-        id: p.id,
-        type: "prayer",
-        name: p.name || "Anonymous",
-        createdAt: p.createdAt,
-      })),
-      ...visitors.map((v: any) => ({
-        id: v.id,
-        type: "visitor",
-        name: v.name,
-        createdAt: v.createdAt,
-      })),
-    ].sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    );
-
-    setNotifications(merged.slice(0, 5));
-  }
-
-  useEffect(() => {
-    fetchNotifications();
-    const interval = setInterval(fetchNotifications, 15000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return {
-    notifications,
-    prayers,
-    visitors,
-    counts,
-  };
+  return { prayers, visitors, counts, notifications, isLoading: query.isLoading, isError: query.isError };
 }

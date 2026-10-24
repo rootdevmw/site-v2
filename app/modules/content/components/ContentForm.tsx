@@ -1,371 +1,817 @@
-"use client";
-
-import { useState } from "react";
-import { useForm, useFieldArray, type Resolver } from "react-hook-form";
+﻿"use client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useCreateContent } from "../hooks/useCreateContent";
-import { useUpdateContent } from "../hooks/useUpdateContent";
-import { useContentTypes } from "../hooks/useContentTypes";
-import { useCreateContentType } from "../hooks/useCreateContentType";
-import { useMembers } from "@/app/modules/members/hooks/useMembers";
-import { contentSchema, ContentFormValues } from "../validation/content.schema";
-
-import { BaseForm } from "@/components/ui/BaseForm";
-import { Input } from "@/components/ui/Input";
-import { Select } from "@/components/ui/Select";
-import { SearchableSelect } from "@/components/ui/SearchableSelect";
-import { FormField } from "@/components/ui/FormField";
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import {
+  useContentEditorTypes,
+  useSaveContentEditor,
+} from "@/lib/hooks/useContentEditor";
+import {
+  addContentTag,
+  contentEditorDefaults,
+  contentEditorFailure,
+  contentEditorPayload,
+  contentEditorSchema,
+  type ContentEditorValues,
+} from "@/lib/utils/content-editor";
+import { programFieldErrors as fieldErrors } from "@/lib/utils/program-editor";
+import type { RelatedRecord } from "@/lib/utils/record-details";
+import {
+  RecordFeedback,
+  RecordSection,
+  RecordStatus,
+} from "@/components/records/RecordLayout";
+import { RecordRichText } from "@/components/records/RecordRichText";
+import { RecordActionDialog } from "@/components/records/RecordActionDialog";
+import { ContentAuthorPicker } from "@/components/records/ContentAuthorPicker";
+import { ContentTypeForm } from "./ContentTypeForm";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
-import { ContentViewer } from "@/components/ui/ContentViewer";
-import { showSuccess, showError } from "@/lib/toast";
+import { Dialog } from "@/components/ui/Dialog";
+import { InlineLoader } from "@/components/ui/InlineLoader";
 
 export function ContentForm({
-  initialData,
-  onSuccess,
   mode = "create",
+  initialData,
+  initialType,
+  initialAuthor,
+  status = "Draft",
   onDelete,
 }: {
-  initialData?: Partial<ContentFormValues> & { id?: string };
-  onSuccess?: (content: any) => void;
   mode?: "create" | "edit" | "view";
-  onDelete?: () => void;
+  initialData?: Partial<ContentEditorValues> & { id?: string };
+  initialType?: RelatedRecord | null;
+  initialAuthor?: RelatedRecord | null;
+  status?: string;
+  onDelete?: () => Promise<unknown>;
 }) {
-  const isView = mode === "view";
-
-  const { mutateAsync: createContent, isPending } = useCreateContent();
-  const { mutateAsync: updateContent } = useUpdateContent();
-
-  const { data: typesData, isLoading: typesLoading } = useContentTypes();
-  const contentTypes = typesData?.data || [];
-
-  const { data: membersData } = useMembers({ page: 1, limit: 100 });
-  const members = membersData?.data || [];
-
-  const { mutateAsync: createType, isPending: creatingType } =
-    useCreateContentType();
-
-  const {
-    register,
-    control,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<ContentFormValues>({
-    resolver: zodResolver(contentSchema) as Resolver<ContentFormValues>,
-    defaultValues: {
-      title: initialData?.title ?? "",
-      slug: initialData?.slug ?? "",
-      body: initialData?.body ?? "",
-      typeId: initialData?.typeId ?? "",
-      authorId: initialData?.authorId ?? "",
-      tags: initialData?.tags ?? [],
-      scriptures: initialData?.scriptures ?? [],
-    },
+  const actor = useAuthStore((state) => state.user),
+    permitted = hasRequiredRole(actor?.roles ?? [], ["MEDIA"]);
+  const router = useRouter(),
+    mutation = useSaveContentEditor(),
+    types = useContentEditorTypes(actor);
+  const form = useForm<ContentEditorValues>({
+    resolver: zodResolver(contentEditorSchema),
+    defaultValues: contentEditorDefaults(initialData),
   });
-
-  const {
-    fields: scriptureFields,
-    append: appendScripture,
-    remove: removeScripture,
-  } = useFieldArray({
-    control,
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
     name: "scriptures",
+    keyName: "editorKey",
   });
-
-  const [showCreateType, setShowCreateType] = useState(false);
-  const [newTypeName, setNewTypeName] = useState("");
-  const [tagInput, setTagInput] = useState("");
-  const [isPreview, setIsPreview] = useState(false);
-
-  const memberOptions = members.map((m: any) => ({
-    label: `${m.firstName} ${m.lastName}`,
-    value: m.id,
-  }));
-
-  const handleCreateType = async () => {
-    if (!newTypeName.trim()) return;
-
-    try {
-      const res = await createType({ name: newTypeName });
-      setValue("typeId", res.data.id);
-      setNewTypeName("");
-      setShowCreateType(false);
-    } catch {
-      showError("Failed to create content type");
-    }
-  };
-
-  const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && tagInput.trim()) {
-      e.preventDefault();
-      const currentTags = watch("tags") || [];
-      setValue("tags", [...currentTags, tagInput.trim()]);
+  const [body, authorId, typeId, tags, title] = useWatch({
+    control: form.control,
+    name: ["body", "authorId", "typeId", "tags", "title"],
+  });
+  const { errors, dirtyFields, isDirty, isSubmitting } = form.formState;
+  const [preview, setPreview] = useState(false),
+    [uploadBusy, setUploadBusy] = useState(false),
+    [typeBusy, setTypeBusy] = useState(false),
+    [deleteBusy, setDeleteBusy] = useState(false),
+    [addingType, setAddingType] = useState(false),
+    [discarding, setDiscarding] = useState(false);
+  const [createdType, setCreatedType] = useState<RelatedRecord | null>(null),
+    [saveError, setSaveError] = useState(""),
+    [attempt, setAttempt] = useState(0),
+    [tagInput, setTagInput] = useState(""),
+    [tagError, setTagError] = useState("");
+  const submitting = useRef(false),
+    uploading = useRef(false),
+    creatingType = useRef(false),
+    deleting = useRef(false),
+    summary = useRef<HTMLDivElement>(null);
+  const busy =
+      mutation.isPending ||
+      isSubmitting ||
+      uploadBusy ||
+      typeBusy ||
+      deleteBusy,
+    isView = mode === "view",
+    disabled = busy || isView,
+    published = status === "Published";
+  const backHref =
+    "/dashboard/content" +
+    (mode !== "create" && initialData?.id
+      ? "/" + encodeURIComponent(initialData.id)
+      : "");
+  const setMediaBusy = useCallback((value: boolean) => {
+    uploading.current = value;
+    setUploadBusy(value);
+  }, []);
+  const setCategoryBusy = useCallback((value: boolean) => {
+    creatingType.current = value;
+    setTypeBusy(value);
+  }, []);
+  useEffect(() => {
+    if (!isDirty && !tagInput.trim()) return;
+    const handler = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [isDirty, tagInput]);
+  useEffect(() => {
+    if (attempt) summary.current?.focus();
+  }, [attempt]);
+  const blocked = () =>
+    submitting.current ||
+    uploading.current ||
+    creatingType.current ||
+    deleting.current ||
+    !permitted ||
+    isView;
+  function addTag() {
+    if (disabled) return;
+    const result = addContentTag(form.getValues("tags"), tagInput);
+    setTagError(result.error);
+    if (!result.error) {
+      form.setValue("tags", result.tags, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
       setTagInput("");
     }
-  };
-
-  const handleRemoveTag = (index: number) => {
-    const currentTags = watch("tags") || [];
-    setValue(
-      "tags",
-      currentTags.filter((_, i) => i !== index),
-    );
-  };
-
-  const onSubmit = async (values: ContentFormValues) => {
-    try {
-      const res =
-        mode === "edit" && initialData?.id
-          ? await updateContent({ id: initialData.id, data: values })
-          : await createContent(values);
-
-      showSuccess(
-        mode === "edit"
-          ? "Content updated successfully"
-          : "Content created successfully",
+  }
+  async function save(values: ContentEditorValues) {
+    if (blocked()) return;
+    if (mode === "edit" && !initialData?.id) {
+      setSaveError(
+        "This message has no record ID. Reopen it from the content list.",
       );
-      onSuccess?.(res.data);
-    } catch {
-      showError("Failed to save content");
+      setAttempt((value) => value + 1);
+      return;
     }
-  };
-
-  return (
-    <BaseForm
-      mode={mode}
-      isLoading={isPending}
-      onSubmit={handleSubmit(onSubmit)}
-      onDelete={onDelete}
-      title={
-        mode === "edit"
-          ? "Edit Content"
-          : mode === "view"
-            ? "View Content"
-            : "Create Content"
+    let pendingTag = false;
+    if (tagInput.trim()) {
+      const result = addContentTag(values.tags, tagInput);
+      if (result.error) {
+        setTagError(result.error);
+        setSaveError(
+          "Review the unfinished tag before saving. Add it or clear the tag field.",
+        );
+        setAttempt((value) => value + 1);
+        return;
       }
+      values = { ...values, tags: result.tags };
+      pendingTag = true;
+      form.setValue("tags", result.tags, { shouldDirty: true });
+      setTagInput("");
+    }
+    submitting.current = true;
+    setSaveError("");
+    try {
+      const changed =
+        mode === "edit"
+          ? {
+              body: !!dirtyFields.body,
+              type: !!dirtyFields.typeId,
+              author: !!dirtyFields.authorId,
+              tags: pendingTag || !!dirtyFields.tags,
+              scriptures: !!dirtyFields.scriptures,
+            }
+          : undefined;
+      const response = await mutation.mutateAsync({
+        id: mode === "edit" ? initialData?.id : undefined,
+        data: contentEditorPayload(values, changed),
+      });
+      form.reset(values);
+      router.push("/dashboard/content/" + encodeURIComponent(response.data.id));
+    } catch (error) {
+      setSaveError(contentEditorFailure(error, mode === "create"));
+      setAttempt((value) => value + 1);
+    } finally {
+      submitting.current = false;
+    }
+  }
+  const typeOptions = new Map(
+    (types.data || []).map((entry) => [entry.id, entry]),
+  );
+  if (createdType) typeOptions.set(createdType.id, createdType);
+  if (typeId && !typeOptions.has(typeId))
+    typeOptions.set(typeId, {
+      id: typeId,
+      name:
+        initialType?.id === typeId
+          ? initialType.name
+          : "Current type #" + typeId,
+    });
+  const entries = fieldErrors(errors);
+  if (!permitted)
+    return (
+      <RecordFeedback
+        kind="forbidden"
+        entity="Content editor"
+        backHref="/dashboard"
+        backLabel="Return to dashboard"
+      />
+    );
+  return (
+    <article
+      className="record-page member-workspace"
+      aria-labelledby="content-editor-title"
     >
-      <Select
-        label="Content Type"
-        {...register("typeId")}
-        error={errors.typeId?.message}
-        disabled={isView}
+      <Link href={backHref} className="record-back">
+        Back to {mode === "create" ? "content" : "message"}
+      </Link>
+      <header className="record-header">
+        <div>
+          <p className="record-eyebrow">
+            Messages for the church
+            {initialData?.id ? " ┬╖ #" + initialData.id : ""}
+          </p>
+          <h1 id="content-editor-title" className="record-title">
+            {mode === "create"
+              ? "Share a message"
+              : isView
+                ? initialData?.title
+                : "Edit message"}
+          </h1>
+          <p className="record-description">
+            Prepare teaching, encouragement and church stories that invite
+            people to grow in faith.
+          </p>
+        </div>
+        <RecordStatus tone={published ? "positive" : "neutral"}>
+          {published
+            ? "Published"
+            : status === "Draft"
+              ? "Draft"
+              : "Status to review"}
+        </RecordStatus>
+      </header>
+      <form
+        className="member-editor mt-6"
+        aria-label={mode === "edit" ? "Edit content" : "Create content"}
+        aria-busy={busy}
+        noValidate
+        onSubmit={form.handleSubmit(save, () =>
+          setAttempt((value) => value + 1),
+        )}
       >
-        <option value="">
-          Select content type (sermon, teaching, blog, article, etc.)
-        </option>
-        {contentTypes.map((type: any) => (
-          <option key={type.id} value={type.id}>
-            {type.name}
-          </option>
-        ))}
-      </Select>
-      {!isView &&
-        (!showCreateType ? (
-          <button
-            type="button"
-            onClick={() => setShowCreateType(true)}
-            className="text-xs text-[var(--main-gold)] hover:underline"
+        <div className="content-editor-notice">
+          <p className="member-form-help">
+            {published
+              ? "This message is public. Saved edits update the published message immediately."
+              : status === "Draft" || mode === "create"
+                ? "New messages are saved as drafts. Review the saved message before publishing from its detail page."
+                : "Review this message's publishing status on its detail page. Saving edits does not change its status."}
+            {mode === "edit" &&
+              " Renaming keeps the existing public web address."}
+          </p>
+          <p className="member-form-help mt-2">
+            Fields marked * are required. Author, tags and scripture index
+            references are optional.
+          </p>
+        </div>
+        {(entries.length > 0 || saveError) && (
+          <div
+            className="member-form-summary"
+            role="alert"
+            tabIndex={-1}
+            ref={summary}
           >
-            + Add new content type
-          </button>
-        ) : (
-          <div className="p-3 rounded-lg border border-[var(--border-soft)] bg-[var(--card-elevated)] space-y-2">
-            <input
-              value={newTypeName}
-              onChange={(e) => setNewTypeName(e.target.value)}
-              placeholder="Type name"
-              className="w-full px-3 py-2 rounded-lg bg-[var(--card-bg)] border border-[var(--border-soft)]"
-            />
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setShowCreateType(false)}
-                className="text-sm text-[var(--text-secondary)]"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleCreateType}
-                disabled={creatingType}
-                className="px-3 py-1 rounded-md bg-[var(--main-gold)] text-black text-sm"
-              >
-                {creatingType ? "Saving..." : "Create"}
-              </button>
-            </div>
-          </div>
-        ))}
-      <Input
-        label="Title"
-        {...register("title")}
-        error={errors.title?.message}
-        disabled={isView}
-      />
-      <Input
-        label="Stable slug (optional)"
-        placeholder="mission-statement or church-leadership"
-        {...register("slug")}
-        error={errors.slug?.message}
-        disabled={isView}
-      />
-      <SearchableSelect
-        label="Author"
-        options={memberOptions}
-        value={watch("authorId")}
-        onChange={(val) => setValue("authorId", val)}
-        error={errors.authorId?.message}
-        disabled={isView}
-      />
-      {isView ? (
-        <FormField label="Body">
-          <div className="min-h-[200px] p-4 border border-[var(--border-soft)] rounded-lg bg-[var(--card-elevated)]">
-            <ContentViewer content={watch("body") || ""} />
-          </div>
-        </FormField>
-      ) : (
-        <FormField label="Body" error={errors.body?.message}>
-          <div className="space-y-2">
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => setIsPreview(!isPreview)}
-                className="px-3 py-1 text-sm text-[var(--main-gold)] hover:underline"
-              >
-                {isPreview ? "Edit" : "Preview"}
-              </button>
-            </div>
-            {isPreview ? (
-              <div className="min-h-[200px] p-4 border border-[var(--border-soft)] rounded-lg bg-[var(--card-elevated)]">
-                <ContentViewer content={watch("body") || ""} />
-              </div>
-            ) : (
-              <RichTextEditor
-                value={watch("body")}
-                onChange={(value) => setValue("body", value)}
-                error={errors.body?.message}
-              />
+            <h2>
+              {saveError
+                ? "Save not confirmed"
+                : "Check the highlighted fields"}
+            </h2>
+            {saveError && <p>{saveError}</p>}
+            {entries.length > 0 && (
+              <ul>
+                {entries.map((entry) => (
+                  <li key={entry.path}>
+                    <a
+                      href={"#content-" + entry.path.replaceAll(".", "-")}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        if (entry.path === "body") setPreview(false);
+                        requestAnimationFrame(() =>
+                          document
+                            .getElementById(
+                              "content-" + entry.path.replaceAll(".", "-"),
+                            )
+                            ?.focus(),
+                        );
+                      }}
+                    >
+                      {entry.path.startsWith("scriptures.")
+                        ? "Reference " +
+                          (Number(entry.path.split(".")[1]) + 1) +
+                          ": "
+                        : ""}
+                      {entry.message}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {saveError && (
+              <Link href={backHref} className="directory-text-link">
+                Review saved {mode === "create" ? "content" : "message"}
+              </Link>
             )}
           </div>
-        </FormField>
-      )}
-
-      {/* Tags */}
-      <FormField label="Tags" error={errors.tags?.message}>
-        <div className="space-y-2">
-          <input
-            disabled={isView}
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={handleAddTag}
-            placeholder="Type a tag and press Enter"
-            className="w-full px-3 py-2 rounded-lg bg-[var(--card-elevated)] border border-[var(--border-soft)] text-sm outline-none disabled:opacity-50"
-          />
-          <div className="flex flex-wrap gap-2">
-            {(watch("tags") || []).map((tag, index) => (
-              <div
-                key={index}
-                className="px-2 py-1 text-xs bg-[var(--main-gold)] text-black rounded-full flex items-center gap-2"
+        )}
+        <RecordSection
+          title="Message details"
+          description="Give readers a clear title and choose where this message belongs."
+        >
+          <div className="member-form-grid">
+            <div className="member-form-field">
+              <label htmlFor="content-title">Title *</label>
+              <input
+                id="content-title"
+                className="record-input"
+                {...form.register("title")}
+                disabled={disabled}
+                required
+                maxLength={191}
+                aria-invalid={!!errors.title}
+                aria-describedby={
+                  errors.title ? "content-title-error" : undefined
+                }
+              />
+              {errors.title && (
+                <p id="content-title-error" className="member-form-error">
+                  {errors.title.message}
+                </p>
+              )}
+            </div>
+            <div className="member-form-field">
+              <label htmlFor="content-typeId">Content type *</label>
+              <select
+                id="content-typeId"
+                className="record-input"
+                {...form.register("typeId")}
+                disabled={disabled || types.isPending || types.isError}
+                required
+                aria-invalid={!!errors.typeId}
+                aria-describedby={
+                  errors.typeId ? "content-typeId-error" : undefined
+                }
               >
-                {tag}
-                {!isView && (
+                <option value="">Choose a content type</option>
+                {[...typeOptions.values()].map((entry) => (
+                  <option key={entry.id} value={entry.id}>
+                    {entry.name}
+                  </option>
+                ))}
+              </select>
+              {errors.typeId && (
+                <p id="content-typeId-error" className="member-form-error">
+                  {errors.typeId.message}
+                </p>
+              )}
+              {types.isPending ? (
+                <p role="status" className="member-form-help">
+                  Loading content types...
+                </p>
+              ) : types.isError ? (
+                <p role="alert" className="member-form-error">
+                  Content types could not be loaded. The current choice is kept.{" "}
                   <button
                     type="button"
-                    onClick={() => handleRemoveTag(index)}
-                    className="hover:underline"
+                    className="directory-text-link"
+                    disabled={busy}
+                    onClick={() => {
+                      void types.refetch();
+                    }}
                   >
-                    ✕
+                    Reload types
                   </button>
-                )}
-              </div>
-            ))}
+                </p>
+              ) : (
+                !types.data?.length && (
+                  <p className="member-form-help">
+                    No types are available. Add one to continue.
+                  </p>
+                )
+              )}
+              {!isView && (
+                <button
+                  type="button"
+                  className="directory-text-link"
+                  disabled={busy}
+                  onClick={() => setAddingType(true)}
+                >
+                  Add content type
+                </button>
+              )}
+            </div>
+            <ContentAuthorPicker
+              actor={actor}
+              value={authorId}
+              initialAuthor={initialAuthor}
+              disabled={disabled}
+              error={errors.authorId?.message}
+              onChange={(value) =>
+                form.setValue("authorId", value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            />
           </div>
-        </div>
-      </FormField>
-
-      {/* Scriptures */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-          Scriptures
-        </h2>
-
-        {scriptureFields.length === 0 && (
-          <p className="text-sm text-[var(--text-secondary)]">
-            No scriptures added yet
-          </p>
-        )}
-
-        {scriptureFields.map((field, index) => (
-          <div
-            key={field.id}
-            className="p-4 rounded-xl border border-[var(--border-soft)] bg-[var(--card-bg)] space-y-3"
-          >
-            <Input
-              label="Book"
-              {...register(`scriptures.${index}.book`)}
-              error={errors.scriptures?.[index]?.book?.message}
-              disabled={isView}
-            />
-
-            <Input
-              label="Chapter"
-              type="number"
-              {...register(`scriptures.${index}.chapter`, {
-                valueAsNumber: true,
-              })}
-              error={errors.scriptures?.[index]?.chapter?.message}
-              disabled={isView}
-            />
-
-            <Input
-              label="Verse From"
-              type="number"
-              {...register(`scriptures.${index}.verseFrom`, {
-                valueAsNumber: true,
-              })}
-              error={errors.scriptures?.[index]?.verseFrom?.message}
-              disabled={isView}
-            />
-
-            <Input
-              label="Verse To (optional)"
-              type="number"
-              {...register(`scriptures.${index}.verseTo`, {
-                valueAsNumber: true,
-              })}
-              error={errors.scriptures?.[index]?.verseTo?.message}
-              disabled={isView}
-            />
-
-            {!isView && (
+        </RecordSection>
+        <RecordSection
+          title="Write your message"
+          description="Keep the message welcoming, readable and grounded in the teaching you want to share."
+        >
+          {!isView && (
+            <div className="member-form-actions mb-4">
               <button
                 type="button"
-                onClick={() => removeScripture(index)}
-                className="text-red-400 text-sm"
+                className="record-button record-button-secondary"
+                aria-pressed={!preview}
+                disabled={busy}
+                onClick={() => setPreview(false)}
               >
-                Remove
+                Write
+              </button>
+              <button
+                type="button"
+                className="record-button record-button-secondary"
+                aria-pressed={preview}
+                disabled={busy}
+                onClick={() => setPreview(true)}
+              >
+                Preview
+              </button>
+            </div>
+          )}
+          {!isView && (
+            <div hidden={preview}>
+              <RichTextEditor
+                id="content-body"
+                label="Message body *"
+                value={body}
+                onChange={(value) =>
+                  form.setValue("body", value, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }
+                disabled={disabled}
+                error={errors.body?.message}
+                onBusyChange={setMediaBusy}
+                editorHeightClassName="h-[clamp(18rem,55dvh,38rem)]"
+              />
+            </div>
+          )}
+          {(preview || isView) && (
+            <div
+              className="content-writing-preview record-reader"
+              aria-label="Message preview"
+            >
+              <h2 className="content-preview-title">
+                {title || "Untitled message"}
+              </h2>
+              <RecordRichText
+                content={body}
+                emptyMessage="Start writing to preview your message."
+              />
+            </div>
+          )}
+          <p className="member-form-help mt-4">
+            Media uploads must finish before saving. Uploading a file does not
+            save the message. Use the scripture toolbar button for inline
+            references; add index references below for message discovery.
+          </p>
+        </RecordSection>
+        <RecordSection
+          title="Tags"
+          description="Use short topic names to help readers find related messages."
+        >
+          <div id="content-tags" tabIndex={-1} className="member-form-field">
+            <label htmlFor="content-tag-input">Add a topic tag</label>
+            <div className="content-tag-entry">
+              <input
+                id="content-tag-input"
+                className="record-input"
+                value={tagInput}
+                onChange={(event) => {
+                  setTagInput(event.target.value);
+                  setTagError("");
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    addTag();
+                  }
+                }}
+                disabled={disabled}
+                maxLength={191}
+                placeholder="For example: Prayer"
+                aria-invalid={!!tagError}
+                aria-describedby="content-tag-help"
+              />
+              <button
+                type="button"
+                className="record-button record-button-secondary"
+                disabled={disabled}
+                onClick={addTag}
+              >
+                Add tag
+              </button>
+            </div>
+            <p
+              id="content-tag-help"
+              className={tagError ? "member-form-error" : "member-form-help"}
+              role={tagError ? "alert" : undefined}
+            >
+              {tagError ||
+                "Press Enter or Add tag. An unfinished valid tag is included when you save."}
+            </p>
+            <ul className="content-tag-list">
+              {(tags || []).map((tag, index) => (
+                <li key={tag} className="record-tag">
+                  <span>{tag}</span>
+                  {!isView && (
+                    <button
+                      type="button"
+                      className="content-tag-remove"
+                      disabled={busy}
+                      onClick={() =>
+                        form.setValue(
+                          "tags",
+                          (form.getValues("tags") || []).filter(
+                            (_, current) => current !== index,
+                          ),
+                          { shouldDirty: true, shouldValidate: true },
+                        )
+                      }
+                      aria-label={"Remove tag " + tag}
+                    >
+                      Remove
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+            {!tags?.length && (
+              <p className="member-form-help mt-3">No topic tags added.</p>
+            )}
+            {errors.tags && (
+              <p className="member-form-error">
+                {errors.tags.message || "Review the topic tags."}
+              </p>
+            )}
+          </div>
+        </RecordSection>
+        <RecordSection
+          title="Scripture index"
+          description="These references appear alongside the message. Adding or removing an index reference does not rewrite inline scripture in the message body."
+        >
+          <div
+            id="content-scriptures"
+            tabIndex={-1}
+            className="program-activity-list"
+          >
+            {fields.map((field, index) => {
+              const entryErrors = errors.scriptures?.[index];
+              return (
+                <div key={field.editorKey} className="program-activity">
+                  <div className="program-activity-heading">
+                    <h3>Reference {index + 1}</h3>
+                    {!isView && (
+                      <button
+                        type="button"
+                        className="record-button record-button-secondary"
+                        disabled={busy}
+                        onClick={() => remove(index)}
+                        aria-label={"Remove scripture reference " + (index + 1)}
+                      >
+                        Remove reference
+                      </button>
+                    )}
+                  </div>
+                  <div className="member-form-grid">
+                    {(
+                      [
+                        "book",
+                        "chapter",
+                        "verseFrom",
+                        "verseTo",
+                        "version",
+                      ] as const
+                    ).map((name) => {
+                      const numeric = [
+                          "chapter",
+                          "verseFrom",
+                          "verseTo",
+                        ].includes(name),
+                        fieldId = "content-scriptures-" + index + "-" + name,
+                        error = entryErrors?.[name];
+                      return (
+                        <div key={name} className="member-form-field">
+                          <label htmlFor={fieldId}>
+                            {name === "book"
+                              ? "Book *"
+                              : name === "chapter"
+                                ? "Chapter *"
+                                : name === "verseFrom"
+                                  ? "First verse *"
+                                  : name === "verseTo"
+                                    ? "Last verse (optional)"
+                                    : "Version (optional)"}
+                          </label>
+                          <input
+                            id={fieldId}
+                            className="record-input"
+                            {...form.register(
+                              `scriptures.${index}.${name}`,
+                              numeric
+                                ? {
+                                    setValueAs: (value) =>
+                                      value === "" ||
+                                      value === null ||
+                                      value === undefined
+                                        ? undefined
+                                        : Number(value),
+                                  }
+                                : {},
+                            )}
+                            type={numeric ? "number" : "text"}
+                            min={numeric ? 1 : undefined}
+                            max={numeric ? 2147483647 : undefined}
+                            step={numeric ? 1 : undefined}
+                            maxLength={numeric ? undefined : 191}
+                            required={!["verseTo", "version"].includes(name)}
+                            disabled={disabled}
+                            aria-invalid={!!error}
+                            aria-describedby={
+                              error ? fieldId + "-error" : undefined
+                            }
+                          />
+                          {error && (
+                            <p
+                              id={fieldId + "-error"}
+                              className="member-form-error"
+                            >
+                              {error.message}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {!fields.length && (
+            <p className="record-empty">
+              No scripture index references added yet.
+            </p>
+          )}
+          {!isView && (
+            <button
+              type="button"
+              className="record-button record-button-secondary mt-4"
+              disabled={busy}
+              onClick={() =>
+                append({ book: "", chapter: 1, verseFrom: 1, version: "" })
+              }
+            >
+              Add scripture reference
+            </button>
+          )}
+        </RecordSection>
+        <footer className="member-form-footer">
+          <p className="member-form-help">
+            {isDirty || tagInput.trim()
+              ? "You have unsaved changes."
+              : published
+                ? "Saved edits update the public message."
+                : "Save a draft, then review and publish it from the detail page."}
+          </p>
+          <div>
+            <button
+              type="button"
+              className="record-button record-button-secondary"
+              disabled={busy}
+              onClick={() => {
+                if (isDirty || tagInput.trim()) setDiscarding(true);
+                else router.push(backHref);
+              }}
+            >
+              {isView ? "Back" : "Cancel"}
+            </button>
+            {!isView && (
+              <button
+                type="submit"
+                className="record-button record-button-primary"
+                disabled={busy}
+              >
+                {busy ? (
+                  <InlineLoader
+                    message={
+                      uploadBusy
+                        ? "Waiting for media upload..."
+                        : typeBusy
+                          ? "Creating type..."
+                          : "Saving..."
+                    }
+                  />
+                ) : published ? (
+                  "Save published changes"
+                ) : status !== "Draft" && mode === "edit" ? (
+                  "Save changes"
+                ) : mode === "edit" ? (
+                  "Save draft changes"
+                ) : (
+                  "Save draft"
+                )}
               </button>
             )}
           </div>
-        ))}
-
-        {!isView && (
+        </footer>
+        {mode === "edit" && onDelete && (
+          <details className="record-more-actions">
+            <summary className="directory-text-link">
+              Other message actions
+            </summary>
+            <RecordActionDialog
+              secondary
+              actionKey={"content:delete:" + initialData?.id}
+              label="Delete content"
+              title={"Delete message #" + initialData?.id + "?"}
+              description="Remove this message from the active content list and public listing. Unsaved edits will not be saved."
+              pendingLabel="Deleting..."
+              successMessage="Deletion confirmed."
+              busy={busy}
+              onConfirm={async () => {
+                if (blocked())
+                  throw new Error("Another message action is in progress.");
+                deleting.current = true;
+                setDeleteBusy(true);
+                try {
+                  await onDelete();
+                } finally {
+                  deleting.current = false;
+                  setDeleteBusy(false);
+                }
+              }}
+            />
+          </details>
+        )}
+      </form>
+      {addingType && (
+        <Dialog
+          open
+          onClose={() => {
+            if (!typeBusy) setAddingType(false);
+          }}
+          closeDisabled={typeBusy}
+          title="Add content type"
+        >
+          <ContentTypeForm
+            onPendingChange={setCategoryBusy}
+            onCancel={() => {
+              if (!typeBusy) setAddingType(false);
+            }}
+            onSuccess={(entry) => {
+              setCreatedType(entry);
+              form.setValue("typeId", entry.id, {
+                shouldDirty: true,
+                shouldValidate: true,
+              });
+              setAddingType(false);
+            }}
+          />
+        </Dialog>
+      )}
+      <Dialog
+        open={discarding}
+        onClose={() => setDiscarding(false)}
+        title="Leave unsaved changes?"
+        description="Your entries have not been saved to this message."
+      >
+        <div className="member-form-actions">
           <button
             type="button"
-            onClick={() =>
-              appendScripture({
-                book: "",
-                chapter: 1,
-                verseFrom: 1,
-              })
-            }
-            className="px-3 py-2 rounded-lg text-sm bg-[var(--card-elevated)]"
+            className="record-button record-button-primary"
+            onClick={() => {
+              form.reset();
+              setTagInput("");
+              router.push(backHref);
+            }}
           >
-            + Add Scripture
+            Leave without saving
           </button>
-        )}
-      </div>
-    </BaseForm>
+          <button
+            type="button"
+            className="record-button record-button-secondary"
+            onClick={() => setDiscarding(false)}
+          >
+            Keep editing
+          </button>
+        </div>
+      </Dialog>
+    </article>
   );
 }

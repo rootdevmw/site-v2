@@ -8,6 +8,8 @@ export async function uploadMedia(
   formData.append("file", file);
 
   const res = await api.post("/content/upload", formData, {
+    timeout: 60000,
+    silent: true,
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -19,5 +21,7 @@ export async function uploadMedia(
     },
   });
 
-  return res.data.data;
+  const url = res.data?.data?.url;
+  if (res.data?.success === false || typeof url !== "string" || !/^https?:\/\//i.test(url) && !/^\/(?!\/)/.test(url)) throw new Error("The media upload could not be confirmed.");
+  return { url };
 }

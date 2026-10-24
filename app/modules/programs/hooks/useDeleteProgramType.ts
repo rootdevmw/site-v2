@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api/client";
+import { deleteCatalogProgramType } from "@/lib/api/type-catalogs";
+import { refreshTypeCatalog } from "@/lib/utils/type-catalog-cache";
 
 export function useDeleteProgramType() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => api.delete(`/programs/types/${id}`),
-
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["program-types"] });
-    },
+    mutationFn: deleteCatalogProgramType,
+    retry: false,
+    onSettled: () => refreshTypeCatalog(qc, "programs"),
   });
 }

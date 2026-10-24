@@ -1,73 +1,28 @@
 "use client";
 
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useRole } from "@/app/modules/roles/hooks/useRoleActions";
-import { useDeleteRole } from "@/app/modules/roles/hooks/useRoleActions";
+import { useRole, useDeleteRole } from "@/app/modules/roles/hooks/useRoleActions";
 import { RoleForm } from "@/app/modules/roles/components/RoleForm";
-import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import { RecordFeedback, RecordLoadError, RecordSkeleton } from "@/components/records/RecordLayout";
 
 export default function EditRolePage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const actor = useAuthStore((state) => state.user);
+  const permitted = hasRequiredRole(actor?.roles ?? [], ["ROOT"]);
+  const query = useRole(id, permitted);
+  const { mutateAsync: remove } = useDeleteRole();
+  if (!permitted) return <RecordFeedback kind="forbidden" entity="Role" backHref="/dashboard" backLabel="Return to dashboard" />;
+  if (query.isPending) return <RecordSkeleton label="Loading role editor…" />;
+  if (query.isError) return <RecordLoadError error={query.error} entity="Role" backHref="/dashboard/roles" backLabel="Back to roles" onRetry={() => { void query.refetch(); }} retrying={query.isFetching} />;
+  if (!query.data?.data) return <RecordFeedback kind="missing" entity="Role" backHref="/dashboard/roles" backLabel="Back to roles" />;
 
-  const { data, isLoading, isError } = useRole(id as string);
-  const { mutateAsync: deleteRole } = useDeleteRole();
-
-  if (isLoading) {
-    return <SpiritualLoader message="Loading Role..." />;
-  }
-
-  if (isError || !data?.data) {
-    return (
-      <div className="p-6 text-sm text-red-600">
-        Failed to load role
-        <button
-          onClick={() => router.push("/dashboard/roles")}
-          className="ml-3 text-[var(--blue)] hover:opacity-90 transition-all duration-200"
-        >
-          Go back
-        </button>
-      </div>
-    );
-  }
-
-  const role = data.data;
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-            Edit Role
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)]">
-            Update role details
-          </p>
-        </div>
-
-        <button
-          onClick={() => router.push(`/dashboard/roles/${role.id}`)}
-          className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200"
-        >
-          View Details
-        </button>
-      </div>
-
-      {/* Form Card */}
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-6">
-        <RoleForm
-          mode="edit"
-          initialData={{
-            id: role.id,
-            name: role.name,
-          }}
-          onDelete={async () => {
-            await deleteRole(role.id);
-            router.push("/dashboard/roles");
-          }}
-        />
-      </div>
-    </div>
-  );
+  const record = query.data.data;
+  return <div className="min-w-0 space-y-6">
+    <div className="flex flex-wrap items-start justify-between gap-3"><div><h1 className="text-2xl font-semibold text-[var(--text-primary)]">Edit role</h1><p className="mt-1 text-sm leading-7 text-[var(--text-secondary)]">Role names are used by the configured access hierarchy.</p></div><Link href={"/dashboard/roles/" + encodeURIComponent(record.id)} className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--text-secondary)] underline">View role</Link></div>
+    <div className="min-w-0 rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)] p-4 sm:p-6"><RoleForm mode="edit" initialData={{ id: record.id, name: record.name }} onDelete={async () => { await remove(record.id); router.push("/dashboard/roles"); }} /></div>
+  </div>;
 }

@@ -13,6 +13,8 @@ import {
   useRef,
   useState,
   useCallback,
+  useEffect,
+  useId,
 } from "react";
 
 import {
@@ -34,6 +36,9 @@ import { showError } from "@/lib/toast";
 import { FormField } from "./FormField";
 import { SafeYoutube } from "./SafeYoutubeExtension";
 import { Scripture } from "./ScriptureExtension";
+import { NativeAudio, NativeVideo } from "./NativeMediaExtension";
+import { Dialog } from "./Dialog";
+import { getWebUrl, getYouTubePreview } from "@/lib/utils/editorial-records";
 
 interface UploadState {
   fileName: string;
@@ -48,12 +53,36 @@ interface RichTextEditorProps {
   label?: string;
   error?: string;
   disabled?: boolean;
+  id?: string;
+  editorHeightClassName?: string;
+  onBusyChange?: (busy: boolean) => void;
 }
 
-export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
-  ({ value, onChange, label, error, disabled = false }, ref) => {
+export const RichTextEditor = forwardRef<
+  {
+    getHTML: () => string | undefined;
+    setContent: (content: string) => boolean | undefined;
+  },
+  RichTextEditorProps
+>(
+  (
+    {
+      value,
+      onChange,
+      label,
+      error,
+      disabled = false,
+      id: suppliedId,
+      editorHeightClassName = "h-[400px]",
+      onBusyChange,
+    },
+    ref,
+  ) => {
+    const generatedId = useId();
+    const id = suppliedId || generatedId;
     const imageInputRef = useRef<HTMLInputElement | null>(null);
     const audioInputRef = useRef<HTMLInputElement | null>(null);
+    const uploading = useRef(false);
 
     const { mutateAsync: uploadMedia } = useUploadMedia();
 
@@ -62,6 +91,7 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
     const [modal, setModal] = useState<null | "link" | "youtube" | "scripture">(
       null,
     );
+    const [modalError, setModalError] = useState("");
 
     const [input, setInput] = useState<{
       url?: string;
@@ -82,6 +112,8 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
         }),
         SafeYoutube,
         Scripture,
+        NativeAudio,
+        NativeVideo,
       ],
       [],
     );
@@ -94,7 +126,35 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
       },
       editable: !disabled,
       immediatelyRender: false,
+      editorProps: {
+        attributes: {
+          id,
+          role: "textbox",
+          "aria-label": label || "Rich text",
+          "aria-multiline": "true",
+          "aria-invalid": String(!!error),
+          "aria-describedby": error ? id + "-error" : "",
+        },
+      },
     });
+
+    useEffect(() => {
+      editor?.setEditable(!disabled);
+    }, [editor, disabled]);
+    useEffect(() => {
+      editor?.setOptions({
+        editorProps: {
+          attributes: {
+            id,
+            role: "textbox",
+            "aria-label": label || "Rich text",
+            "aria-multiline": "true",
+            "aria-invalid": String(!!error),
+            "aria-describedby": error ? id + "-error" : "",
+          },
+        },
+      });
+    }, [editor, id, label, error]);
 
     useImperativeHandle(ref, () => ({
       getHTML: () => editor?.getHTML(),
@@ -113,6 +173,9 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
         type: "image" | "audio",
         onSuccess: (url: string) => void,
       ) => {
+        if (uploading.current || disabled) return;
+        uploading.current = true;
+        onBusyChange?.(true);
         setUploadState({
           fileName: file.name,
           progress: 0,
@@ -141,9 +204,12 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
           );
           showError(`${type === "image" ? "Image" : "Audio"} upload failed`);
           setTimeout(() => setUploadState(null), 2000);
+        } finally {
+          uploading.current = false;
+          onBusyChange?.(false);
         }
       },
-      [uploadMedia],
+      [uploadMedia, onBusyChange, disabled],
     );
 
     const handleImageSelect = useCallback(
@@ -166,9 +232,7 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
           editor
             .chain()
             .focus()
-            .insertContent(
-              `<audio controls src="${url}" style="width: 100%;"></audio>`,
-            )
+            .insertContent({ type: "audio", attrs: { src: url } })
             .run();
         });
         if (audioInputRef.current) audioInputRef.current.value = "";
@@ -177,33 +241,52 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
     );
 
     const handleInsert = () => {
-      if (!editor) return;
+      if (!editor || disabled) return;
       try {
-        if (modal === "link" && input.url) {
-          editor.chain().focus().setLink({ href: input.url }).run();
+        if (modal === "link") {
+          const url = getWebUrl(input.url);
+          if (!url) {
+            setModalError("Enter a complete http or https link.");
+            return;
+          }
+          editor.chain().focus().setLink({ href: url }).run();
         }
-        if (modal === "youtube" && input.url) {
-          const videoId = input.url.match(
-            /(?:youtube\.com.*v=|youtu\.be\/)([^&\n?#]+)/,
-          )?.[1];
-          if (!videoId) return showError("Invalid YouTube URL");
+        if (modal === "youtube") {
+          const url = getYouTubePreview(input.url || "");
+          if (!url) {
+            setModalError("Enter a valid YouTube video link.");
+            return;
+          }
           editor
             .chain()
             .focus()
             .insertContent({
               type: "youtube",
-              attrs: { src: `https://www.youtube.com/embed/${videoId}` },
+              attrs: { src: url },
             })
             .run();
         }
-        if (
-          modal === "scripture" &&
-          input.book &&
-          input.chapter &&
-          input.verseFrom
-        ) {
+        if (modal === "scripture") {
+          if (
+            !input.book?.trim() ||
+            input.book.trim().length > 191 ||
+            !Number.isInteger(input.chapter) ||
+            !input.chapter ||
+            input.chapter < 1 ||
+            !Number.isInteger(input.verseFrom) ||
+            !input.verseFrom ||
+            input.verseFrom < 1 ||
+            (input.verseTo !== undefined &&
+              (!Number.isInteger(input.verseTo) ||
+                input.verseTo < input.verseFrom))
+          ) {
+            setModalError(
+              "Enter a book, positive whole chapter and verse numbers, and a last verse at or after the first.",
+            );
+            return;
+          }
           editor.commands.setScripture({
-            book: input.book,
+            book: input.book.trim(),
             chapter: input.chapter,
             verseFrom: input.verseFrom,
             verseTo: input.verseTo,
@@ -211,8 +294,11 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
         }
         setModal(null);
         setInput({});
+        setModalError("");
       } catch {
-        showError("Failed to insert content");
+        setModalError(
+          "The content could not be inserted. Your entries are kept.",
+        );
       }
     };
 
@@ -221,7 +307,7 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
     const isUploading = uploadState?.status === "uploading";
 
     return (
-      <FormField label={label!} error={error}>
+      <FormField label={label || "Rich text"} error={error} htmlFor={id}>
         <div className="border border-[var(--border-soft)] rounded-lg overflow-hidden">
           {/* Hidden file inputs */}
           <input
@@ -240,9 +326,15 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
           />
 
           {/* Toolbar */}
-          {!disabled && (
+          {(!disabled || isUploading) && (
             <div className="bg-[var(--card-elevated)] border-b">
-              <div className="p-2 flex flex-wrap gap-1">
+              <fieldset
+                disabled={disabled}
+                className="p-2 flex flex-wrap gap-1"
+              >
+                <legend className="sr-only">
+                  Message formatting and media controls
+                </legend>
                 <ToolbarButton
                   title="Bold (Ctrl+B)"
                   active={editor.isActive("bold")}
@@ -311,13 +403,19 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
                 </ToolbarButton>
                 <ToolbarButton
                   title="Add Link"
-                  onClick={() => setModal("link")}
+                  onClick={() => {
+                    setModalError("");
+                    setModal("link");
+                  }}
                 >
                   <FaLink />
                 </ToolbarButton>
                 <ToolbarButton
                   title="Embed YouTube"
-                  onClick={() => setModal("youtube")}
+                  onClick={() => {
+                    setModalError("");
+                    setModal("youtube");
+                  }}
                 >
                   <FaYoutube />
                 </ToolbarButton>
@@ -343,12 +441,13 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
                         return;
                       }
                     }
+                    setModalError("");
                     setModal("scripture");
                   }}
                 >
                   <FaBook />
                 </ToolbarButton>
-              </div>
+              </fieldset>
 
               {/* ── Upload progress bar ── */}
               {uploadState && (
@@ -367,7 +466,7 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
                           ? "text-red-500"
                           : uploadState.status === "done"
                             ? "text-green-600"
-                            : "text-[var(--main-gold)]"
+                            : "text-[var(--brand-link)]"
                       }`}
                     >
                       {uploadState.status === "error"
@@ -385,7 +484,7 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
                           ? "bg-red-500"
                           : uploadState.status === "done"
                             ? "bg-green-500"
-                            : "bg-[var(--main-gold)]"
+                            : "bg-[var(--brand-orange)]"
                       }`}
                       style={{ width: `${uploadState.progress}%` }}
                     />
@@ -403,7 +502,10 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
           {/* Editor */}
           <div
             onClick={() => editor.chain().focus().run()}
-            className="h-[400px] flex flex-col bg-[var(--card-bg)] focus-within:ring-2 focus-within:ring-[var(--main-gold)] cursor-text"
+            className={
+              editorHeightClassName +
+              " flex flex-col bg-[var(--card-bg)] focus-within:ring-2 focus-within:ring-[var(--brand-focus)] cursor-text"
+            }
           >
             <div
               className="flex-1 overflow-y-auto p-4
@@ -423,75 +525,119 @@ export const RichTextEditor = forwardRef<any, RichTextEditorProps>(
           </div>
         </div>
 
-        {/* Modal */}
         {modal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-[var(--card-bg)] p-4 rounded-xl w-full max-w-md space-y-3">
-              <h3 className="font-semibold capitalize">{modal}</h3>
-
+          <Dialog
+            open
+            onClose={() => {
+              setModal(null);
+              setModalError("");
+            }}
+            title={
+              modal === "scripture"
+                ? "Insert scripture reference"
+                : modal === "youtube"
+                  ? "Embed YouTube video"
+                  : "Insert a link"
+            }
+          >
+            <div
+              className="space-y-4"
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  handleInsert();
+                }
+              }}
+            >
+              {modalError && (
+                <p role="alert" className="member-form-error">
+                  {modalError}
+                </p>
+              )}
               {modal !== "scripture" ? (
-                <input
-                  placeholder="Enter URL"
-                  value={input.url || ""}
-                  onChange={(e) => setInput({ ...input, url: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-[var(--card-elevated)]"
-                />
+                <div>
+                  <label htmlFor={id + "-insert-url"}>Link URL</label>
+                  <input
+                    id={id + "-insert-url"}
+                    className="record-input"
+                    type="url"
+                    value={input.url || ""}
+                    onChange={(event) =>
+                      setInput({ ...input, url: event.target.value })
+                    }
+                    disabled={disabled}
+                  />
+                </div>
               ) : (
                 <>
-                  <input
-                    placeholder="Book"
-                    onChange={(e) =>
-                      setInput({ ...input, book: e.target.value })
-                    }
-                    className="w-full px-3 py-2 rounded-lg bg-[var(--card-elevated)]"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Chapter"
-                    onChange={(e) =>
-                      setInput({ ...input, chapter: Number(e.target.value) })
-                    }
-                    className="w-full px-3 py-2 rounded-lg bg-[var(--card-elevated)]"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Verse From"
-                    onChange={(e) =>
-                      setInput({ ...input, verseFrom: Number(e.target.value) })
-                    }
-                    className="w-full px-3 py-2 rounded-lg bg-[var(--card-elevated)]"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Verse To (optional)"
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setInput({
-                        ...input,
-                        verseTo: value === "" ? undefined : Number(value),
-                      });
-                    }}
-                    className="w-full px-3 py-2 rounded-lg bg-[var(--card-elevated)]"
-                  />
+                  <div>
+                    <label htmlFor={id + "-insert-book"}>Book</label>
+                    <input
+                      id={id + "-insert-book"}
+                      className="record-input"
+                      value={input.book || ""}
+                      maxLength={191}
+                      onChange={(event) =>
+                        setInput({ ...input, book: event.target.value })
+                      }
+                      disabled={disabled}
+                    />
+                  </div>
+                  {(["chapter", "verseFrom", "verseTo"] as const).map(
+                    (field) => (
+                      <div key={field}>
+                        <label htmlFor={id + "-insert-" + field}>
+                          {field === "chapter"
+                            ? "Chapter"
+                            : field === "verseFrom"
+                              ? "First verse"
+                              : "Last verse (optional)"}
+                        </label>
+                        <input
+                          id={id + "-insert-" + field}
+                          className="record-input"
+                          type="number"
+                          min={1}
+                          step={1}
+                          value={input[field] ?? ""}
+                          onChange={(event) =>
+                            setInput({
+                              ...input,
+                              [field]:
+                                event.target.value === ""
+                                  ? undefined
+                                  : Number(event.target.value),
+                            })
+                          }
+                          disabled={disabled}
+                        />
+                      </div>
+                    ),
+                  )}
                 </>
               )}
-
-              <div className="flex justify-end gap-2">
+              <div className="flex flex-wrap gap-3">
                 <button
-                  onClick={() => setModal(null)}
-                  className="text-sm text-[var(--text-secondary)]"
-                >
-                  Cancel
-                </button>
-                <button
+                  type="button"
+                  className="record-button record-button-primary"
                   onClick={handleInsert}
-                  className="bg-[var(--main-gold)] px-3 py-1 rounded text-sm text-black"
+                  disabled={disabled}
                 >
                   Insert
                 </button>
+                <button
+                  type="button"
+                  className="record-button record-button-secondary"
+                  onClick={() => {
+                    setModal(null);
+                    setModalError("");
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
-          </div>
+          </Dialog>
         )}
       </FormField>
     );
@@ -517,8 +663,10 @@ function ToolbarButton({
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={`px-2 py-1 rounded text-sm flex items-center justify-center transition-colors
-        ${active ? "bg-[var(--main-gold)] text-black" : "hover:bg-[var(--hover-soft)]"}
+      aria-label={title}
+      aria-pressed={active}
+      className={`min-h-11 min-w-11 px-2 py-1 rounded text-sm flex items-center justify-center transition-colors
+        ${active ? "bg-[var(--brand-gold)] text-[var(--brand-ink)]" : "hover:bg-[var(--hover-soft)]"}
         ${disabled ? "opacity-50 cursor-not-allowed" : ""}
       `}
     >
@@ -538,6 +686,17 @@ function parseVerseRef(text: string) {
       /^((?:[1-3]\s+)?[A-Za-z]+(?:\s+[A-Za-z]+){0,3})\s+(\d+):(\d+)(?:-(\d+))?$/,
     );
   if (!m) return null;
+  const chapter = Number(m[2]),
+    verseFrom = Number(m[3]),
+    verseTo = m[4] ? Number(m[4]) : undefined;
+  if (
+    [chapter, verseFrom, ...(verseTo === undefined ? [] : [verseTo])].some(
+      (value) => !Number.isInteger(value) || value < 1 || value > 2147483647,
+    ) ||
+    (verseTo !== undefined && verseTo < verseFrom) ||
+    m[1].trim().length > 191
+  )
+    return null;
   return {
     book: m[1].trim(),
     chapter: parseInt(m[2], 10),

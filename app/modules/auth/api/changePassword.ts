@@ -1,9 +1,8 @@
-import { api } from "@/lib/api/client";
-import { useMutation } from "@tanstack/react-query";
+import { accountWrite } from "@/lib/api/account-flows";
 
-export function useSetPassword() {
-  return useMutation({
-    mutationFn: (data: { token: string; password: string }) =>
-      api.post("/auth/set-password", data),
-  });
+export function changePassword(data: {
+  currentPassword: string;
+  newPassword: string;
+}) {
+  return accountWrite("change-password", data);
 }

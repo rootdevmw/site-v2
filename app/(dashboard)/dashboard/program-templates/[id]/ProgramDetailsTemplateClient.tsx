@@ -1,57 +1,22 @@
 "use client";
 
-import Link from "next/link";
-
 import { useProgramTemplate } from "@/app/modules/programTemplates/hooks/useProgramTemplate";
-import { ProgramDetails } from "@/app/modules/programs/components/ProgramDetails";
-
-import { Info } from "@/components/ui/Info";
-import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import { ProgramTemplateRecordView } from "@/components/records/ProgramTemplateRecordView";
+import { CreateProgramFromTemplateDialog } from "@/components/records/CreateProgramFromTemplateDialog";
+import { RecordFeedback, RecordLoadError, RecordSkeleton } from "@/components/records/RecordLayout";
 
 export function ProgramTemplateDetailsClient({ id }: { id: string }) {
-  const { data, isLoading } = useProgramTemplate(id);
+  const user = useAuthStore((state) => state.user);
+  const permitted = hasRequiredRole(user?.roles ?? [], ["DEACON"]);
+  const query = useProgramTemplate(id, permitted);
 
-  const template = data?.data;
+  if (!permitted) return <RecordFeedback kind="forbidden" entity="Template" backHref="/dashboard" backLabel="Return to dashboard" />;
+  if (query.isPending) return <RecordSkeleton label="Loading template…" />;
+  if (query.isError) return <RecordLoadError error={query.error} entity="Template" backHref="/dashboard/program-templates" backLabel="Back to templates" onRetry={() => { void query.refetch(); }} retrying={query.isFetching} />;
+  if (!query.data?.data) return <RecordFeedback kind="missing" entity="Template" backHref="/dashboard/program-templates" backLabel="Back to templates" />;
 
-  if (isLoading || !template) {
-    return <SpiritualLoader message="Loading template..." />;
-  }
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-            {template.name}
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)]">
-            Program template structure
-          </p>
-        </div>
-
-        <Link
-          href={`/dashboard/program-templates/${template.id}/edit`}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-[var(--main-gold)] text-black hover:bg-[var(--gold-dark)] transition"
-        >
-          Edit Template
-        </Link>
-      </div>
-
-      {/* Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl p-4">
-        <Info label="Type" value={template.type?.name} />
-        <Info label="Items" value={template.items?.length} />
-      </div>
-
-      {/* Items */}
-      <div className="space-y-2">
-        <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-          Template Items
-        </h2>
-
-        <ProgramDetails program={template} />
-      </div>
-    </div>
-  );
+  const template = query.data.data;
+  return <ProgramTemplateRecordView template={template} useTemplateAction={<CreateProgramFromTemplateDialog key={template.id} template={template} refreshing={query.isFetching} />} />;
 }

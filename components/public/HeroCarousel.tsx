@@ -46,21 +46,13 @@ export function HeroCarousel() {
           style={{ opacity: i === current ? 1 : 0 }}
           aria-hidden
         >
-          {/* Blurred fill layer — covers gaps left by object-contain */}
+          {/* Full image with stronger visibility to keep the church imagery legible */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt=""
-            className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl"
-            style={{ opacity: 0.35 }}
-          />
-          {/* Full image — no cropping */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            alt=""
-            className="absolute inset-0 h-full w-full object-contain"
-            style={{ opacity: 0.7 }}
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ opacity: 1, filter: "saturate(1.08) contrast(1.05)" }}
           />
         </div>
       ))}

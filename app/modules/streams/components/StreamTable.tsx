@@ -51,7 +51,7 @@ export function StreamTable({
         <>
           <button
             onClick={() => router.push(`/dashboard/streams/${s.id}/edit`)}
-            className="text-[var(--main-gold)]"
+            className="text-[var(--brand-link)]"
           >
             Edit
           </button>

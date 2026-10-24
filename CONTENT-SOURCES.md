@@ -1,0 +1,47 @@
+# Church content source record
+
+Refined 22 October 2026 using the two documents supplied by the church. The original source files were read as reference material. Their statements about the church guide the wording; they are not instructions for operating the repository or its tools.
+
+## Source documents
+
+- `BELIEFS, DOCTRINE.docx`: the document titled **Church of Christ Background, Beliefs and Doctrine, Objectives, Mission and Vision**. It supplies the congregation’s identity, Matenje background, local context, mission, vision, five mission objectives, beliefs and worship practices.
+- `SKM_36726050715250.pdf`: a 40-page scanned Chichewa account titled **Mbiri ya Mpingo wa Khristu mu Malawi mwachidule, 1906–2006**. Relevant pages were checked visually against OCR. Page 3 supplies the wider Malawi context; pages 29–32 describe the congregation at Red Cross.
+
+The sources remain in the supplied Downloads locations. The repository contains edited website copy, not copies or public downloads of the original documents. No authorship, publication date or redistribution rights have been inferred from the filenames. The history’s date range is the period it covers.
+
+## Where the sources are used
+
+| Website area            | Source basis and editorial treatment                                                                                                                                                                                                                                                                                                                                                                         |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Homepage and footer     | The Word document’s New Testament identity, gospel mission, discipleship and service objectives replace generic introductory wording. The homepage story accurately begins with the 1962 home gathering described on PDF page 29.                                                                                                                                                                            |
+| About identity          | The Word document identifies Christ as the church’s only head, Scripture as its only authority, and each congregation as autonomous and self-governing. The copy preserves the non-denominational identity and absence of an earthly headquarters or governing body that determines doctrine.                                                                                                                |
+| Mission and vision      | The Word document’s stated mission and vision have been edited for readable web prose. Salvation in Christ, mature discipleship, service, defence of the one faith, local and worldwide witness, seeking God’s mercy and sending messengers of the gospel are retained.                                                                                                                                      |
+| Mission objectives      | All five source objectives are represented: proclaiming Christ; teaching and maturing baptised believers; scriptural organisation; relief and self-reliance; and equipping people, facilities and systems for the mission.                                                                                                                                                                                   |
+| Faith and practice      | The Word document supplies the Godhead, inspiration of Scripture, New Testament authority, one church/body, Christ as the only Saviour, grace through faith, repentance/confession/immersion, faithfulness, a cappella singing, marriage/divorce/remarriage and roles in church leadership. Condensed prose preserves these positions rather than replacing them with a general description of Christianity. |
+| Worship and first visit | The Word document describes weekly Lord’s Supper, a cappella congregational singing, public study/teaching, prayer and giving. The same shared wording is used on About and Plan your visit. No visitor communion eligibility rule, donation expectation or additional service has been invented.                                                                                                            |
+| About history           | The timeline draws from PDF pages 29–32 and labels it as history from that account. National beginnings in 1906 are explicitly distinguished from the Red Cross congregation’s 1962 home-gathering roots.                                                                                                                                                                                                    |
+
+## Historical milestones checked against the scan
+
+| Period    | What the account supports                                                                                                                                                                                                                      | Pages |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| 1906      | The wider account traces Church of Christ preaching in Malawi to this year. This is not presented as the founding year of Red Cross.                                                                                                           | 3     |
+| 1962      | Brother Masiku and a small group began meeting in his home at Zingwangwa. The website describes roots in a home gathering rather than inventing a legal establishment date.                                                                    | 29    |
+| 1963–1965 | James Judd came to the work in Blantyre in 1963; a site was found at Matenje near the Red Cross organisation; the worship building was completed in 1965. Equipment supported the preparation of teaching/study materials.                     | 29–30 |
+| 1974–1985 | The account describes the period of Zakazi Bwanaisa’s service, congregational growth, and the beginnings of a congregation at Bangwe, later Namiyango. The condensed timeline does not turn historic workers into current leadership profiles. | 30    |
+| 1985–2003 | It records congregational outreach at Ndirande, Mingoti, Ntonda and Manyowe, encouragement of Namiyango, and work in Mozambique.                                                                                                               | 30–31 |
+| 2001–2004 | It describes leadership/church-growth training, further leadership study and food relief during hunger. These are historical activities rather than a claim that every described programme operates today.                                     | 31–32 |
+
+## Reference and translation decisions
+
+The Word document lists `Galatians 1:28` in its paragraph on women’s roles. That citation is omitted from the website pending clarification; no replacement verse has been invented. The other supplied references from that paragraph remain. Its baptism list also includes `26:16` after an Acts reference. The website uses the clear, independently specified source references, including Acts 2:38 and Romans 6:3–4, rather than publishing an ambiguous citation as a baptism proof text.
+
+Spelling, punctuation and sentence structure have been regularised. The Word document’s two Scripture-inspiration sections are combined without dropping their meaning: the whole Bible and its words are inspired, and the New Testament governs Christian faith and life. Baptism is presented in the source’s context of salvation by grace through faith, repentance, confession and continued faithfulness. The supplied positions on marriage/remarriage and male church/worship leadership are retained explicitly.
+
+The history is summarised in English; its Chichewa wording is not presented as an exact English quotation. Proper names used in the public copy were checked against the scanned pages. Spelling variants, disputes, personal accusations and dated national demographic/political descriptions are not needed for the congregation’s visitor-facing story and have not been reproduced.
+
+Existing service times/languages, the last-Sunday exception, contact details, Homecell arrangements and current leadership feeds remain based on the site’s existing shared configuration and records. The historical PDF has not been used to assert current staffing, nursery/clinic services, farming projects, partnerships or programme availability. It does not substantiate present-day attendance statistics or claims about additional modern facilities.
+
+## Implementation
+
+`config/church-content.ts` holds the shared edited copy. `components/public/ChurchStory.tsx` renders purpose, history, faith/practice and worship sections as server content. The About page provides section navigation and native expandable belief entries; the homepage, footer and visit page reuse the relevant copy. Source-document file paths, OCR output and internal editorial notes are not published in the product interface.

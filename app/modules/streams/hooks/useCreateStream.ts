@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createStream } from "../api/createStream";
-import { StreamFormValues } from "../types/stream.types";
+import type { StreamEditorPayload } from "@/lib/utils/stream-editor";
 
 export function useCreateStream() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: StreamFormValues) => createStream(data),
+    mutationFn: (data: StreamEditorPayload) => createStream(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["streams"] });
     },

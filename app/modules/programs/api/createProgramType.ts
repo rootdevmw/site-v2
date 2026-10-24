@@ -1,6 +1,5 @@
-import { api } from "@/lib/api/client";
+import { createCatalogType } from "@/lib/api/type-catalogs";
 
 export const createProgramType = async (data: { name: string }) => {
-  const res = await api.post("/programs/types", data);
-  return res.data;
+  return createCatalogType("programs", data);
 };

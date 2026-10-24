@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function ScriptureTooltip({
@@ -9,7 +9,13 @@ export function ScriptureTooltip({
   verseFrom,
   verseTo,
   children,
-}: any) {
+}: {
+  book: string;
+  chapter: number;
+  verseFrom: number;
+  verseTo?: number | null;
+  children: ReactNode;
+}) {
   const [isVisible, setIsVisible] = useState(false);
   const [passage, setPassage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -96,19 +102,19 @@ export function ScriptureTooltip({
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", stiffness: 340, damping: 36 }}
-            className="fixed bottom-0 left-0 right-0 z-9999 border-t border-[#c2620a]/30 bg-[#1a0a02]/96 px-6 py-5 shadow-2xl backdrop-blur-md"
+            className="fixed bottom-0 left-0 right-0 z-9999 border-t border-[var(--brand-link)]/30 bg-[var(--brand-dark)]/96 px-6 py-5 shadow-2xl backdrop-blur-md"
           >
             <div className="mx-auto max-w-3xl text-center">
               {/* Reference label */}
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#c2a23a]">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--brand-gold)]">
                 {reference}
               </p>
 
               {/* Passage */}
               {loading ? (
-                <p className="text-sm italic text-[#e6c79c]">Loading…</p>
+                <p className="text-sm italic text-[var(--brand-gold)]">Loading…</p>
               ) : (
-                <p className="line-clamp-3 text-sm leading-relaxed text-[#fde5c0]">
+                <p className="line-clamp-3 text-sm leading-relaxed text-[var(--brand-warm)]">
                   {passage}
                 </p>
               )}

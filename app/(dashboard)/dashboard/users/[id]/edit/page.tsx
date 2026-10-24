@@ -1,73 +1,28 @@
 "use client";
 
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useUser } from "@/app/modules/users/hooks/useUserActions";
-import { useDeleteUser } from "@/app/modules/users/hooks/useUserActions";
+import { useUser, useDeleteUser } from "@/app/modules/users/hooks/useUserActions";
 import { UserForm } from "@/app/modules/users/components/UserForm";
-import { SpiritualLoader } from "@/components/ui/SpiritualLoader";
+import { useAuthStore } from "@/app/modules/auth/store/auth.store";
+import { hasRequiredRole } from "@/lib/auth/roles";
+import { RecordFeedback, RecordLoadError, RecordSkeleton } from "@/components/records/RecordLayout";
 
 export default function EditUserPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const actor = useAuthStore((state) => state.user);
+  const permitted = hasRequiredRole(actor?.roles ?? [], ["ADMIN"]);
+  const query = useUser(id, permitted);
+  const { mutateAsync: remove } = useDeleteUser();
+  if (!permitted) return <RecordFeedback kind="forbidden" entity="User" backHref="/dashboard" backLabel="Return to dashboard" />;
+  if (query.isPending) return <RecordSkeleton label="Loading user editor…" />;
+  if (query.isError) return <RecordLoadError error={query.error} entity="User" backHref="/dashboard/users" backLabel="Back to users" onRetry={() => { void query.refetch(); }} retrying={query.isFetching} />;
+  if (!query.data?.data) return <RecordFeedback kind="missing" entity="User" backHref="/dashboard/users" backLabel="Back to users" />;
 
-  const { data, isLoading, isError } = useUser(id as string);
-  const { mutateAsync: deleteUser } = useDeleteUser();
-
-  if (isLoading) {
-    return <SpiritualLoader message="Loading user details..." />;
-  }
-
-  if (isError || !data?.data) {
-    return (
-      <div className="p-6 text-sm text-red-600">
-        Failed to load user
-        <button
-          onClick={() => router.push("/dashboard/users")}
-          className="ml-3 text-[var(--blue)] hover:opacity-90 transition-all duration-200"
-        >
-          Go back
-        </button>
-      </div>
-    );
-  }
-
-  const user = data.data;
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-            Edit User
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)]">
-            Update user details
-          </p>
-        </div>
-
-        <button
-          onClick={() => router.push(`/dashboard/users/${user.id}`)}
-          className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all duration-200"
-        >
-          View Details
-        </button>
-      </div>
-
-      {/* Form Card */}
-      <div className="bg-[var(--card-bg)] border border-[var(--border-soft)] rounded-2xl shadow-sm p-6">
-        <UserForm
-          mode="edit"
-          initialData={{
-            id: user.id,
-            email: user.email,
-          }}
-          onDelete={async () => {
-            await deleteUser(user.id);
-            router.push("/dashboard/users");
-          }}
-        />
-      </div>
-    </div>
-  );
+  const record = query.data.data;
+  return <div className="min-w-0 space-y-6">
+    <div className="flex flex-wrap items-start justify-between gap-3"><div><h1 className="text-2xl font-semibold text-[var(--text-primary)]">Edit user</h1><p className="mt-1 text-sm leading-7 text-[var(--text-secondary)]">Update the account email. Role assignments and directory links are managed on the detail page.</p></div><Link href={"/dashboard/users/" + encodeURIComponent(record.id)} className="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--text-secondary)] underline">View user</Link></div>
+    <div className="min-w-0 rounded-2xl border border-[var(--border-soft)] bg-[var(--card-bg)] p-4 sm:p-6"><UserForm mode="edit" initialData={{ id: record.id, email: record.email }} onDelete={async () => { await remove(record.id); router.push("/dashboard/users"); }} /></div>
+  </div>;
 }
