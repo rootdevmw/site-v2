@@ -1,5 +1,73 @@
-:root {
-  /* Shared palette for the public website, account pages and church portal. */
+/* ========================================================
+   Red Cross Church of Christ - Theme System
+   Supports Dark and Light themes with seamless CSS variables
+   ======================================================== */
+
+/* ── DARK THEME (DEFAULT) ─────────────────────────────── */
+:root,
+[data-theme="dark"],
+.dark {
+  /* Brand Tokens - Dark */
+  --brand-ink: #fcebce;
+  --brand-surface: #201e1b;
+  --brand-dark: #181614;
+  --brand-orange: #f7941d;
+  --brand-orange-hover: #ffac3b;
+  --brand-gold: #c8a96a;
+  --brand-gold-hover: #ffcb6b;
+  --brand-link: #f6b63d;
+  --brand-border: #443c32;
+  --brand-gold-border: #4a3e2c;
+  --brand-soft: rgba(200, 169, 106, 0.16);
+  --brand-soft-hover: rgba(200, 169, 106, 0.26);
+  --brand-warm: #2a2622;
+  --brand-line: #3d352b;
+  --brand-focus: var(--brand-gold);
+
+  /* Portal & Core Palette - Dark */
+  --bg-dark: #22201d;
+  --card-bg: #2b2723;
+  --main-gold: #c8a96a;
+  --gold-dark: #b89655;
+  --blue: #7fb7d8;
+
+  /* Backgrounds */
+  --bg-main: var(--bg-dark);
+  --bg-subtle: #2f2a25;
+  --bg-card: var(--card-bg);
+
+  /* Text */
+  --text-primary: #fcebce;
+  --text-secondary: #cfc6b2;
+
+  /* Gold Accent */
+  --accent-gold: var(--main-gold);
+  --accent-gold-hover: var(--gold-dark);
+  --accent-gold-soft: rgba(200, 169, 106, 0.18);
+
+  /* UI */
+  --border-soft: #3f372d;
+  --hover-soft: #352f28;
+  --card-elevated: #322d27;
+
+  /* Public Site Tokens - Dark */
+  --public-bg: #1e1b18;
+  --public-ink: #fcebce;
+  --public-muted: #c5b9aa;
+  --public-accent: #f6b63d;
+  --public-gold: #382c1e;
+  --public-gold-hover: #4d3c29;
+  --public-orange: #f7941d;
+  --public-orange-hover: #ffac3b;
+  --public-line: #3d352b;
+
+  color-scheme: dark;
+}
+
+/* ── LIGHT THEME ─────────────────────────────────────── */
+[data-theme="light"],
+.light {
+  /* Brand Tokens - Light */
   --brand-ink: #29241f;
   --brand-surface: #faf8f4;
   --brand-dark: #25221f;
@@ -16,8 +84,9 @@
   --brand-line: #efd3a3;
   --brand-focus: var(--brand-link);
 
+  /* Portal & Core Palette - Light */
   --bg-dark: var(--brand-surface);
-  --card-bg: #fff;
+  --card-bg: #ffffff;
   --main-gold: var(--brand-gold);
   --gold-dark: var(--brand-link);
   --blue: #5d8db5;
@@ -25,7 +94,7 @@
   /* Backgrounds */
   --bg-main: var(--brand-surface);
   --bg-subtle: var(--brand-warm);
-  --bg-card: #fff;
+  --bg-card: #ffffff;
 
   /* Text */
   --text-primary: var(--brand-ink);
@@ -39,5 +108,76 @@
   /* UI */
   --border-soft: #e7e0d5;
   --hover-soft: var(--brand-soft);
-  --card-elevated: #fff;
+  --card-elevated: #ffffff;
+
+  /* Public Site Tokens - Light */
+  --public-bg: var(--brand-surface);
+  --public-ink: var(--brand-ink);
+  --public-muted: #6c6257;
+  --public-accent: var(--brand-link);
+  --public-gold: var(--brand-gold);
+  --public-gold-hover: var(--brand-gold-hover);
+  --public-orange: var(--brand-orange);
+  --public-orange-hover: var(--brand-orange-hover);
+  --public-line: #e7e0d5;
+
+  color-scheme: light;
+}
+
+/* ── DARK THEME OVERRIDES FOR LEGACY FIXED-WHITE SURFACES ── */
+[data-theme="dark"] .record-header,
+[data-theme="dark"] .record-section,
+[data-theme="dark"] .record-feedback,
+[data-theme="dark"] .record-audit-entry,
+[data-theme="dark"] .overview-actions a,
+[data-theme="dark"] .overview-panel,
+[data-theme="dark"] .overview-workspace,
+[data-theme="dark"] .program-activity,
+[data-theme="dark"] .member-form-footer,
+[data-theme="dark"] .directory-filters,
+[data-theme="dark"] .directory-applied span,
+[data-theme="dark"] .directory-row,
+[data-theme="dark"] .directory-message,
+[data-theme="dark"] .catalog-name-form,
+[data-theme="dark"] .queue-scope-links a,
+[data-theme="dark"] .prayer-team-option,
+[data-theme="dark"] .access-audit-group,
+[data-theme="dark"] .account-card,
+[data-theme="dark"] .public-site section.bg-white,
+[data-theme="dark"] .public-site div.bg-white {
+  background: var(--card-bg) !important;
+  color: var(--text-primary);
+  border-color: var(--border-soft);
+}
+
+[data-theme="dark"] .record-input,
+[data-theme="dark"] .account-input,
+[data-theme="dark"] select.record-input {
+  background: var(--card-elevated) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-soft) !important;
+}
+
+[data-theme="dark"] .record-input::placeholder,
+[data-theme="dark"] .account-input::placeholder {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .record-button-secondary,
+[data-theme="dark"] .account-button-secondary {
+  background: var(--card-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-soft);
+}
+
+[data-theme="dark"] .record-button-secondary:hover,
+[data-theme="dark"] .account-button-secondary:hover {
+  background: var(--hover-soft);
+}
+
+/* Base Body Styles */
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }

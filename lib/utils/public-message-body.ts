@@ -118,7 +118,7 @@ export function prepareMessageBody(body: string) {
     transformTags: {
       h1: "h2",
       table: () => ({ tagName: "table", attribs: { tabindex: "0" } }),
-      span: (_tag, attrs): sanitizeHtml.Tag => {
+      span: (_tag: string, attrs: Record<string, string>): sanitizeHtml.Tag => {
         if (!("data-scripture" in attrs))
           return { tagName: "span", attribs: {} };
         const reference = publicScriptureReference({
@@ -135,7 +135,7 @@ export function prepareMessageBody(body: string) {
           text: reference.label,
         };
       },
-      a: (_tag, attrs) => {
+      a: (_tag: string, attrs: Record<string, string>) => {
         const href = articleLink(attrs.href);
         return {
           tagName: "a",
@@ -146,7 +146,7 @@ export function prepareMessageBody(body: string) {
           },
         };
       },
-      img: (_tag, attrs) => {
+      img: (_tag: string, attrs: Record<string, string>) => {
         const src = getWebUrl(attrs.src);
         const dimension = (name: string) =>
           /^[1-9]\d{0,4}$/.test(attrs[name] || "")
@@ -164,7 +164,7 @@ export function prepareMessageBody(body: string) {
           },
         };
       },
-      iframe: (_tag, attrs): sanitizeHtml.Tag => {
+      iframe: (_tag: string, attrs: Record<string, string>): sanitizeHtml.Tag => {
         const src = videoSource(attrs.src || "");
         if (!src)
           return {
@@ -191,7 +191,7 @@ export function prepareMessageBody(body: string) {
           },
         };
       },
-      "*": (tagName, attrs) => {
+      "*": (tagName: string, attrs: Record<string, string>) => {
         if (!["audio", "video", "source"].includes(tagName))
           return { tagName, attribs: attrs };
         const src = getWebUrl(attrs.src);
@@ -215,7 +215,7 @@ export function prepareMessageBody(body: string) {
         };
       },
     },
-    exclusiveFilter: (frame) =>
+    exclusiveFilter: (frame: sanitizeHtml.IFrame) =>
       frame.tag === "a" && !frame.attribs.href
         ? "excludeTag"
         : frame.tag === "img" && !frame.attribs.src,
@@ -229,14 +229,14 @@ export function prepareMessageBody(body: string) {
     .replace(/<[^>]*>/g, "")
     .replace(
       /&(amp|lt|gt|quot|#39);/g,
-      (entity) =>
+      (entity: string) =>
         ({
           "&amp;": "&",
           "&lt;": "<",
           "&gt;": ">",
           "&quot;": '"',
           "&#39;": "'",
-        })[entity] || entity,
+        } as Record<string, string>)[entity] || entity,
     )
     .replace(/\s+/g, " ")
     .trim();

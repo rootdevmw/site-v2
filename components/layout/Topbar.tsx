@@ -10,6 +10,7 @@ import { getHighestRole, hasRequiredRole } from "@/lib/auth/roles";
 import { useAttentionNotifications } from "@/app/modules/attention/hooks/useAttentionNotifications";
 import { FaPeoplePulling } from "react-icons/fa6";
 import { GiPrayer } from "react-icons/gi";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function Topbar({
   onOpenNavigation,
@@ -68,6 +69,7 @@ export function Topbar({
       </div>
 
       <div ref={controlsRef} className="flex shrink-0 items-center gap-1 sm:gap-2">
+        <ThemeToggle />
         {canManageAttention && (
           <div className="relative flex items-center">
             {[

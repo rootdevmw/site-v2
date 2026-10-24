@@ -8,6 +8,7 @@ import { FiArrowUpRight, FiChevronDown, FiMenu } from "react-icons/fi";
 import { church } from "@/config/church";
 import { publicNavigation } from "@/config/public-navigation";
 import { Dialog } from "@/components/ui/Dialog";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
   const pathname = usePathname();
@@ -167,7 +168,8 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
           )}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-5">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+          <ThemeToggle />
           <div className="hidden min-w-30 md:block">{watchLink}</div>
           <Link
             href="/plan-visit"
@@ -240,6 +242,10 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
             </div>
           ))}
           <div onClick={() => setMenuOpen(false)}>{watchLink}</div>
+          <div className="pt-3 border-t border-[var(--public-line)] flex items-center justify-between">
+            <span className="text-sm font-semibold">Theme</span>
+            <ThemeToggle showLabel />
+          </div>
         </nav>
       </Dialog>
     </header>
