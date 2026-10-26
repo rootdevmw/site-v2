@@ -9,7 +9,7 @@ import {
 } from "react-icons/fi";
 import worshipPhoto from "@/public/images/worship.webp";
 import welcomePhoto from "@/public/images/welcome.webp";
-import communityPhoto from "@/public/images/community.webp";
+import communityPhoto from "@/public/DSC_0056.jpg";
 import { church, combinedService, sundayServices } from "@/config/church";
 import { getPublishedContent } from "@/lib/public-api/content";
 import { getPublicEvents } from "@/lib/public-api/events";
@@ -145,7 +145,7 @@ export function HomePage() {
         <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-[#e7e0d5]">
           <Image
             src={communityPhoto}
-            alt="Members of the Church of Christ at Red Cross smiling together with their Bibles"
+            alt="Members of the Church of Christ at Red Cross reading Scripture together"
             fill
             placeholder="blur"
             sizes="(min-width: 1280px) 600px, (min-width: 1024px) 50vw, 100vw"
