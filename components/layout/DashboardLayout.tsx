@@ -27,7 +27,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       </div>
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <Topbar key={pathname} onOpenNavigation={() => setNavigationOpen(true)} navigationOpen={navigationOpen} />
-        <main id="portal-content" tabIndex={-1} className="min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6 lg:p-8">
+        <main id="portal-content" tabIndex={-1} className="min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 lg:p-6">
           <div className="mx-auto w-full min-w-0 max-w-screen-2xl">{children}</div>
         </main>
       </div>

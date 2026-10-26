@@ -85,13 +85,13 @@ export async function ProgramDetails({
   const state = getProgramDayState(program.date, new Date(result.checkedAt));
   return (
     <>
-      <header className="public-container py-10 sm:py-14">
+      <section className="public-container public-section-tight">
         <Link href={from} className="public-text-link">
           <FiArrowLeft aria-hidden="true" />
           Back to programs
         </Link>
-        <div className="mt-7 grid items-start gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16">
-          <div className="min-w-0">
+        <div className="public-detail-grid">
+          <header className="public-detail-intro min-w-0">
             <p className="public-eyebrow">Program · {state.label}</p>
             <h1 className="public-display mt-4 text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.1] wrap-anywhere">
               {programLabel(program)}
@@ -118,18 +118,18 @@ export async function ProgramDetails({
                 label="Share this program"
               />
             </div>
-          </div>
+          </header>
           <section
             aria-label="Program information"
-            className="min-w-0 rounded-2xl border border-[var(--public-line)] bg-white p-6 sm:p-8"
+            className="public-detail-facts min-w-0 rounded-2xl border border-[var(--public-line)] bg-white p-5 sm:p-6"
           >
             <h2 className="public-display text-2xl">At a glance</h2>
-            <dl className="mt-6 space-y-5">
+            <dl className="mt-4 space-y-4">
               <div>
                 <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--public-muted)]">
                   Program date
                 </dt>
-                <dd className="mt-2 text-base leading-7">
+                <dd className="mt-1 text-base leading-7">
                   <time dateTime={program.date}>
                     {programDateLabel(program)}
                   </time>
@@ -140,7 +140,7 @@ export async function ProgramDetails({
                   <FiMapPin aria-hidden="true" />
                   Venue
                 </dt>
-                <dd className="mt-2 text-base leading-7 wrap-anywhere">
+                <dd className="mt-1 text-base leading-7 wrap-anywhere">
                   {program.location?.trim() ||
                     "The venue has not been added. Please confirm it with the church team before visiting."}
                 </dd>
@@ -166,30 +166,26 @@ export async function ProgramDetails({
                   </dd>
                 </div>
               )}
-              <div className="border-t border-[var(--public-line)] pt-5">
+              <div className="border-t border-[var(--public-line)] pt-4">
                 <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--public-muted)]">
                   Planned activities
                 </dt>
-                <dd className="mt-2 text-base font-semibold">
+                <dd className="mt-1 text-base font-semibold">
                   {program.items.length
                     ? program.items.length
                     : "Still to come"}
                 </dd>
               </div>
             </dl>
-            <p className="mt-5 text-xs leading-6 text-[var(--public-muted)]">
+            <p className="mt-5 text-xs leading-5 text-[var(--public-muted)]">
               Program dates and clock times are local to Malawi. Please confirm
               the venue and current arrangements before visiting.
             </p>
           </section>
-        </div>
-      </header>
-      <section className="border-y border-[var(--public-line)] bg-white">
-        <div className="public-container public-section grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,0.4fr)] lg:gap-16">
           <section
             id="program-order"
             aria-label="Program schedule"
-            className="min-w-0 scroll-mt-36"
+            className="public-detail-body border-t border-[var(--public-line)] pt-6 min-w-0 scroll-mt-32"
           >
             <p className="public-eyebrow">The planned order</p>
             <h2 className="public-display mt-4 text-3xl leading-tight sm:text-4xl">
@@ -201,7 +197,7 @@ export async function ProgramDetails({
             </p>
             <ProgramAgenda program={program} />
           </section>
-          <aside className="min-w-0">
+          <aside className="public-detail-support min-w-0">
             <section className="rounded-2xl bg-[var(--brand-soft)] p-6">
               <h2 className="public-display text-2xl">
                 Need a little guidance?
@@ -249,7 +245,7 @@ export async function ProgramDetails({
           </aside>
         </div>
       </section>
-      <section className="public-container flex flex-col items-start justify-between gap-7 py-12 lg:flex-row lg:items-center">
+      <section className="public-container flex flex-col items-start justify-between gap-7 public-section-tight lg:flex-row lg:items-center">
         <div className="min-w-0 max-w-xl">
           <p className="public-eyebrow">Come and share in it</p>
           <h2 className="public-display mt-3 text-3xl leading-tight sm:text-4xl">

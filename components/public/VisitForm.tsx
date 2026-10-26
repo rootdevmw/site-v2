@@ -88,7 +88,7 @@ export function VisitForm({
       <div
         ref={confirmationRef}
         tabIndex={-1}
-        className="rounded-2xl border border-[#d7dfce] bg-[#f4f7ef] p-6 sm:p-8"
+        className="rounded-2xl border border-[#d7dfce] bg-[#f4f7ef] p-5 sm:p-6"
       >
         <FiCheckCircle aria-hidden="true" className="size-8 text-[#405c2c]" />
         <h3 className="public-display mt-5 text-3xl">

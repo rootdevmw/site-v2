@@ -21,7 +21,7 @@ import { churchContent } from "@/config/church-content";
 export function HomePage() {
   return (
     <>
-      <section className="public-container grid items-center gap-10 py-10 sm:py-14 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:py-16">
+      <section className="public-container grid items-center gap-8 public-section-tight lg:grid-cols-[1fr_1.05fr] lg:gap-10">
         <div className="min-w-0">
           <p className="public-eyebrow">
             A New Testament church in Blantyre, Malawi
@@ -63,7 +63,7 @@ export function HomePage() {
             </p>
           </div>
         </div>
-        <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-[#e7e0d5] lg:aspect-auto lg:min-h-[35rem]">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-[#e7e0d5] lg:aspect-auto lg:min-h-[28rem]">
           <Image
             src={worshipPhoto}
             alt="The congregation gathered for worship at Church of Christ at Red Cross"
@@ -88,7 +88,7 @@ export function HomePage() {
         aria-label="Sunday essentials"
         className="border-y border-[var(--public-line)] bg-white"
       >
-        <div className="public-container grid gap-7 py-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+        <div className="public-container grid gap-7 py-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           <div className="flex items-start gap-4">
             <FiClock
               aria-hidden="true"
@@ -141,7 +141,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="public-container public-section grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
+      <section className="public-container public-section grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
         <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-[#e7e0d5]">
           <Image
             src={communityPhoto}
@@ -198,7 +198,7 @@ export function HomePage() {
             Explore ministries <FiArrowUpRight aria-hidden="true" />
           </Link>
         </div>
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
           <Link href="/homecells" className="group block min-w-0 rounded-2xl">
             <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-[#e7e0d5]">
               <Image
@@ -284,7 +284,7 @@ async function FeaturedMessages() {
   );
   const [featured, ...more] = result.data ?? [];
   return (
-    <div className="mt-6 grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-20">
+    <div className="mt-6 grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:gap-10">
       <div className="min-w-0">
         <h2 className="public-display text-4xl leading-tight wrap-break-word sm:text-5xl">
           {featured?.title || "A word for the week. Faith for everyday life."}
@@ -417,7 +417,7 @@ async function UpcomingEvents() {
   const events = result.data ?? [];
   if (!events.length)
     return (
-      <div className="mt-10 border-t border-[#d9d0c3] pt-8">
+      <div className="mt-8 border-t border-[#d9d0c3] pt-8">
         <p className="max-w-xl text-base leading-8 text-[var(--public-muted)]">
           {result.unavailable
             ? "Upcoming gatherings could not be loaded right now. Our regular Sunday service information is available on the visit page."
@@ -429,7 +429,7 @@ async function UpcomingEvents() {
       </div>
     );
   return (
-    <div className="mt-10 border-t border-[#d9d0c3]">
+    <div className="mt-8 border-t border-[#d9d0c3]">
       {events.map((event) => (
         <Link
           key={event.id}

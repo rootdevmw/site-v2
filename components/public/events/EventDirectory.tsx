@@ -30,7 +30,7 @@ import { homecellGathering } from "@/config/church";
 export function EventDirectory({ filters }: { filters: EventFilters }) {
   return (
     <>
-      <header className="public-container grid gap-8 py-12 sm:py-16 lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-16">
+      <header className="public-container grid gap-8 public-section-tight lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-10">
         <div className="min-w-0">
           <p className="public-eyebrow">Events · Come together</p>
           <h1 className="public-display mt-5 max-w-3xl text-[clamp(2.75rem,5vw,4.75rem)] leading-[1.1]">
@@ -66,7 +66,7 @@ export function EventDirectory({ filters }: { filters: EventFilters }) {
       <section
         id="event-directory"
         aria-label="Event directory"
-        className="public-container scroll-mt-36 pb-14 sm:pb-20"
+        className="public-container scroll-mt-32 public-section-end"
       >
         <form
           action="/events"
@@ -142,7 +142,7 @@ export function EventDirectory({ filters }: { filters: EventFilters }) {
         </div>
       </section>
     <section className="public-dark bg-[var(--brand-dark)] text-white">
-        <div className="public-container public-section grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-20">
+        <div className="public-container public-section grid gap-8 lg:grid-cols-[1fr_1fr] lg:gap-10">
           <div className="min-w-0">
             <p className="public-eyebrow text-[var(--brand-gold)]">Our regular rhythm</p>
             <h2 className="public-display mt-4 text-3xl leading-tight sm:text-4xl">
@@ -159,7 +159,7 @@ export function EventDirectory({ filters }: { filters: EventFilters }) {
               Service and visit information <FiArrowRight aria-hidden="true" />
             </Link>
           </div>
-          <div className="min-w-0 rounded-2xl border border-white/20 p-6 sm:p-8">
+          <div className="min-w-0 rounded-2xl border border-white/20 p-5 sm:p-6">
             <h3 className="public-display mb-5 text-2xl">Sunday worship</h3>
             <ServiceTimes dark />
             <div className="mt-7 border-t border-white/20 pt-6">
@@ -386,7 +386,7 @@ function EventPagination({
   return (
     <nav
       aria-label="Event pages"
-      className="mt-10 flex flex-wrap items-center justify-between gap-3"
+      className="mt-8 flex flex-wrap items-center justify-between gap-3"
     >
       <div>
         {filters.page > 1 && (

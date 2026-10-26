@@ -73,7 +73,7 @@ export function LibraryListing({
     path = pathFor(kind);
   return (
     <>
-      <header className="public-container grid items-start gap-10 py-12 sm:py-16 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+      <header className="public-container grid items-start gap-8 public-section-tight lg:grid-cols-[1.2fr_0.8fr] lg:gap-10">
         <div className="min-w-0">
           <p className="public-eyebrow">
             {live
@@ -101,7 +101,7 @@ export function LibraryListing({
               : "Read updates, teaching and encouragement from the life of our church. Open an edition to read or save its document."}
           </p>
         </div>
-        <aside className="min-w-0 rounded-2xl border border-[var(--public-line)] bg-white p-6 sm:p-8">
+        <aside className="min-w-0 rounded-2xl border border-[var(--public-line)] bg-white p-5 sm:p-6">
           <h2 className="public-display mb-5 text-2xl">Join us in person.</h2>
           <ServiceTimes />
           <Link href="/plan-visit" className="public-text-link mt-4">
@@ -113,7 +113,7 @@ export function LibraryListing({
       {live && (
         <section
           aria-label="Current broadcast"
-          className="public-container pb-12"
+          className="public-container pb-8 sm:pb-10"
         >
           <Suspense fallback={<LibraryLoading />}>
             <CurrentBroadcast />
@@ -121,7 +121,7 @@ export function LibraryListing({
         </section>
       )}
       <section
-        className="public-container pb-14 sm:pb-20"
+        className="public-container public-section-end"
         aria-label={live ? "Broadcast library" : "Publication library"}
       >
         <form
@@ -198,7 +198,7 @@ export function LibraryListing({
         </div>
       </section>
       <section className="border-t border-[var(--public-line)] bg-[var(--brand-soft)]">
-        <div className="public-container flex flex-col items-start justify-between gap-7 py-12 lg:flex-row lg:items-center">
+        <div className="public-container flex flex-col items-start justify-between gap-7 public-section-tight lg:flex-row lg:items-center">
           <div className="min-w-0 max-w-xl">
             <p className="public-eyebrow">Grow through the week</p>
             <h2 className="public-display mt-3 text-3xl leading-tight sm:text-4xl">
@@ -468,7 +468,7 @@ export async function LibraryResults({
       {result.totalPages > 1 && (
         <nav
           aria-label="Library pages"
-          className="mt-10 flex flex-wrap items-center justify-between gap-3"
+          className="mt-8 flex flex-wrap items-center justify-between gap-3"
         >
           <div>
             {filters.page > 1 && (
@@ -603,7 +603,7 @@ export async function OnlineDetails({
   const href = detailHref({ kind, id: "slug" in item ? item.slug : item.id });
   return (
     <>
-      <header className="public-container py-10 sm:py-14">
+      <header className="public-container public-section-tight">
         <Link href={from} className="public-text-link">
           <FiArrowLeft aria-hidden="true" />
           Back to {kind === "streams" ? "broadcasts" : "publications"}
@@ -623,7 +623,7 @@ export async function OnlineDetails({
           </div>
         </div>
       </header>
-      <section className="public-container pb-14 sm:pb-20">
+      <section className="public-container public-section-end">
         {"slug" in item ? (
           <>
             <BroadcastPlayer key={item.id} stream={item} />

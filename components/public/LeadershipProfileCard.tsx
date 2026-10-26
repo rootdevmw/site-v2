@@ -43,7 +43,7 @@ export function LeadershipProfileCard({
         <div
           className={
             "flex min-w-0 flex-1 flex-col p-6 sm:p-7 " +
-            (featured ? "md:justify-center md:p-10" : "")
+            (featured ? "md:justify-center md:p-8" : "")
           }
         >
           <p className="public-eyebrow">Meet our {role.toLowerCase()}</p>

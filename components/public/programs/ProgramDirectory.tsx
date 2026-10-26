@@ -28,7 +28,7 @@ import { ProgramTypeField, ProgramTypeLoading } from "./ProgramTypeField";
 export function ProgramDirectory({ filters }: { filters: ProgramFilters }) {
   return (
     <>
-      <header className="public-container grid items-start gap-9 py-12 sm:py-16 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+      <header className="public-container grid items-start gap-9 public-section-tight lg:grid-cols-[1.2fr_0.8fr] lg:gap-10">
         <div className="min-w-0">
           <p className="public-eyebrow">Programs · Worship together</p>
           <h1 className="public-display mt-5 text-[clamp(2.75rem,5vw,4.75rem)] leading-[1.1]">
@@ -67,7 +67,7 @@ export function ProgramDirectory({ filters }: { filters: ProgramFilters }) {
       <section
         id="program-directory"
         aria-label="Program directory"
-        className="public-container scroll-mt-36 pb-14 sm:pb-20"
+        className="public-container scroll-mt-32 public-section-end"
       >
         <form
           action="/programs"
@@ -142,7 +142,7 @@ export function ProgramDirectory({ filters }: { filters: ProgramFilters }) {
         </div>
       </section>
       <section className="border-t border-[var(--public-line)] bg-[var(--brand-soft)]">
-        <div className="public-container flex flex-col items-start justify-between gap-7 py-12 lg:flex-row lg:items-center">
+        <div className="public-container flex flex-col items-start justify-between gap-7 public-section-tight lg:flex-row lg:items-center">
           <div className="min-w-0 max-w-xl">
             <p className="public-eyebrow">Take your next step</p>
             <h2 className="public-display mt-3 text-3xl leading-tight sm:text-4xl">
@@ -430,7 +430,7 @@ function ProgramPagination({
   return (
     <nav
       aria-label="Program pages"
-      className="mt-10 flex flex-wrap items-center justify-between gap-3"
+      className="mt-8 flex flex-wrap items-center justify-between gap-3"
     >
       <div>
         {filters.page > 1 && (

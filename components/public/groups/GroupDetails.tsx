@@ -114,12 +114,12 @@ export async function GroupDetails({
   const people = groupPeople(group);
   return (
     <>
-      <header className="public-container py-10 sm:py-14">
+      <header className="public-container public-section-tight">
         <Link href={from} className="public-text-link">
           <FiArrowLeft aria-hidden="true" />
           Back to {kind === "ministry" ? "ministries" : "homecells"}
         </Link>
-        <div className="mt-7 grid gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-end lg:gap-16">
+        <div className="mt-7 grid gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-start lg:gap-10">
           <div className="min-w-0">
             <p className="public-eyebrow">
               {kind === "ministry"
@@ -167,7 +167,7 @@ export async function GroupDetails({
         </div>
       </header>
       <section className="border-y border-[var(--public-line)] bg-white">
-        <div className="public-container public-section grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
+        <div className="public-container public-section grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-10">
           <div className="min-w-0">
             <p className="public-eyebrow">Get to know the group</p>
             <h2 className="public-display mt-4 text-3xl leading-tight sm:text-4xl">
@@ -188,7 +188,7 @@ export async function GroupDetails({
                   {description.scriptures.length > 0 && (
                     <section
                       id="message-scriptures"
-                      className="mt-8 scroll-mt-36"
+                      className="mt-8 scroll-mt-32"
                     >
                       <h3 className="text-base font-semibold">
                         Scripture references
@@ -293,7 +293,7 @@ export async function GroupDetails({
           )}
         </div>
       </section>
-      <section className="public-container flex flex-col items-start justify-between gap-7 py-12 lg:flex-row lg:items-center">
+      <section className="public-container flex flex-col items-start justify-between gap-7 public-section-tight lg:flex-row lg:items-center">
         <div className="min-w-0 max-w-xl">
           <p className="public-eyebrow">Your next step</p>
           <h2 className="public-display mt-3 text-3xl leading-tight sm:text-4xl">

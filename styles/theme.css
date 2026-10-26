@@ -15,6 +15,9 @@
   --brand-warm: #fff8ed;
   --brand-line: #efd3a3;
   --brand-focus: var(--brand-link);
+  --layout-panel-padding: clamp(1rem, 1.5vw, 1.25rem);
+  --layout-stack-gap: 1.25rem;
+  --layout-field-gap: 1rem;
 
   --bg-dark: var(--brand-surface);
   --card-bg: #fff;

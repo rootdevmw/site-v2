@@ -13,11 +13,11 @@ export function ChurchPurpose() {
     <section
       id="our-purpose"
       tabIndex={-1}
-      className="scroll-mt-36 border-y border-[var(--public-line)] bg-[var(--brand-soft)]"
+      className="scroll-mt-32 border-y border-[var(--public-line)] bg-[var(--brand-soft)]"
     >
       <div className="public-container public-section">
         <p className="public-eyebrow">Our mission and vision</p>
-        <div className="mt-5 grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-5 grid gap-8 lg:grid-cols-2 lg:gap-10">
           <div className="min-w-0">
             <h2 className="public-display text-3xl leading-tight sm:text-4xl">
               Salvation in Christ.
@@ -40,11 +40,11 @@ export function ChurchPurpose() {
         <p className="mt-6 text-sm leading-7 text-[var(--public-muted)]">
           {churchContent.purposeReferences.join(" · ")}
         </p>
-        <div className="mt-12 border-t border-[#d9d0c3] pt-8">
+        <div className="mt-8 border-t border-[#d9d0c3] pt-8">
           <h3 className="public-display text-3xl">
             Putting our mission into practice.
           </h3>
-          <ol className="mt-7 grid gap-x-10 gap-y-7 md:grid-cols-2">
+          <ol className="mt-7 grid gap-x-8 gap-y-7 md:grid-cols-2">
             {missionObjectives.map((objective, index) => (
               <li key={objective.title} className="flex min-w-0 gap-4">
                 <span
@@ -73,9 +73,9 @@ export function ChurchHistory() {
     <section
       id="our-story"
       tabIndex={-1}
-      className="public-container public-section scroll-mt-36"
+      className="public-container public-section scroll-mt-32"
     >
-      <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+      <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10">
         <div className="min-w-0 max-w-lg">
           <p className="public-eyebrow">Our story</p>
           <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
@@ -128,7 +128,7 @@ export function ChurchBeliefs() {
     <section
       id="our-beliefs"
       tabIndex={-1}
-      className="public-container public-section grid scroll-mt-36 gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20"
+      className="public-container public-section grid scroll-mt-32 gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10"
     >
       <div className="min-w-0 max-w-lg">
         <p className="public-eyebrow">Our faith and practice</p>
@@ -157,7 +157,7 @@ export function ChurchBeliefs() {
           <details
             key={belief.id}
             id={`belief-${belief.id}`}
-            className="group scroll-mt-36 border-b border-[var(--public-line)]"
+            className="group scroll-mt-32 border-b border-[var(--public-line)]"
           >
             <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-5 text-base font-semibold">
               <span className="min-w-0">{belief.title}</span>
@@ -188,7 +188,7 @@ export function WorshipPractices() {
     <section
       id="our-worship"
       tabIndex={-1}
-      className="scroll-mt-36 border-y border-[var(--public-line)] bg-white"
+      className="scroll-mt-32 border-y border-[var(--public-line)] bg-white"
     >
       <div className="public-container public-section">
         <div className="max-w-2xl">
@@ -201,7 +201,7 @@ export function WorshipPractices() {
             practices you will find when we gather on the first day of the week.
           </p>
         </div>
-        <dl className="mt-10 grid gap-x-12 gap-y-8 md:grid-cols-2">
+        <dl className="mt-8 grid gap-x-8 gap-y-8 md:grid-cols-2">
           {worshipPractices.map((practice) => (
             <div
               key={practice.title}

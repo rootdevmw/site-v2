@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 export default function PlanVisitPage() {
   return (
     <>
-      <section className="public-container grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+      <section className="public-container grid items-center gap-8 public-section-tight lg:grid-cols-[1fr_1.05fr] lg:gap-10">
         <div>
           <p className="public-eyebrow">Your first Sunday</p>
           <h1 className="public-display mt-5 text-[clamp(2.75rem,5vw,4.75rem)] leading-[1.1]">
@@ -69,9 +69,9 @@ export default function PlanVisitPage() {
 
       <section
         id="service-times"
-        className="scroll-mt-36 border-y border-[var(--public-line)] bg-white"
+        className="scroll-mt-32 border-y border-[var(--public-line)] bg-white"
       >
-        <div className="public-container public-section grid gap-10 md:grid-cols-2 lg:grid-cols-[1fr_1fr_1.1fr] lg:gap-16">
+        <div className="public-container public-section grid gap-8 md:grid-cols-2 lg:grid-cols-[1fr_1fr_1.1fr] lg:gap-10">
           <div>
             <p className="public-eyebrow">Make yourself at home</p>
             <h2 className="public-display mt-4 text-4xl leading-tight">
@@ -125,7 +125,7 @@ export default function PlanVisitPage() {
             <br />A warm welcome.
           </h2>
         </div>
-        <div className="mt-10 grid gap-8 md:grid-cols-3 md:gap-10">
+        <div className="mt-8 grid gap-8 md:grid-cols-3 md:gap-8">
           <div className="border-t border-[var(--public-line)] pt-6">
             <h3 className="text-lg font-semibold">Worship together</h3>
             <p className="mt-3 text-sm leading-7 text-[var(--public-muted)]">
@@ -165,8 +165,8 @@ export default function PlanVisitPage() {
 
       <WorshipPractices />
 
-      <section id="let-us-know" className="scroll-mt-36 bg-[var(--brand-soft)]">
-        <div className="public-container public-section grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+      <section id="let-us-know" className="scroll-mt-32 bg-[var(--brand-soft)]">
+        <div className="public-container public-section grid items-start gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10">
           <div className="max-w-lg">
             <p className="public-eyebrow">An optional hello</p>
             <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
@@ -194,7 +194,7 @@ export default function PlanVisitPage() {
       </section>
 
       <section className="public-container public-section">
-        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10">
           <h2 className="public-display text-3xl leading-tight sm:text-4xl">
             Before you come.
           </h2>

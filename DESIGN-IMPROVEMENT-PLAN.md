@@ -545,6 +545,16 @@ The rollout covers public cards and sections, visit/prayer forms, sign-in/passwo
 
 Validation: all **340 frontend regression tests**, targeted lint across **62 changed source files** with no warnings, and the production build including TypeScript pass. All eight stylesheets parse successfully and the 15 referenced brand tokens resolve without cycles. Checked brand text pairs have a minimum calculated contrast of **5.00:1**; charcoal labels on the four bright normal/hover fills range from **6.74:1 to 10.25:1**, and gold on the dark surface is **8.80:1**. Old hard-coded brand accent colors were removed from the application and component styles. These are source, build and automated checks; no backend or live record changes were needed.
 
+**Spacing refinement — 26 October 2026**
+
+Public sections, page introductions, cards and column gaps now use a more compact spacing scale. The shared container allows up to 84rem, the sticky header is shorter, and the homepage hero no longer reserves an oversized minimum height. Heading sizes, imagery, brand colors and readable paragraph spacing remain intact.
+
+Event descriptions and program schedules share a responsive grid with their introductions and information cards. On desktop, the main content follows its introduction rather than waiting below the taller information card; on phones, the introduction, practical information, main content and help retain their reading order. Date, venue and calendar cards also have tighter internal spacing.
+
+Portal record panels, management lists, overview cards and editors use shared padding and gap tokens. Account forms and navigation have smaller surrounding gaps. Existing responsive breakpoints, wrapping, editor space, keyboard focus and minimum 44px control targets are preserved.
+
+Validation: all 341 frontend regression tests, frontend TypeScript, changed-file ESLint, the production build and whitespace checks pass. All seven shared stylesheets parse, and the three new spacing tokens resolve. Layout behavior was reviewed in source; these checks do not establish rendered device appearance.
+
 **What the original implementation tells us**
 
 | Finding                                                                                                             | Evidence                                                                                                                                                                 | Design implication                                                                                                    |

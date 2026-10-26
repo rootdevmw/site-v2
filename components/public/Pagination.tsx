@@ -19,7 +19,7 @@ export function Pagination({ page, totalPages, basePath, typeId, search, tags }:
   const disabledClass = linkClass + " opacity-40";
 
   return (
-    <nav className="@container mt-10" aria-label="Pagination">
+    <nav className="@container mt-8" aria-label="Pagination">
       <div className="flex items-center justify-between gap-2 @2xl:justify-center">
         {currentPage > 1 ? <Link href={href(currentPage - 1)} rel="prev" className={linkClass}>Previous</Link> : <span aria-disabled="true" className={disabledClass}>Previous</span>}
         <p className="min-w-0 text-center text-xs text-[var(--text-secondary)] tabular-nums @2xl:hidden">

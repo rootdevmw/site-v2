@@ -27,8 +27,8 @@ export default async function ContentPage({
   const filters = readMessageFilters(await searchParams);
   return (
     <>
-      <section className="public-container py-12 sm:py-16">
-        <div className="flex flex-col items-start justify-between gap-7 lg:flex-row lg:items-end lg:gap-12">
+      <section className="public-container public-section-tight">
+        <div className="flex flex-col items-start justify-between gap-7 lg:flex-row lg:items-end lg:gap-8">
           <div className="min-w-0 max-w-3xl">
             <p className="public-eyebrow">Teaching &amp; reflection</p>
             <h1 className="public-display mt-5 text-[clamp(2.75rem,5vw,4.75rem)] leading-[1.1]">
@@ -49,14 +49,14 @@ export default async function ContentPage({
       </section>
       <section
         aria-label="Message library"
-        className="public-container pb-14 sm:pb-20"
+        className="public-container public-section-end"
       >
         <Suspense key={messagesHref(filters)} fallback={<MessageListLoading />}>
           <MessageBrowse filters={filters} />
         </Suspense>
       </section>
       <section className="border-t border-[var(--public-line)] bg-[var(--brand-soft)]">
-        <div className="public-container flex flex-col items-start justify-between gap-7 py-12 lg:flex-row lg:items-center">
+        <div className="public-container flex flex-col items-start justify-between gap-7 public-section-tight lg:flex-row lg:items-center">
           <div className="min-w-0 max-w-2xl">
             <p className="public-eyebrow">Faith grows in community</p>
             <h2 className="public-display mt-3 text-3xl leading-tight sm:text-4xl">

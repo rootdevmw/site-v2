@@ -49,7 +49,7 @@ const ways = [
 export default function ContactPage() {
   return (
     <>
-      <section className="public-container grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1fr] lg:gap-20">
+      <section className="public-container grid items-center gap-8 public-section-tight lg:grid-cols-[1fr_1fr] lg:gap-10">
         <div className="min-w-0">
           <p className="public-eyebrow">Contact · {church.name}</p>
           <h1 className="public-display mt-5 text-[clamp(2.75rem,5vw,4.75rem)] leading-[1.1]">
@@ -71,7 +71,7 @@ export default function ContactPage() {
             </a>
           </div>
         </div>
-        <div className="min-w-0 rounded-[1.5rem] border border-[var(--public-line)] bg-white p-6 sm:p-8">
+        <div className="min-w-0 rounded-[1.5rem] border border-[var(--public-line)] bg-white p-5 sm:p-6">
           <h2 className="public-display text-2xl sm:text-3xl">
             Talk to the church team.
           </h2>
@@ -120,9 +120,9 @@ export default function ContactPage() {
 
       <section
         id="find-us"
-        className="scroll-mt-36 border-y border-[var(--public-line)] bg-white"
+        className="scroll-mt-32 border-y border-[var(--public-line)] bg-white"
       >
-        <div className="public-container public-section grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+        <div className="public-container public-section grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
           <figure className="min-w-0">
             <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-[#e7e0d5]">
               <Image
@@ -189,7 +189,7 @@ export default function ContactPage() {
             How can we help?
           </h2>
         </div>
-        <div className="mt-10 grid gap-8 lg:grid-cols-3 lg:gap-12">
+        <div className="mt-8 grid gap-8 lg:grid-cols-3 lg:gap-8">
           {ways.map(({ title, text, href, action, Icon }) => (
             <div
               key={href}
@@ -211,7 +211,7 @@ export default function ContactPage() {
         </div>
         <div
           id="portal-help"
-          className="mt-12 grid scroll-mt-36 gap-6 rounded-2xl border border-[var(--public-line)] bg-white p-6 sm:p-8 lg:grid-cols-[1fr_1fr] lg:gap-12"
+          className="mt-8 grid scroll-mt-32 gap-6 rounded-2xl border border-[var(--public-line)] bg-white p-5 sm:p-6 lg:grid-cols-[1fr_1fr] lg:gap-8"
         >
           <div className="min-w-0">
             <p className="public-eyebrow">Church portal access</p>
@@ -248,7 +248,7 @@ export default function ContactPage() {
       </section>
 
       <section className="public-dark bg-[var(--brand-ink)] text-white">
-        <div className="public-container flex flex-col items-start justify-between gap-8 py-12 sm:py-16 lg:flex-row lg:items-center lg:gap-12">
+        <div className="public-container flex flex-col items-start justify-between gap-8 public-section-tight lg:flex-row lg:items-center lg:gap-8">
           <div className="min-w-0 max-w-xl">
             <p className="public-eyebrow text-[var(--brand-gold)]!">Keep in touch</p>
             <h2 className="public-display mt-4 text-3xl leading-tight sm:text-4xl">

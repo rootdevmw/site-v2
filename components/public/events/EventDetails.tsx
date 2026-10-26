@@ -100,13 +100,13 @@ export async function EventDetails({
   } as const;
   return (
     <>
-      <header className="public-container py-10 sm:py-14">
+      <section className="public-container public-section-tight">
         <Link href={from} className="public-text-link">
           <FiArrowLeft aria-hidden="true" />
           Back to events
         </Link>
-        <div className="mt-7 grid items-start gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16">
-          <div className="min-w-0">
+        <div className="public-detail-grid">
+          <header className="public-detail-intro min-w-0">
             <p className="public-eyebrow">
               {event.type?.name || "Church gathering"}
             </p>
@@ -141,18 +141,18 @@ export async function EventDetails({
                 label="Share this event"
               />
             </div>
-          </div>
+          </header>
           <section
             aria-label="When and where"
-            className="min-w-0 rounded-2xl border border-[var(--public-line)] bg-white p-6 sm:p-8"
+            className="public-detail-facts min-w-0 rounded-2xl border border-[var(--public-line)] bg-white p-5 sm:p-6"
           >
             <h2 className="public-display text-2xl">When &amp; where</h2>
-            <dl className="mt-6 space-y-5">
+            <dl className="mt-4 space-y-4">
               <div>
                 <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--public-muted)]">
                   Starts
                 </dt>
-                <dd className="mt-2 text-base leading-7">
+                <dd className="mt-1 text-base leading-7">
                   <time dateTime={event.startTime}>
                     {formatChurchDate(event.startTime, fullDate)}
                   </time>
@@ -162,28 +162,28 @@ export async function EventDetails({
                 <dt className="text-xs font-semibold uppercase tracking-widest text-[var(--public-muted)]">
                   Ends
                 </dt>
-                <dd className="mt-2 text-base leading-7">
+                <dd className="mt-1 text-base leading-7">
                   <time dateTime={event.endTime}>
                     {formatChurchDate(event.endTime, fullDate)}
                   </time>
                 </dd>
               </div>
-              <div className="border-t border-[var(--public-line)] pt-5">
+              <div className="border-t border-[var(--public-line)] pt-4">
                 <dt className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--public-muted)]">
                   <FiMapPin aria-hidden="true" />
                   Venue
                 </dt>
-                <dd className="mt-2 text-base leading-7 wrap-anywhere">
+                <dd className="mt-1 text-base leading-7 wrap-anywhere">
                   {event.location?.trim() ||
                     "The venue has not been added. Please confirm it with the church team before attending."}
                 </dd>
               </div>
             </dl>
-            <p className="mt-5 text-xs leading-6 text-[var(--public-muted)]">
+            <p className="mt-5 text-xs leading-5 text-[var(--public-muted)]">
               All times are local to Malawi (CAT, UTC+02:00).
             </p>
             {state !== "past" && (
-              <div className="mt-6 border-t border-[var(--public-line)] pt-5">
+              <div className="mt-5 border-t border-[var(--public-line)] pt-4">
                 <a
                   href={eventHref(event.slug) + "/calendar"}
                   download="red-cross-event.ics"
@@ -192,18 +192,14 @@ export async function EventDetails({
                   <FiCalendar aria-hidden="true" className="shrink-0" />
                   Add to calendar
                 </a>
-                <p className="mt-3 text-xs leading-6 text-[var(--public-muted)]">
+                <p className="mt-3 text-xs leading-5 text-[var(--public-muted)]">
                   Downloads a calendar file. Download it again if the event
                   details change.
                 </p>
               </div>
             )}
           </section>
-        </div>
-      </header>
-      <section className="border-y border-[var(--public-line)] bg-white">
-        <div className="public-container public-section grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,0.45fr)] lg:gap-16">
-          <article className="min-w-0">
+          <article className="public-detail-body border-t border-[var(--public-line)] pt-6 min-w-0">
             <p className="public-eyebrow">The gathering</p>
             <h2 className="public-display mt-4 text-3xl leading-tight sm:text-4xl">
               About this event.
@@ -216,7 +212,7 @@ export async function EventDetails({
                 {description.scriptures.length > 0 && (
                   <section
                     id="message-scriptures"
-                    className="mt-8 scroll-mt-36"
+                    className="mt-8 scroll-mt-32"
                   >
                     <h3 className="text-base font-semibold">
                       Scripture references
@@ -233,7 +229,7 @@ export async function EventDetails({
               </p>
             )}
           </article>
-          <aside className="min-w-0">
+          <aside className="public-detail-support min-w-0">
             <section className="rounded-2xl bg-[var(--brand-soft)] p-6">
               <h2 className="public-display text-2xl">Have a question?</h2>
               <p className="mt-4 text-sm leading-7 text-[var(--public-muted)]">
@@ -281,7 +277,7 @@ export async function EventDetails({
           </aside>
         </div>
       </section>
-      <section className="public-container flex flex-col items-start justify-between gap-7 py-12 lg:flex-row lg:items-center">
+      <section className="public-container flex flex-col items-start justify-between gap-7 public-section-tight lg:flex-row lg:items-center">
         <div className="min-w-0 max-w-xl">
           <p className="public-eyebrow">Keep exploring</p>
           <h2 className="public-display mt-3 text-3xl leading-tight sm:text-4xl">

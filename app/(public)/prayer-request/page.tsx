@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function PrayerRequestPage() {
   return (
     <>
-      <header className="public-container py-12 sm:py-16">
+      <header className="public-container public-section-tight">
         <p className="public-eyebrow">Prayer and care</p>
         <h1 className="public-display mt-5 max-w-4xl text-[clamp(2.75rem,5vw,4.75rem)] leading-[1.1]">
           You do not have to
@@ -24,7 +24,7 @@ export default function PrayerRequestPage() {
           prayer.
         </p>
       </header>
-      <section className="public-container grid items-start gap-10 pb-14 sm:pb-20 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,0.45fr)] lg:gap-16">
+      <section className="public-container grid items-start gap-8 public-section-end lg:grid-cols-[minmax(0,1fr)_minmax(15rem,0.45fr)] lg:gap-10">
         <div className="min-w-0">
           <PrayerForm />
         </div>

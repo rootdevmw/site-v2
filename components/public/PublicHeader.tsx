@@ -43,7 +43,7 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--public-line)] bg-[var(--brand-surface)]/95 backdrop-blur-md">
       <div className="public-top-bar border-b">
-        <div className="public-container flex min-h-9 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-1.5 text-[11px] font-semibold">
+        <div className="public-container flex min-h-8 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-1 text-[11px] font-semibold">
           <span>
             Mahatma Road, Blantyre{" "}
             <span aria-hidden="true" className="mx-1.5">
@@ -59,7 +59,7 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
           </Link>
         </div>
       </div>
-      <div className="public-container flex min-h-20 items-center justify-between gap-3 py-3">
+      <div className="public-container flex min-h-18 items-center justify-between gap-3 py-2">
         <Link
           href="/"
           aria-label={church.name + " home"}

@@ -94,7 +94,7 @@ export default async function ContentDetailsPage({
     tags = messageTags(message);
   return (
     <>
-      <header className="public-container py-10 sm:py-14">
+      <header className="public-container public-section-tight">
         <Link href={from} className="public-text-link">
           <FiArrowLeft aria-hidden="true" /> Back to messages
         </Link>
@@ -139,7 +139,7 @@ export default async function ContentDetailsPage({
         </div>
       </header>
       <div className="border-y border-[var(--public-line)] bg-white">
-        <div className="public-container grid items-start gap-10 py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-16">
+        <div className="public-container grid items-start gap-8 public-section-tight lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-10">
           <article aria-label={message.title} className="min-w-0">
             {prepared.media.length > 0 && (
               <nav
@@ -166,7 +166,7 @@ export default async function ContentDetailsPage({
                 ))}
               </nav>
             )}
-            <div id="message-body" className="public-message-body scroll-mt-36">
+            <div id="message-body" className="public-message-body scroll-mt-32">
               {prepared.hasContent ? (
                 <div dangerouslySetInnerHTML={{ __html: prepared.html }} />
               ) : (
@@ -176,7 +176,7 @@ export default async function ContentDetailsPage({
                 </p>
               )}
             </div>
-            <div className="mt-10 border-t border-[var(--public-line)] pt-6">
+            <div className="mt-8 border-t border-[var(--public-line)] pt-6">
               <ShareButton
                 key={message.id}
                 title={message.title}
@@ -190,7 +190,7 @@ export default async function ContentDetailsPage({
             className="min-w-0 space-y-8 border-t border-[var(--public-line)] pt-8 lg:border-t-0 lg:pt-0"
           >
             {references.length > 0 && (
-              <section id="message-scriptures" className="scroll-mt-36">
+              <section id="message-scriptures" className="scroll-mt-32">
                 <h2 className="text-base font-semibold">
                   Scripture references
                 </h2>
@@ -231,7 +231,7 @@ export default async function ContentDetailsPage({
           </aside>
         </div>
       </div>
-      <section className="public-container flex flex-col items-start justify-between gap-6 py-12 lg:flex-row lg:items-center">
+      <section className="public-container flex flex-col items-start justify-between gap-6 public-section-tight lg:flex-row lg:items-center">
         <div className="min-w-0 max-w-xl">
           <p className="public-eyebrow">Keep exploring</p>
           <h2 className="public-display mt-3 text-3xl leading-tight sm:text-4xl">

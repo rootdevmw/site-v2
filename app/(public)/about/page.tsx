@@ -50,7 +50,7 @@ const pillars = [
 export default function AboutPage() {
   return (
     <>
-      <section className="public-container grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+      <section className="public-container grid items-center gap-8 public-section-tight lg:grid-cols-[1fr_1.05fr] lg:gap-10">
         <div className="min-w-0">
           <p className="public-eyebrow">About our church · Blantyre, Malawi</p>
           <h1 className="public-display mt-5 text-[clamp(2.75rem,5vw,4.75rem)] leading-[1.1]">
@@ -99,7 +99,7 @@ export default function AboutPage() {
 
       <nav
         aria-label="On this page"
-        className="public-container flex flex-wrap gap-2 pb-10"
+        className="public-container flex flex-wrap gap-2 pb-6"
       >
         {aboutSections.map(({ label, href }) => (
           <a
@@ -114,7 +114,7 @@ export default function AboutPage() {
 
       <section className="border-y border-[var(--public-line)] bg-white">
         <div className="public-container public-section">
-          <div className="grid gap-7 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+          <div className="grid gap-7 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10">
             <div className="min-w-0">
               <p className="public-eyebrow">Who we are</p>
               <h2 className="public-display mt-4 max-w-lg text-4xl leading-tight sm:text-5xl">
@@ -131,7 +131,7 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-          <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-3 lg:gap-12">
+          <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-3 lg:gap-8">
             {pillars.map(({ title, text, Icon }) => (
               <div
                 key={title}
@@ -159,10 +159,10 @@ export default function AboutPage() {
       <section
         id="church-leadership"
         tabIndex={-1}
-        className="scroll-mt-36 border-y border-[var(--public-line)] bg-[var(--brand-soft)]"
+        className="scroll-mt-32 border-y border-[var(--public-line)] bg-[var(--brand-soft)]"
       >
         <div className="public-container public-section">
-          <div className="grid items-end gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+          <div className="grid items-end gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10">
             <div className="min-w-0">
               <p className="public-eyebrow">Church leadership</p>
               <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
@@ -177,7 +177,7 @@ export default function AboutPage() {
               the names.
             </p>
           </div>
-          <div className="mt-9 grid gap-8 lg:grid-cols-2 lg:gap-16">
+          <div className="mt-9 grid gap-8 lg:grid-cols-2 lg:gap-10">
             <div className="min-w-0 border-t border-[#d9d0c3] pt-6">
               <h3 className="text-lg font-semibold">Pastors (elders)</h3>
               <p className="mt-3 max-w-xl text-sm leading-7 text-[var(--public-muted)]">
@@ -200,12 +200,12 @@ export default function AboutPage() {
             id="our-pastors"
             tabIndex={-1}
             aria-labelledby="about-pastors"
-            className="mt-14 scroll-mt-36 border-t border-[#d9d0c3] pt-8 sm:mt-16"
+            className="mt-10 scroll-mt-32 border-t border-[#d9d0c3] pt-8 sm:mt-10"
           >
             <span
               id="our-elders"
               aria-hidden="true"
-              className="block scroll-mt-36"
+              className="block scroll-mt-32"
             />
             <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -241,7 +241,7 @@ export default function AboutPage() {
       </section>
 
       <section className="public-dark bg-[var(--brand-ink)] text-white">
-        <div className="public-container public-section grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
+        <div className="public-container public-section grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
           <div className="min-w-0 max-w-xl">
             <p className="public-eyebrow text-[var(--brand-gold)]!">
               Come as you are

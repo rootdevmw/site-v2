@@ -165,7 +165,7 @@ export async function MessageBrowse({ filters }: { filters: MessageFilters }) {
           </Link>
         </div>
       )}
-      <div className="mt-10 border-t border-[var(--public-line)] pt-8">
+      <div className="mt-8 border-t border-[var(--public-line)] pt-8">
         {result.unavailable ? (
           <div className="max-w-2xl">
             <h2 className="public-display text-3xl">

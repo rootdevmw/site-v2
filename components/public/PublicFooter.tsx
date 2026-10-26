@@ -9,7 +9,7 @@ export function PublicFooter() {
   return (
     <footer className="public-dark bg-[var(--brand-dark)] text-[var(--brand-surface)]">
       <div className="public-container">
-        <div className="flex flex-col items-start justify-between gap-6 border-b border-white/15 py-12 sm:py-16 lg:flex-row lg:items-center">
+        <div className="flex flex-col items-start justify-between gap-6 border-b border-white/15 public-section-tight lg:flex-row lg:items-center">
           <div>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--brand-gold)]">Your next Sunday</p>
             <h2 className="public-display max-w-xl text-3xl leading-tight sm:text-4xl">There is a place for you here.</h2>
@@ -17,7 +17,7 @@ export function PublicFooter() {
           <Link href="/plan-visit" className="public-button public-button-light">Come worship with us <FiArrowRight aria-hidden="true" /></Link>
         </div>
 
-        <div className="grid gap-12 py-12 sm:grid-cols-2 lg:grid-cols-[1.15fr_1fr_0.65fr_1.15fr] lg:gap-10 lg:py-16">
+        <div className="grid gap-8 public-section-tight sm:grid-cols-2 lg:grid-cols-[1.15fr_1fr_0.65fr_1.15fr] lg:gap-8">
           <div>
             <Link href="/" className="inline-flex items-center gap-3" aria-label={church.name + " home"}>
               <Image src="/logos/full-logo.png" alt="" width={64} height={64} className="size-14 rounded-full bg-[var(--brand-surface)] object-cover p-1" />
