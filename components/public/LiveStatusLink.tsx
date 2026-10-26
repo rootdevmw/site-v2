@@ -1,32 +1,18 @@
 "use client";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
 import { FiArrowUpRight } from "react-icons/fi";
-import { getLiveStream } from "@/lib/public-api/streams";
-import { parseBroadcast, isBroadcastLive } from "@/lib/utils/public-library";
+import { readLiveSnapshot, type LiveSnapshot } from "@/lib/public-api/live";
+import { useLiveBroadcast } from "@/lib/hooks/use-live-broadcast";
 type Status = "live" | "offline" | "unavailable";
 export async function readLiveStatus(): Promise<Status> {
-  try {
-    const res = await getLiveStream({ signal: AbortSignal.timeout(3500) });
-    if (res.success === false) throw new Error();
-    return res.data && isBroadcastLive(parseBroadcast(res.data), Date.now())
-      ? "live"
-      : "offline";
-  } catch {
-    return "unavailable";
-  }
+  return (await readLiveSnapshot()).state;
 }
-export function LiveStatusLink({ initialStatus }: { initialStatus: Status }) {
-  const { data } = useQuery({
-    queryKey: ["public-live-status"],
-    queryFn: readLiveStatus,
-    initialData: initialStatus,
-    staleTime: 20000,
-    refetchInterval: 30000,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: true,
-    retry: false,
-  });
+export function LiveStatusLink({
+  initialSnapshot,
+}: {
+  initialSnapshot: LiveSnapshot;
+}) {
+  const { state: data } = useLiveBroadcast(initialSnapshot);
   const live = data === "live";
   return (
     <Link
@@ -39,7 +25,7 @@ export function LiveStatusLink({ initialStatus }: { initialStatus: Status }) {
           ? "Join the current broadcast"
           : data === "unavailable"
             ? "Live status unavailable. View broadcasts and service information."
-            : "No live broadcast. View scheduled and past broadcasts."
+            : "No live broadcast. View live broadcast information."
       }
     >
       <span

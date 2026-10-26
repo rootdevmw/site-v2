@@ -5,13 +5,16 @@ export async function PublicWatchLink() {
   const result = await loadLiveBroadcast();
   return (
     <LiveStatusLink
-      initialStatus={
-        result.state !== "ready"
-          ? "unavailable"
-          : result.data
-            ? "live"
-            : "offline"
-      }
+      initialSnapshot={{
+        state:
+          result.state !== "ready"
+            ? "unavailable"
+            : result.data
+              ? "live"
+              : "offline",
+        broadcast: result.state === "ready" ? result.data : null,
+        checkedAt: result.state === "ready" ? result.checkedAt : 0,
+      }}
     />
   );
 }

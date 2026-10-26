@@ -1,11 +1,11 @@
 import { cache } from "react";
 import { PublicApiError } from "./client";
-import { getLiveStream, getStreamBySlug } from "./streams";
+import { getStreamBySlug } from "./streams";
 import { getPublicPublication } from "./publications";
+import { readLiveSnapshot } from "./live";
 import {
   parseBroadcast,
   parseDocument,
-  isBroadcastLive,
   type PublicBroadcast,
   type PublicDocument,
 } from "@/lib/utils/public-library";
@@ -15,19 +15,14 @@ type Result<T> =
   | { state: "unavailable" };
 export const loadLiveBroadcast = cache(
   async (): Promise<Result<PublicBroadcast | null>> => {
-    try {
-      const res = await getLiveStream({ signal: AbortSignal.timeout(3500) });
-      if (res.success === false) throw new Error();
-      const now = Date.now();
-      const value = res.data ? parseBroadcast(res.data) : null;
-      return {
-        state: "ready",
-        data: value && isBroadcastLive(value, now) ? value : null,
-        checkedAt: now,
-      };
-    } catch {
-      return { state: "unavailable" };
-    }
+    const snapshot = await readLiveSnapshot();
+    return snapshot.state === "unavailable"
+      ? { state: "unavailable" }
+      : {
+          state: "ready",
+          data: snapshot.broadcast,
+          checkedAt: snapshot.checkedAt,
+        };
   },
 );
 export const loadBroadcast = cache(

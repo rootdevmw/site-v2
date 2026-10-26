@@ -20,8 +20,8 @@ test("editorial states use the live flag and actual schedule without inventing l
   assert.equal(getStreamState({ ...stream, startsAt: "2026-10-22T07:00:00Z" }, now).label, "Scheduled");
   assert.equal(getStreamState({ ...stream, startsAt: "2026-10-20T07:00:00Z" }, now).label, "Not live");
   assert.equal(getStreamState({ ...stream, endsAt: "2026-10-21T07:00:00Z" }, now).label, "Ended");
-  assert.equal(getStreamState({ ...stream, isLive: true, endsAt: "2026-10-20T07:00:00Z" }, now).label, "Live now");
-  assert.equal(getStreamState({ ...stream, startsAt: "invalid", endsAt: "invalid" }, now).label, "Not live");
+  assert.equal(getStreamState({ ...stream, isLive: true, endsAt: "2026-10-20T07:00:00Z" }, now).label, "Ended");
+  assert.equal(getStreamState({ ...stream, startsAt: "invalid", endsAt: "invalid" }, now).label, "Unavailable");
 });
 
 test("player previews accept real YouTube video destinations and reject lookalike hosts or arbitrary embeds", () => {

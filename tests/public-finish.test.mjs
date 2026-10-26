@@ -161,7 +161,7 @@ test("actual live state requires the flag and a valid current broadcast window",
     "Past broadcast",
   );
   assert.equal(
-    library.broadcastLabel(stream({ startsAt: "2099-01-01T00:00:00Z" }), now),
+    library.broadcastLabel(stream({ startsAt: "2099-01-01T00:00:00Z", endsAt: "2099-01-01T02:00:00Z" }), now),
     "Scheduled",
   );
 });
@@ -289,10 +289,10 @@ test("navigation renders grey offline/unavailable status and shares the status l
   ]) {
     const { LiveStatusLink } = sourceLoader({
       "next/link": link,
-      "@tanstack/react-query": { useQuery: () => ({ data: status }) },
+      "@/lib/hooks/use-live-broadcast": { useLiveBroadcast: () => ({ state: status, broadcast: null, checkedAt: now }) },
     })("components/public/LiveStatusLink.tsx");
     const html = renderToStaticMarkup(
-      React.createElement(LiveStatusLink, { initialStatus: status }),
+      React.createElement(LiveStatusLink, { initialSnapshot: { state: status, broadcast: null, checkedAt: now } }),
     );
     assert.match(html, expected);
     assert.match(html, status === "live" ? /is-live/ : /is-offline/);
@@ -309,14 +309,14 @@ test("live polling distinguishes service failure from off air and does not infer
     [{ data: null }, "offline"],
     [
       { data: stream({ startsAt: "2000-01-01T00:00:00Z", endsAt: null }) },
-      "live",
+      "offline",
     ],
     [{ data: stream({ isLive: false }) }, "offline"],
     [{ success: false }, "unavailable"],
     [{ data: {} }, "unavailable"],
   ]) {
     const { readLiveStatus } = sourceLoader({
-      "@/lib/public-api/streams": {
+      "./streams": {
         getLiveStream: async (options) => {
           assert.ok(options.signal instanceof AbortSignal);
           return response;
@@ -333,12 +333,12 @@ test("library search and return links retain filters while blocking external and
     period: "past",
   });
   assert.equal(
-    library.libraryHref("/live", filters),
-    "/live?page=3&q=Sunday&period=past",
+    library.libraryHref("/broadcasts", filters),
+    "/broadcasts?page=3&q=Sunday&period=past",
   );
   assert.equal(
-    library.libraryReturnHref("/live", "/live?page=3&q=Sunday&period=past"),
-    "/live?page=3&q=Sunday&period=past",
+    library.libraryReturnHref("/broadcasts", "/broadcasts?page=3&q=Sunday&period=past"),
+    "/broadcasts?page=3&q=Sunday&period=past",
   );
   for (const href of [
     "//evil.test/live",
@@ -346,7 +346,7 @@ test("library search and return links retain filters while blocking external and
     "https://evil.test/live",
     "/live\\evil",
   ])
-    assert.equal(library.libraryReturnHref("/live", href), "/live");
+    assert.equal(library.libraryReturnHref("/broadcasts", href), "/broadcasts");
   assert.equal(
     library.libraryReturnHref(
       "/publications",
@@ -558,7 +558,7 @@ test("journey events redact dynamic records, personal values and query strings a
 });
 test("production sitemap and crawler metadata use the confirmed domain and exclude account and portal pages", () => {
   const entries = load("app/sitemap.ts").default();
-  assert.equal(entries.length, 12);
+  assert.equal(entries.length, 13);
   assert.ok(
     entries.every((item) => item.url.startsWith("https://churchofchrist.mw/")),
   );

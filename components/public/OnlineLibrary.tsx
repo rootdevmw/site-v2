@@ -34,9 +34,10 @@ import { formatChurchDate } from "@/lib/utils/church-date";
 import { ServiceTimes } from "./ServiceTimes";
 import { BroadcastPlayer } from "./BroadcastPlayer";
 import { ShareButton } from "./ShareButton";
+import { LiveBroadcastPanel } from "./LiveBroadcastPanel";
 type Kind = "streams" | "publications";
 const pathFor = (kind: Kind) =>
-  kind === "streams" ? "/live" : "/publications";
+  kind === "streams" ? "/broadcasts" : "/publications";
 function detailHref({
   kind,
   id,
@@ -97,7 +98,7 @@ export function LibraryListing({
           </h1>
           <p className="mt-6 max-w-xl text-base leading-8 text-[var(--public-muted)]">
             {live
-              ? "Join a live broadcast, find a scheduled gathering, or explore earlier broadcasts and messages."
+              ? "Find scheduled gatherings and earlier recordings. Visit Live to join the current broadcast."
               : "Read updates, teaching and encouragement from the life of our church. Open an edition to read or save its document."}
           </p>
         </div>
@@ -111,14 +112,11 @@ export function LibraryListing({
         </aside>
       </header>
       {live && (
-        <section
-          aria-label="Current broadcast"
-          className="public-container pb-8 sm:pb-10"
-        >
-          <Suspense fallback={<LibraryLoading />}>
-            <CurrentBroadcast />
-          </Suspense>
-        </section>
+        <div className="public-container pb-6">
+          <Link href="/live" className="public-button public-button-secondary">
+            Check the live broadcast <FiArrowRight aria-hidden="true" />
+          </Link>
+        </div>
       )}
       <section
         className="public-container public-section-end"
@@ -231,102 +229,22 @@ export function LibraryListing({
 }
 export async function CurrentBroadcast() {
   const result = await loadLiveBroadcast();
-  if (result.state !== "ready")
-    return (
-      <div className="rounded-2xl border border-[var(--public-line)] bg-white p-6">
-        <h2 className="public-display text-3xl">
-          Live status is temporarily unavailable.
-        </h2>
-        <p className="mt-4 text-sm leading-7 text-[var(--public-muted)]">
-          Please try again shortly. You can still browse broadcasts, read a
-          message or use our church channels.
-        </p>
-        <ChannelLinks />
-      </div>
-    );
-  if (!result.data)
-    return (
-      <div className="rounded-2xl border border-[var(--public-line)] bg-[#f0eeeb] p-6 sm:p-9">
-        <p className="flex items-center gap-2 text-sm font-semibold text-[#716b65]">
-          <span
-            aria-hidden="true"
-            className="size-2 rounded-full bg-stone-400"
-          />
-          Off air
-        </p>
-        <h2 className="public-display mt-4 text-3xl leading-tight sm:text-4xl">
-          We are not broadcasting right now.
-        </h2>
-        <p className="mt-5 max-w-2xl text-base leading-8 text-[var(--public-muted)]">
-          Check upcoming broadcasts below, explore earlier broadcasts, or read a
-          message while you wait.
-        </p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link
-            href="/live?period=past"
-            className="public-button public-button-secondary"
-          >
-            Past broadcasts
-            <FiArrowRight aria-hidden="true" />
-          </Link>
-          <Link href="/content" className="public-text-link">
-            Read a message
-            <FiArrowRight aria-hidden="true" />
-          </Link>
-        </div>
-        <ChannelLinks />
-      </div>
-    );
   return (
-    <div>
-      <p className="mb-4 flex items-center gap-2 text-sm font-semibold text-red-800">
-        <span aria-hidden="true" className="size-2 rounded-full bg-red-700" />
-        Live now
-      </p>
-      <h2 className="public-display mb-6 text-3xl leading-tight wrap-anywhere sm:text-4xl">
-        {result.data.title}
-      </h2>
-      <BroadcastPlayer key={result.data.id} stream={result.data} />
-    </div>
+    <LiveBroadcastPanel
+      initialSnapshot={{
+        state:
+          result.state !== "ready"
+            ? "unavailable"
+            : result.data
+              ? "live"
+              : "offline",
+        broadcast: result.state === "ready" ? result.data : null,
+        checkedAt: result.state === "ready" ? result.checkedAt : 0,
+      }}
+    />
   );
 }
-import { church } from "@/config/church";
-function ChannelLinks() {
-  return (
-    <div className="mt-5 flex flex-wrap gap-5">
-      <a
-        href={church.youtubeUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="public-text-link"
-      >
-        Our YouTube channel
-        <FiArrowUpRight aria-hidden="true" />
-        <span className="sr-only"> in a new tab</span>
-      </a>
-      <a
-        href={church.facebookUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="public-text-link"
-      >
-        Our Facebook page
-        <FiArrowUpRight aria-hidden="true" />
-        <span className="sr-only"> in a new tab</span>
-      </a>
-      <a
-        href={church.tiktokUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="public-text-link"
-      >
-        Our TikTok page
-        <FiArrowUpRight aria-hidden="true" />
-        <span className="sr-only"> in a new tab</span>
-      </a>
-    </div>
-  );
-}
+
 export async function LibraryResults({
   kind,
   filters,

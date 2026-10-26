@@ -25,6 +25,7 @@ export function publicPageFamily(path: string) {
       "/programs",
       "/publications",
       "/live",
+      "/broadcasts",
       "/prayer-request",
     ].includes(clean)
   )

@@ -12,6 +12,7 @@ const publicLandingPaths = [
   "/programs",
   "/publications",
   "/live",
+  "/broadcasts",
   "/prayer-request",
 ];
 export default function sitemap(): MetadataRoute.Sitemap {

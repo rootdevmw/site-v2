@@ -467,8 +467,8 @@ test("new live selection waits for confirmation, while missing edit IDs or unusa
   const live = renderEditor({ entries: { ...values, isLive: true }, mutate });
   await live.submit();
   assert.equal(writes, 0);
-  assert.match(live.html, /Save this as the live selection/);
-  assert.match(live.html, /switched off when you save/);
+  assert.match(live.html, /Confirm this broadcast is airing now/);
+  assert.match(live.html, /live selection will be switched off/);
   const missing = renderEditor({ data: { ...initial, id: undefined }, mutate });
   await missing.submit();
   const broken = renderEditor({
@@ -577,9 +577,12 @@ test("shared platform dialog owns one form, explains global changes and blocks o
   assert.deepEqual(busy, [true, false, true, false]);
 });
 
-test("live eligibility gives actionable start/end/link guidance while allowing a future selected service", () => {
-  const now = Date.parse("2099-10-22T06:00Z");
-  assert.equal(helpers.streamLiveSelectionIssue(initial, now), "");
+test("live eligibility rejects future schedules and requires a finite current window", () => {
+  const now = Date.parse("2099-10-22T08:00Z");
+  const current = { ...initial, endsAt: "2099-10-22T10:00Z" };
+  assert.equal(helpers.streamLiveSelectionIssue(current, now), "");
+  assert.match(helpers.streamLiveSelectionIssue({ ...current, startsAt: "2099-10-22T09:00Z" }, now), /Wait until/);
+  assert.match(helpers.streamLiveSelectionIssue({ ...current, endsAt: null }, now), /end time/);
   assert.match(
     helpers.streamLiveSelectionIssue({ ...initial, startsAt: null }, now),
     /start time/,
@@ -592,7 +595,7 @@ test("live eligibility gives actionable start/end/link guidance while allowing a
     /end time/,
   );
   assert.match(
-    helpers.streamLiveSelectionIssue({ ...initial, platforms: [] }, now),
+    helpers.streamLiveSelectionIssue({ ...initial, endsAt: "2099-10-22T10:00Z", platforms: [] }, now),
     /watch link/,
   );
 });

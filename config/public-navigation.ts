@@ -41,6 +41,7 @@ export const publicNavigation: readonly PublicNavigationItem[] = [
     href: "/content",
     children: [
       { label: "Messages & articles", href: "/content" },
+      { label: "Broadcast library", href: "/broadcasts" },
       { label: "Publications", href: "/publications" },
     ],
   },

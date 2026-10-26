@@ -323,7 +323,8 @@ export function StreamForm({
               {(["startsAt", "endsAt"] as const).map((key) => (
                 <div key={key} className="member-form-field">
                   <label htmlFor={"stream-" + key}>
-                    {key === "startsAt" ? "Starts" : "Ends"} (optional)
+                    {key === "startsAt" ? "Starts" : "Ends"}{" "}
+                    {isLive ? "(required while live)" : "(optional)"}
                   </label>
                   <input
                     id={"stream-" + key}
@@ -342,8 +343,8 @@ export function StreamForm({
                     className="member-form-help"
                   >
                     {key === "startsAt"
-                      ? "Malawi time (CAT, UTC+2). Required for Watch online selection."
-                      : "Malawi time. Leave blank when the end time is unknown. Clearing removes the saved end time."}
+                      ? "Malawi time (CAT, UTC+2). The start time must have arrived before going live."
+                      : "Malawi time. Required while live: the website stops showing this broadcast at this time."}
                   </p>
                   {errors[key] && (
                     <p
@@ -561,8 +562,8 @@ export function StreamForm({
           </div>
         </RecordSection>
         <RecordSection
-          title="Watch online selection"
-          description="Select the church's featured live broadcast deliberately."
+          title="Live broadcast status"
+          description="Confirm that the broadcast is airing before making it live here."
         >
           <div className="member-form-choices">
             <label htmlFor="stream-isLive">
@@ -573,12 +574,12 @@ export function StreamForm({
                 disabled={disabled}
                 aria-describedby="stream-live-help"
               />
-              Select this stream as the live broadcast
+              This broadcast is airing now
             </label>
           </div>
           <p id="stream-live-help" className="member-form-help mt-3">
             {isLive
-              ? "Saving this selection switches off any other selected live stream immediately. Watch online uses the start/end window, so a future start is not shown there yet. An end time that has passed cannot be selected live."
+              ? "Confirm the provider is already broadcasting. Saving switches off any other live selection. A current start time and future end time are required; the live indicator expires automatically."
               : "This stream stays available at its public address, without replacing the selected live broadcast."}{" "}
             This setting does not start or stop a broadcast on YouTube or
             another service.
@@ -638,8 +639,8 @@ export function StreamForm({
         onClose={() => {
           if (!submitting.current) setLiveIntent(null);
         }}
-        title="Save this as the live selection?"
-        description="Any other selected live stream will be switched off when you save. A future start time delays its appearance on Watch online. This does not start a broadcast on an external service."
+        title="Confirm this broadcast is airing now?"
+        description="Confirm the provider is already airing this broadcast. Any other live selection will be switched off, and this selection expires at the end time. This does not start a broadcast on the provider."
       >
         <div className="member-form-actions">
           <button
@@ -661,7 +662,7 @@ export function StreamForm({
             {busy ? (
               <InlineLoader message="Saving live selection..." />
             ) : (
-              "Save and select live"
+              "Confirm and go live"
             )}
           </button>
         </div>

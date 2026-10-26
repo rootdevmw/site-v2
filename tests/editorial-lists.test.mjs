@@ -135,8 +135,8 @@ test("publication cards distinguish drafts, published dates and missing or unusa
 
 test("stream cards distinguish selected live, scheduled, ended and unscheduled records without autoplay", () => {
   const { EditorialList } = load("components/directories/EditorialList.tsx");
-  const html = renderToStaticMarkup(React.createElement(EditorialList, { kind: "streams", records: [streamListEntry(stream), streamListEntry({ ...stream, id: "24", isLive: true }), streamListEntry({ ...stream, id: "25", startsAt: null, endsAt: "2026-10-20T07:00:00Z" }), streamListEntry({ ...stream, id: "26", startsAt: null, platforms: [] })], now, onDelete: async () => {} }));
-  for (const message of ["Selected live", "Scheduled", "Ended", "Not scheduled", "No end time recorded", "No platforms connected"]) assert.match(html, new RegExp(message));
+  const html = renderToStaticMarkup(React.createElement(EditorialList, { kind: "streams", records: [streamListEntry(stream), streamListEntry({ ...stream, id: "24", isLive: true, startsAt: "2026-10-20T07:00:00Z", endsAt: "2026-10-22T10:00:00Z" }), streamListEntry({ ...stream, id: "25", startsAt: null, endsAt: "2026-10-20T07:00:00Z" }), streamListEntry({ ...stream, id: "26", startsAt: null, platforms: [] })], now, onDelete: async () => {} }));
+  for (const message of ["Live now", "Scheduled", "Ended", "Not scheduled", "No end time recorded", "No platforms connected"]) assert.match(html, new RegExp(message));
   assert.match(html, /href="https:\/\/video.example\/church"/);
   assert.match(html, /does not stop the broadcast on its platform/);
   assert.doesNotMatch(html, /1970|<iframe|autoplay/);

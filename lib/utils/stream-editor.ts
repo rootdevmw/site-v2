@@ -85,6 +85,19 @@ export const streamEditorSchema = z
         message:
           "Set a start time before selecting this stream for Watch online.",
       });
+    if (value.isLive && start && Date.parse(start) > Date.now())
+      context.addIssue({
+        code: "custom",
+        path: ["startsAt"],
+        message: "Wait until the start time before going live.",
+      });
+    if (value.isLive && (!end || Date.parse(end) <= Date.now()))
+      context.addIssue({
+        code: "custom",
+        path: ["endsAt"],
+        message:
+          "Set a future end time so the live broadcast expires automatically.",
+      });
     if (value.isLive && !value.platformIds.length)
       context.addIssue({
         code: "custom",
@@ -138,7 +151,14 @@ export function streamLiveSelectionIssue(
 ) {
   if (!stream.startsAt || !Number.isFinite(Date.parse(stream.startsAt)))
     return "Add a start time in Edit stream before selecting this broadcast.";
-  if (stream.endsAt && Date.parse(stream.endsAt) <= now)
+  if (Date.parse(stream.startsAt) > now)
+    return "Wait until the scheduled start time before going live.";
+  if (
+    !stream.endsAt ||
+    !Number.isFinite(Date.parse(stream.endsAt)) ||
+    Date.parse(stream.endsAt) <= now ||
+    Date.parse(stream.endsAt) <= Date.parse(stream.startsAt)
+  )
     return "Update the end time in Edit stream before selecting this broadcast.";
   if (!stream.platforms.some((platform) => streamPlatformUrl(platform.url)))
     return "Add an available platform watch link before selecting this broadcast.";

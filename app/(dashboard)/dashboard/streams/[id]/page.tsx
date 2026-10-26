@@ -19,7 +19,7 @@ export default function StreamDetailsPage() {
   const user = useAuthStore((state) => state.user);
   const permitted = hasRequiredRole(user?.roles ?? [], ["MEDIA"]);
   const query = useStream(id, permitted);
-  const mutation = useSetLiveStream();
+  const mutation = useSetLiveStream(query.data?.data?.isLive ? "end" : "start");
 
   if (!permitted)
     return (
@@ -60,26 +60,37 @@ export default function StreamDetailsPage() {
     <StreamRecordView
       stream={stream}
       broadcastAction={
-        !stream.isLive &&
-        (!selectionIssue ? (
+        stream.isLive || !selectionIssue ? (
           <RecordActionDialog
             actionKey={stream.id + ":" + stream.isLive}
-            label="Set live"
-            title="Make this the live broadcast?"
-            description={
-              "“" +
-              stream.title +
-              "” will become the church’s live broadcast. Any other stream currently marked live will be switched off. A future start delays its appearance on Watch online. This does not start a broadcast on YouTube or another platform."
+            label={stream.isLive ? "End broadcast" : "Go live"}
+            title={
+              stream.isLive
+                ? "End this live broadcast?"
+                : "Is this broadcast airing now?"
             }
-            confirmLabel="Set as live broadcast"
-            pendingLabel="Setting live…"
-            successMessage="This stream is now the live broadcast."
+            description={
+              stream.isLive
+                ? "Remove the live indicator and player from the church website. The recording will stay available in the library. Stop the broadcast on its provider separately."
+                : "“" +
+                  stream.title +
+                  "” will become the church’s live broadcast until its end time. Confirm it is already airing on the provider. Any other live selection will be switched off. This action does not start the provider’s broadcast."
+            }
+            confirmLabel={
+              stream.isLive ? "End broadcast" : "Confirm and go live"
+            }
+            pendingLabel={stream.isLive ? "Ending broadcast…" : "Going live…"}
+            successMessage={
+              stream.isLive
+                ? "The live broadcast has ended on the church website."
+                : "This stream is now the live broadcast."
+            }
             onConfirm={() => mutation.mutateAsync(stream.id)}
             busy={mutation.isPending || query.isFetching}
           />
         ) : (
           <p className="record-empty">{selectionIssue}</p>
-        ))
+        )
       }
     />
   );

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { getWebUrl, getYouTubePreview } from "./editorial-records";
 import { getPaginationHref } from "./pagination";
 import { readGroupFilters, type GroupSearchParams } from "./public-groups";
+import { broadcastState } from "./broadcast-state";
 const id = z
   .union([z.string().trim().min(1), z.number().int().nonnegative()])
   .transform(String);
@@ -94,18 +95,18 @@ export function readLibraryFilters(params: GroupSearchParams): LibraryFilters {
   };
 }
 export function libraryHref(
-  path: "/live" | "/publications",
+  path: "/broadcasts" | "/live" | "/publications",
   filters: LibraryFilters,
   updates: Partial<LibraryFilters> = {},
 ) {
   const next = { ...filters, ...updates };
-  return getPaginationHref(path, next.page, {
+  return getPaginationHref(path === "/live" ? "/broadcasts" : path, next.page, {
     q: next.q,
-    period: path === "/live" && next.period === "past" ? "past" : "",
+    period: path !== "/publications" && next.period === "past" ? "past" : "",
   });
 }
 export function libraryReturnHref(
-  path: "/live" | "/publications",
+  path: "/broadcasts" | "/publications",
   value: unknown,
 ) {
   if (
@@ -116,7 +117,11 @@ export function libraryReturnHref(
     return path;
   try {
     const url = new URL(value, "https://church.invalid");
-    if (url.origin !== "https://church.invalid" || url.pathname !== path)
+    if (
+      url.origin !== "https://church.invalid" ||
+      (url.pathname !== path &&
+        !(path === "/broadcasts" && url.pathname === "/live"))
+    )
       return path;
     const params: GroupSearchParams = {};
     for (const key of ["page", "q", "period"])
@@ -131,21 +136,20 @@ export function isBroadcastLive(
   value: Pick<PublicBroadcast, "isLive" | "startsAt" | "endsAt">,
   now: number,
 ) {
-  return (
-    value.isLive &&
-    (!value.startsAt || Date.parse(value.startsAt) <= now) &&
-    (!value.endsAt || Date.parse(value.endsAt) > now)
-  );
+  return broadcastState(value, now) === "live";
 }
 export function broadcastLabel(value: PublicBroadcast, now: number) {
-  return isBroadcastLive(value, now)
-    ? "Live now"
-    : value.startsAt && Date.parse(value.startsAt) > now
-      ? "Scheduled"
-      : (value.endsAt && Date.parse(value.endsAt) <= now) ||
-          (value.startsAt && Date.parse(value.startsAt) <= now)
-        ? "Past broadcast"
-        : "Not live";
+  const state = broadcastState(value, now);
+  return state === "unavailable"
+    ? "Unavailable"
+    : state === "live"
+      ? "Live now"
+      : value.startsAt && Date.parse(value.startsAt) > now
+        ? "Scheduled"
+        : (value.endsAt && Date.parse(value.endsAt) <= now) ||
+            (value.startsAt && Date.parse(value.startsAt) <= now)
+          ? "Past broadcast"
+          : "Not live";
 }
 export function broadcastLinks(value: PublicBroadcast) {
   return value.platforms.flatMap((platform) => {

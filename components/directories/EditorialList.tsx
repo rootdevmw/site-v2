@@ -23,7 +23,7 @@ export function EditorialList({ kind, records, now, onDelete, busy = false, auth
   return <ul className="directory-list editorial-list" aria-label={editorialInfo[kind].title + " results"}>{records.map((entry) => {
     const href = "/dashboard/" + kind + "/" + encodeURIComponent(entry.id);
     const label = entry.title + " · " + editorialInfo[kind].singular + " #" + entry.id;
-    const state = kind === "streams" ? entry.isLive ? { label: "Selected live", tone: "positive" as const } : getStreamState({ isLive: false, startsAt: entry.startsAt, endsAt: entry.endsAt }, now.getTime()) : getContentState(entry.status || "");
+    const state = kind === "streams" ? getStreamState({ isLive: entry.isLive ?? false, startsAt: entry.startsAt, endsAt: entry.endsAt }, now.getTime()) : getContentState(entry.status || "");
     const reviewPublish = kind !== "streams" && entry.status === "Draft" && (kind === "content" || !!entry.file?.href);
     return <li key={entry.id} className="directory-row">
       <div className="directory-identity"><span className="directory-initials" aria-hidden="true"><Icon className="size-5" /></span><div className="min-w-0"><h2><Link href={href} aria-label={label}>{entry.title}</Link></h2><p className="directory-caption">{editorialInfo[kind].singular[0].toUpperCase() + editorialInfo[kind].singular.slice(1)} #{entry.id}</p><div className="mt-2"><RecordStatus tone={state.tone}>{state.label}</RecordStatus></div></div></div>
