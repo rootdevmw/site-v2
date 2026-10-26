@@ -38,8 +38,8 @@
   padding-block: clamp(3.5rem, 7vw, 6.5rem);
 }
 .public-top-bar {
-  border-color: var(--brand-gold-border);
-  background: var(--public-gold);
+  border-color: var(--brand-border);
+  background: var(--public-orange);
   color: var(--public-ink);
 }
 .public-eyebrow {

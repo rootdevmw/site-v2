@@ -2,6 +2,8 @@ import type { Member } from "@/app/modules/members/types/member.types";
 import type { Ministry } from "@/app/modules/ministries/types/ministry.types";
 import type { Homecell } from "@/app/modules/homecells/types/homecell.types";
 import { normalizeGroupMembers, type GroupMemberPayload } from "./group-members";
+import { memberPrefixes, normalizeMemberPrefix } from "./member-titles";
+export { memberPrefixes } from "./member-titles";
 
 export type DirectoryKind = "members" | "ministries" | "homecells";
 export const directoryInfo = {
@@ -10,18 +12,18 @@ export const directoryInfo = {
   homecells: { title: "Homecells", singular: "homecell", description: "Local communities, their meeting locations, and the people who lead them.", searchLabel: "Name or location" },
 } as const;
 export const memberStatuses = ["MEMBER", "VISITOR"];
-export const memberPrefixes = ["PASTOR", "ELDER", "DEACON", "SISTER", "BROTHER"];
 export type DirectoryFilters = { page: number; search: string; status: string; prefix: string; leaderId: string; overseerId: string };
 export const DIRECTORY_LIMIT = 10;
 
 export function readDirectoryFilters(kind: DirectoryKind, params: Pick<URLSearchParams, "get">): DirectoryFilters {
   const page = Number(params.get("page"));
+  const prefix = normalizeMemberPrefix(params.get("prefix") ?? "");
   const id = (key: string) => /^\d+$/.test(params.get(key) ?? "") ? params.get(key)! : "";
   return {
     page: Number.isSafeInteger(page) && page > 0 ? page : 1,
     search: params.get("search")?.trim() ?? "",
     status: kind === "members" && memberStatuses.includes(params.get("status") ?? "") ? params.get("status")! : "",
-    prefix: kind === "members" && memberPrefixes.includes(params.get("prefix") ?? "") ? params.get("prefix")! : "",
+    prefix: kind === "members" && memberPrefixes.some((value) => value === prefix) ? prefix : "",
     leaderId: kind === "ministries" ? id("leaderId") : "",
     overseerId: kind === "ministries" ? id("overseerId") : "",
   };
@@ -51,7 +53,7 @@ export type DirectoryPage = { data: DirectoryEntry[]; total: number; limit: numb
 export type DirectoryHomecell = Homecell & { members?: GroupMemberPayload; deletedAt?: string | null };
 
 export function memberDirectoryEntry(member: Member): DirectoryEntry {
-  return { id: member.id, name: [member.firstName, member.lastName].filter(Boolean).join(" ") || "Unnamed person", phone: member.phone, status: member.status, prefix: member.prefix, location: member.location };
+  return { id: member.id, name: [member.firstName, member.lastName].filter(Boolean).join(" ") || "Unnamed person", phone: member.phone, status: member.status, prefix: member.prefix ? normalizeMemberPrefix(member.prefix) : member.prefix, location: member.location };
 }
 
 export function groupDirectoryEntry(group: Ministry | DirectoryHomecell): DirectoryEntry {

@@ -5,7 +5,6 @@ export const aboutSections = [
   { label: "Our worship", href: "/about#our-worship" },
   { label: "Church leadership", href: "/about#church-leadership" },
   { label: "Our pastors", href: "/about#our-pastors" },
-  { label: "Our elders", href: "/about#our-elders" },
 ] as const;
 
 type PublicNavigationItem = {
@@ -18,7 +17,7 @@ export const publicNavigation: readonly PublicNavigationItem[] = [
   {
     label: "About us",
     href: "/about",
-    children: [{ label: "About our church", href: "/about" }, ...aboutSections],
+    children: [{ label: "Our church", href: "/about" }, ...aboutSections],
   },
   {
     label: "Visit",

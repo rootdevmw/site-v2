@@ -50,7 +50,7 @@ const renderProfiles = async (data, extra = {}) => {
       getPublicPastors: async () => ({ data, ...extra }),
     },
   })("components/public/LeadershipProfiles.tsx");
-  return renderToStaticMarkup(await LeadershipProfiles({ role: "Pastor" }));
+  return renderToStaticMarkup(await LeadershipProfiles());
 };
 
 test("public profile projection trims names, skips unusable duplicates and excludes member administration fields", () => {
@@ -145,7 +145,7 @@ test("public member transports preserve cancellation options for each leadership
   );
 });
 
-test("a failed pastor feed leaves the elder profiles and contact path available without disclosing request errors", async () => {
+test("a failed shared leadership feed offers contact without disclosing request errors", async () => {
   const { LeadershipProfiles } = sourceLoader({
     ...presentation,
     "@/lib/public-api/members": {
@@ -153,24 +153,16 @@ test("a failed pastor feed leaves the elder profiles and contact path available 
         assert.ok(signal instanceof AbortSignal);
         throw new Error("PRIVATE_ERROR");
       },
-      getPublicElders: async ({ signal }) => {
-        assert.ok(signal instanceof AbortSignal);
-        return { data: [member] };
-      },
     },
   })("components/public/LeadershipProfiles.tsx");
-  const [pastors, elders] = await Promise.all([
-    LeadershipProfiles({ role: "Pastor" }),
-    LeadershipProfiles({ role: "Elder" }),
-  ]);
-  const failed = renderToStaticMarkup(pastors),
-    populated = renderToStaticMarkup(elders);
+  const failed = renderToStaticMarkup(await LeadershipProfiles());
   assert.match(failed, /temporarily unavailable/);
   assert.match(failed, /href="\/contact"/);
+  assert.doesNotMatch(failed, /PRIVATE_/);
+  const populated = await renderProfiles([member]);
   assert.match(populated, /<ul/);
   assert.match(populated, /<h4[^>]*>Test Person<\/h4>/);
   assert.match(populated, /A published biography/);
-  assert.doesNotMatch(failed + populated, /PRIVATE_/);
 });
 
 test("unpublished leadership and malformed or unsuccessful responses have distinct useful fallbacks", async () => {
@@ -219,18 +211,14 @@ test("a missing or failed portrait shows initials and a new photo source can rec
 });
 
 test("About streams its essential welcome and beliefs before stalled profiles resolve", async () => {
-  let releasePastors, rejectElders;
+  let releasePastors;
   const pendingPastors = new Promise((resolve) => {
     releasePastors = resolve;
-  });
-  const pendingElders = new Promise((resolve, reject) => {
-    rejectElders = reject;
   });
   const Page = sourceLoader({
     ...presentation,
     "@/lib/public-api/members": {
       getPublicPastors: () => pendingPastors,
-      getPublicElders: () => pendingElders,
     },
   })("app/(public)/about/page.tsx").default;
   let html = "",
@@ -262,11 +250,10 @@ test("About streams its essential welcome and beliefs before stalled profiles re
     assert.doesNotMatch(html, /&amp;apos;|<main[ >]|PRIVATE_/);
   } finally {
     releasePastors({ data: [member] });
-    rejectElders(new Error("PRIVATE_BACKEND_ERROR"));
     await completed;
   }
   assert.match(html, /Test Person/);
-  assert.match(html, /Elder profiles are temporarily unavailable/);
+  assert.doesNotMatch(html, /Our elders|Elder profiles/);
   assert.doesNotMatch(html, /PRIVATE_/);
 });
 
@@ -282,6 +269,7 @@ test("Contact exposes direct church channels, directions, prayer and invitation-
     church.mapsUrl.replaceAll("&", "&amp;"),
     church.facebookUrl,
     church.youtubeUrl,
+    church.tiktokUrl,
     "/plan-visit",
     "/prayer-request",
     "/ministries",

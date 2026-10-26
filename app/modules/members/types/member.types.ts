@@ -1,11 +1,12 @@
 import { z } from "zod";
+import { memberPrefixes } from "@/lib/utils/member-titles";
 
 export const memberSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(191),
   lastName: z.string().trim().min(1, "Last name is required").max(191),
   phone: z.string().trim().max(191).optional(),
   status: z.enum(["VISITOR", "MEMBER"]),
-  prefix: z.enum(["PASTOR", "ELDER", "DEACON", "SISTER", "BROTHER"]),
+  prefix: z.enum(memberPrefixes),
   isBaptized: z.boolean().optional(),
   location: z.string().trim().max(191).optional(),
   homecellId: z.string().optional(),

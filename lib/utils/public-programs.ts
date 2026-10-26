@@ -191,7 +191,7 @@ export function publicProgramPerson(item: PublicProgram["items"][number]) {
     .join(" ");
   const prefixes: Record<string, string> = {
     PASTOR: "Pastor",
-    ELDER: "Elder",
+    ELDER: "Pastor",
     DEACON: "Deacon",
     BROTHER: "Brother",
     SISTER: "Sister",

@@ -11,6 +11,7 @@ export const church = {
   email: "churchofchristatredcross@gmail.com",
   facebookUrl: "https://www.facebook.com/share/18ioYhR8RB/",
   youtubeUrl: "https://www.youtube.com/@churchofchristatredcross",
+  tiktokUrl: "https://www.tiktok.com/@redcrosscoc",
 } as const;
 
 export const sundayServices = [

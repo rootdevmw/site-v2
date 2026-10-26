@@ -15,8 +15,10 @@ const group = { id: "4", name: "Community & Care", purpose: "Serve <everyone>", 
 test("directory URL filters validate values and preserve applied filters across paging and exports", () => {
   const member = filters("members", "search=Test+%26+Person&status=MEMBER&prefix=ELDER&page=4&leaderId=123&limit=999");
   assert.equal(member.leaderId, "");
-  assert.equal(directoryHref("members", member), "/dashboard/members?search=Test+%26+Person&status=MEMBER&prefix=ELDER&page=4");
-  assert.equal(directoryParams("members", member, false).toString(), "search=Test+%26+Person&status=MEMBER&prefix=ELDER");
+  assert.equal(directoryHref("members", member), "/dashboard/members?search=Test+%26+Person&status=MEMBER&prefix=PASTOR&page=4");
+  assert.equal(directoryParams("members", member, false).toString(), "search=Test+%26+Person&status=MEMBER&prefix=PASTOR");
+  assert.deepEqual(helpers.memberPrefixes, ["PASTOR", "DEACON", "SISTER", "BROTHER"]);
+  assert.equal(memberDirectoryEntry(person).prefix, "PASTOR");
   assert.deepEqual(filters("members", directoryParams("members", member).toString()), member);
   for (const page of ["-1", "0", "1.5", "Infinity", "9007199254740992", "abc"]) assert.equal(filters("members", "page=" + page).page, 1);
   const bad = filters("ministries", "leaderId=javascript:alert(1)&overseerId=9%2Fedit&status=MEMBER");
@@ -65,7 +67,7 @@ test("server-paginated directories retain endpoint, filter, cancellation, timeou
   const actual = sourceLoader({ "@/lib/api/client": { api } })("lib/api/directory-records.ts");
   const signal = new AbortController().signal;
   const member = await actual.getDirectoryPage("members", filters("members", "search=Person&status=MEMBER&prefix=ELDER&page=2"), signal);
-  assert.deepEqual(calls[0], ["/members", { params: { search: "Person", status: "MEMBER", prefix: "ELDER", page: 2, limit: 10 }, signal, timeout: 15000, silent: true }]);
+  assert.deepEqual(calls[0], ["/members", { params: { search: "Person", status: "MEMBER", prefix: "PASTOR", page: 2, limit: 10 }, signal, timeout: 15000, silent: true }]);
   assert.equal(member.total, 41);
   assert.equal(member.data[0].name, "Test Person");
   await actual.getDirectoryPage("ministries", filters("ministries", "leaderId=123&overseerId=456&page=4"), signal);
@@ -97,7 +99,7 @@ test("member export sends only applied filters and deletion uses bounded authent
   } } })("lib/api/directory-records.ts");
   const signal = new AbortController().signal;
   assert.equal(await actual.exportMemberDirectory(filters("members", "search=Person&prefix=ELDER&status=MEMBER&page=8"), signal), blob);
-  assert.deepEqual(calls[0], ["get", "/members/export/xlsx", { params: { search: "Person", status: "MEMBER", prefix: "ELDER" }, responseType: "blob", signal, timeout: 30000, silent: true }]);
+  assert.deepEqual(calls[0], ["get", "/members/export/xlsx", { params: { search: "Person", status: "MEMBER", prefix: "PASTOR" }, responseType: "blob", signal, timeout: 30000, silent: true }]);
   await actual.deleteDirectoryRecord("ministries", "4/5");
   assert.deepEqual(calls[1], ["delete", "/ministries/4%2F5", { timeout: 30000, silent: true }]);
 });

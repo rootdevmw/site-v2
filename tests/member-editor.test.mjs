@@ -7,6 +7,20 @@ import { sourceLoader } from "./helpers/load-source.mjs";
 const helpers = sourceLoader()("lib/utils/member-editor.ts");
 const values = { firstName: "A", lastName: "Person", prefix: "BROTHER", status: "MEMBER", phone: "", location: "Area", isBaptized: true, baptismDate: "2026-10-21", homecellId: "2", ministryIds: ["3"], bio: "<p>A story</p>", imageUrl: "/uploads/photo.webp" };
 
+test("Pastor is the single selectable title and historical Elder imports become Pastor", () => {
+  const { memberSchema } = sourceLoader()("app/modules/members/types/member.types.ts");
+  assert.equal(memberSchema.safeParse({ ...values, prefix: "PASTOR" }).success, true);
+  assert.equal(memberSchema.safeParse({ ...values, prefix: "ELDER" }).success, false);
+  const { parseCsv } = sourceLoader({
+    "next/navigation": {}, "../hooks/useBulkCreateMembers": {},
+  })("app/modules/members/components/CsvMemberImport.tsx");
+  const [legacy, current] = parseCsv("firstName,lastName,phone,status,prefix,location\nA,Person,123,MEMBER,ELDER,Area\nB,Person,123,MEMBER,PASTOR,Area");
+  assert.equal(legacy.prefix, "PASTOR");
+  assert.equal(current.prefix, "PASTOR");
+  assert.deepEqual(legacy.issues, []);
+  assert.deepEqual(current.issues, []);
+});
+
 test("editor defaults merge empty initial data, retain biography/assignments and normalize baptism dates to the Malawi day", () => {
   const defaults = helpers.memberEditorDefaults({});
   assert.deepEqual(defaults.ministryIds, []);

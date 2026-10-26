@@ -24,6 +24,7 @@ test("member detail payloads preserve biography, baptism, and real ministry iden
   assert.equal(payload.bio.bio, "<p>A recorded biography.</p>");
   assert.deepEqual(normalizeMemberDetails({ ...payload, bio: null, baptized: false, ministries: null }).ministries, []);
   assert.equal(normalizeMemberDetails({ ...payload, baptized: false }).isBaptized, false);
+  assert.equal(normalizeMemberDetails({ ...payload, prefix: "ELDER" }).prefix, "PASTOR");
 });
 
 test("private detail reads use individual endpoints and normalize nested event relationships", async () => {

@@ -32,10 +32,11 @@ export function AccountShell({
           <aside className="account-welcome" aria-label="Church welcome">
             <Link href="/" className="account-brand">
               <Image
-                src="/images/church-logo.webp"
+                src="/logos/full-logo.png"
                 width={64}
                 height={64}
                 alt=""
+                className="object-cover"
               />
               <span>
                 Church of Christ<span>at Red Cross</span>

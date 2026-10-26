@@ -66,11 +66,11 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
           className="flex shrink-0 items-center gap-3"
         >
           <Image
-            src="/images/church-logo.webp"
+            src="/logos/full-logo.png"
             alt=""
             width={52}
             height={52}
-            className="size-11 object-contain sm:size-13"
+            className="size-11 object-cover sm:size-13"
           />
           <span className="hidden min-[400px]:block">
             <span className="block text-sm font-bold tracking-tight sm:text-base">

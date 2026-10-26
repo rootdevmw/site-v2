@@ -13,7 +13,7 @@ export function LeadershipProfileCard({
   featured = false,
 }: {
   person: PublicLeader;
-  role: "Pastor" | "Elder";
+  role: "Pastor";
   featured?: boolean;
 }) {
   const [open, setOpen] = useState(false);

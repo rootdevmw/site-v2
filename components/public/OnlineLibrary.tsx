@@ -314,6 +314,16 @@ function ChannelLinks() {
         <FiArrowUpRight aria-hidden="true" />
         <span className="sr-only"> in a new tab</span>
       </a>
+      <a
+        href={church.tiktokUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="public-text-link"
+      >
+        Our TikTok page
+        <FiArrowUpRight aria-hidden="true" />
+        <span className="sr-only"> in a new tab</span>
+      </a>
     </div>
   );
 }

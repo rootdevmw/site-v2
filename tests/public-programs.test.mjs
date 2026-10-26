@@ -230,6 +230,10 @@ test("program dates keep the Malawi calendar day and clock/descriptive times and
     "Brother Test Person",
   );
   assert.equal(
+    helpers.publicProgramPerson({ ...parsed.items[0], responsible: { ...parsed.items[0].responsible, prefix: "ELDER" } }),
+    "Pastor Test Person",
+  );
+  assert.equal(
     helpers.publicProgramPerson({ ...parsed.items[0], responsible: null }),
     "",
   );

@@ -4,16 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useBulkCreateMembers } from "../hooks/useBulkCreateMembers";
 import { MemberFormValues } from "../types/member.types";
+import { memberPrefixes, normalizeMemberPrefix } from "@/lib/utils/member-titles";
 
 const VALID_STATUSES = ["VISITOR", "MEMBER"] as const;
 type ValidStatus = (typeof VALID_STATUSES)[number];
-const VALID_PREFIXES = [
-  "PASTOR",
-  "ELDER",
-  "DEACON",
-  "SISTER",
-  "BROTHER",
-] as const;
+const VALID_PREFIXES = memberPrefixes;
 type ValidPrefix = (typeof VALID_PREFIXES)[number];
 
 type ParsedRow = {
@@ -46,7 +41,7 @@ function splitCsvLine(line: string): string[] {
   return cols;
 }
 
-function parseCsv(text: string): ParsedRow[] {
+export function parseCsv(text: string): ParsedRow[] {
   const lines = text
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, "\n")
@@ -73,7 +68,7 @@ function parseCsv(text: string): ParsedRow[] {
     const lastName = cols[1] || "";
     const phone = cols[2] || "";
     const status = cols[3] || "";
-    const prefix = cols[4] || "";
+    const prefix = normalizeMemberPrefix(cols[4] || "");
     const location = cols[5] || "";
 
     const issues: string[] = [];
@@ -84,7 +79,7 @@ function parseCsv(text: string): ParsedRow[] {
       issues.push(`Status must be VISITOR or MEMBER`);
     }
     if (!VALID_PREFIXES.includes(prefix as ValidPrefix)) {
-      issues.push(`Prefix must be PASTOR, ELDER, DEACON, SISTER, or BROTHER`);
+      issues.push(`Prefix must be PASTOR, DEACON, SISTER, or BROTHER`);
     }
 
     return { firstName, lastName, phone, status, prefix, location, issues };
@@ -152,9 +147,9 @@ export function CsvMemberImport({ onBusyChange }: { onBusyChange?: (busy: boolea
           firstName, lastName, phone, status, prefix, location
         </p>
         <p className="text-xs">
-          Required: firstName, lastName, phone, status (VISITOR / MEMBER /
-          BAPTIZED). Prefix and Location are optional. First row may be a
-          header.
+          Required: firstName, lastName, phone, status (VISITOR / MEMBER), and
+          prefix (PASTOR / DEACON / SISTER / BROTHER). Location is optional.
+          First row may be a header. Existing Elder titles are imported as Pastor.
         </p>
       </div>
 

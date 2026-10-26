@@ -255,7 +255,7 @@ export default function ContactPage() {
               Stay connected through the week.
             </h2>
             <p className="mt-4 text-sm leading-7 text-stone-300">
-              Follow the church on Facebook and YouTube, or find our latest
+              Follow the church on Facebook, YouTube and TikTok, or find our latest
               messages here on the website.
             </p>
           </div>
@@ -271,6 +271,12 @@ export default function ContactPage() {
               className="public-text-link text-[var(--brand-gold)]"
             >
               YouTube <FiArrowUpRight aria-hidden="true" />
+            </a>
+            <a
+              href={church.tiktokUrl}
+              className="public-text-link text-[var(--brand-gold)]"
+            >
+              TikTok <FiArrowUpRight aria-hidden="true" />
             </a>
             <Link href="/content" className="public-text-link text-[var(--brand-gold)]">
               Latest messages <FiArrowRight aria-hidden="true" />

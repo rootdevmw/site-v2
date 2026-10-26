@@ -179,12 +179,12 @@ export default function AboutPage() {
           </div>
           <div className="mt-9 grid gap-8 lg:grid-cols-2 lg:gap-16">
             <div className="min-w-0 border-t border-[#d9d0c3] pt-6">
-              <h3 className="text-lg font-semibold">Elders</h3>
+              <h3 className="text-lg font-semibold">Pastors (elders)</h3>
               <p className="mt-3 max-w-xl text-sm leading-7 text-[var(--public-muted)]">
-                Elders provide spiritual oversight, prayerful guidance, and
-                pastoral care for the congregation. The church continues to
-                recognize and appoint elders in line with the pattern of the New
-                Testament church.
+                Pastors, also called elders, provide spiritual oversight,
+                prayerful guidance, and pastoral care for the congregation. The
+                church continues to recognize and appoint them in line with the
+                pattern of the New Testament church.
               </p>
             </div>
             <div className="min-w-0 border-t border-[#d9d0c3] pt-6">
@@ -196,53 +196,56 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-          {(["Pastor", "Elder"] as const).map((role) => (
-            <section
-              key={role}
-              id={`our-${role.toLowerCase()}s`}
-              tabIndex={-1}
-              aria-labelledby={`about-${role.toLowerCase()}s`}
-              className="mt-14 scroll-mt-36 border-t border-[#d9d0c3] pt-8 sm:mt-16"
-            >
-              <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
-                <div>
-                  <p className="public-eyebrow mb-3">
-                    People, faith &amp; service
-                  </p>
-                  <h3
-                    id={`about-${role.toLowerCase()}s`}
-                    className="public-display text-3xl sm:text-4xl"
-                  >
-                    {role === "Pastor" ? "Our pastors" : "Our elders"}
-                  </h3>
-                </div>
-                <p className="max-w-sm text-sm leading-7 text-[var(--public-muted)]">
-                  {role === "Pastor"
-                    ? "Get to know our pastors and the stories they share with our congregation."
-                    : "Meet the elders who serve and guide our church family."}
+          <section
+            id="our-pastors"
+            tabIndex={-1}
+            aria-labelledby="about-pastors"
+            className="mt-14 scroll-mt-36 border-t border-[#d9d0c3] pt-8 sm:mt-16"
+          >
+            <span
+              id="our-elders"
+              aria-hidden="true"
+              className="block scroll-mt-36"
+            />
+            <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="public-eyebrow mb-3">
+                  People, faith &amp; service
                 </p>
+                <h3
+                  id="about-pastors"
+                  className="public-display text-3xl sm:text-4xl"
+                >
+                  Our pastors
+                </h3>
               </div>
-              <Suspense
-                fallback={
-                  <p
-                    role="status"
-                    className="rounded-xl border border-[var(--public-line)] bg-white p-5 text-sm text-[var(--public-muted)]"
-                  >
-                    Loading {role.toLowerCase()} profiles…
-                  </p>
-                }
-              >
-                <LeadershipProfiles role={role} />
-              </Suspense>
-            </section>
-          ))}
+              <p className="max-w-sm text-sm leading-7 text-[var(--public-muted)]">
+                Get to know our pastors, also called elders, and the stories
+                they share with our congregation.
+              </p>
+            </div>
+            <Suspense
+              fallback={
+                <p
+                  role="status"
+                  className="rounded-xl border border-[var(--public-line)] bg-white p-5 text-sm text-[var(--public-muted)]"
+                >
+                  Loading pastor profiles…
+                </p>
+              }
+            >
+              <LeadershipProfiles />
+            </Suspense>
+          </section>
         </div>
       </section>
 
       <section className="public-dark bg-[var(--brand-ink)] text-white">
         <div className="public-container public-section grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
           <div className="min-w-0 max-w-xl">
-            <p className="public-eyebrow text-[var(--brand-gold)]!">Come as you are</p>
+            <p className="public-eyebrow text-[var(--brand-gold)]!">
+              Come as you are
+            </p>
             <h2 className="public-display mt-4 text-4xl leading-tight sm:text-5xl">
               You are welcome here.
             </h2>
@@ -257,7 +260,10 @@ export default function AboutPage() {
               >
                 Plan a visit <FiArrowRight aria-hidden="true" />
               </Link>
-              <Link href="/contact" className="public-text-link text-[var(--brand-gold)]">
+              <Link
+                href="/contact"
+                className="public-text-link text-[var(--brand-gold)]"
+              >
                 Talk to the church team <FiArrowRight aria-hidden="true" />
               </Link>
             </div>

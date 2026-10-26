@@ -20,13 +20,14 @@ export function PublicFooter() {
         <div className="grid gap-12 py-12 sm:grid-cols-2 lg:grid-cols-[1.15fr_1fr_0.65fr_1.15fr] lg:gap-10 lg:py-16">
           <div>
             <Link href="/" className="inline-flex items-center gap-3" aria-label={church.name + " home"}>
-              <Image src="/images/church-logo.webp" alt="" width={64} height={64} className="size-14 rounded-full bg-[var(--brand-surface)] object-contain p-1" />
+              <Image src="/logos/full-logo.png" alt="" width={64} height={64} className="size-14 rounded-full bg-[var(--brand-surface)] object-cover p-1" />
               <span className="text-sm font-semibold leading-6">Church of Christ<br /><span className="font-normal text-stone-300">at Red Cross</span></span>
             </Link>
             <p className="mt-5 max-w-xs text-sm leading-7 text-stone-300">{churchContent.footerSummary}</p>
             <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
               <a href={church.facebookUrl} target="_blank" rel="noopener noreferrer" className="public-text-link text-stone-200">Facebook <FiArrowUpRight aria-hidden="true" /></a>
               <a href={church.youtubeUrl} target="_blank" rel="noopener noreferrer" className="public-text-link text-stone-200">YouTube <FiArrowUpRight aria-hidden="true" /></a>
+              <a href={church.tiktokUrl} target="_blank" rel="noopener noreferrer" className="public-text-link text-stone-200">TikTok <FiArrowUpRight aria-hidden="true" /></a>
             </div>
           </div>
           <div>

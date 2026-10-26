@@ -65,6 +65,7 @@ function stateful(file, name, props, overrides = {}) {
 }
 
 test("About dropdown and page navigation share real, unique, focusable section destinations", () => {
+  let profileLists = 0;
   const Page = sourceLoader({
     ...presentation,
     "@/public/images/worship.webp": {
@@ -73,14 +74,17 @@ test("About dropdown and page navigation share real, unique, focusable section d
       height: 1067,
     },
     "@/components/public/LeadershipProfiles": {
-      LeadershipProfiles: () => null,
+      LeadershipProfiles: () => {
+        profileLists++;
+        return null;
+      },
     },
   })("app/(public)/about/page.tsx").default;
   const html = renderToStaticMarkup(React.createElement(Page));
   const about = publicNavigation.find((item) => item.href === "/about");
   assert.equal(about.label, "About us");
   assert.deepEqual(about.children, [
-    { label: "About our church", href: "/about" },
+    { label: "Our church", href: "/about" },
     ...aboutSections,
   ]);
   for (const { href } of aboutSections) {
@@ -94,6 +98,16 @@ test("About dropdown and page navigation share real, unique, focusable section d
     assert.ok(html.includes(`href="#${id}"`), href);
   }
   assert.equal((html.match(/<h1[ >]/g) ?? []).length, 1);
+  assert.equal(profileLists, 1, "pastors and elders share one profile list");
+  assert.equal((html.match(/>Our pastors<\/h3>/g) ?? []).length, 1);
+  assert.match(html, /Pastors, also called elders/);
+  assert.doesNotMatch(html, /Our elders/);
+  assert.ok(!about.children.some(({ href }) => href === "/about#our-elders"));
+  assert.match(
+    html,
+    /id="our-elders"/,
+    "existing elder links retain a destination",
+  );
 });
 
 test("desktop and mobile About menus expose all section links without marking every anchor as the current page", () => {
@@ -234,7 +248,7 @@ test("missing biographies offer a real contact path and never create an empty bi
   const html = renderToStaticMarkup(
     React.createElement(Card, {
       person: { ...person, bio: null },
-      role: "Elder",
+      role: "Pastor",
     }),
   );
   assert.match(html, /Biography not yet published/);
@@ -266,7 +280,7 @@ test("client biography cards receive only public profile fields and keep encoded
       },
     },
   })("components/public/LeadershipProfiles.tsx").LeadershipProfiles;
-  renderToStaticMarkup(await Profiles({ role: "Pastor" }));
+  renderToStaticMarkup(await Profiles());
   assert.deepEqual(received, getPublicLeaders([raw])[0]);
   assert.deepEqual(Object.keys(received).sort(), [
     "bio",
