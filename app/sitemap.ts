@@ -9,6 +9,7 @@ const publicLandingPaths = [
   "/homecells",
   "/content",
   "/events",
+  "/sail-2027",
   "/programs",
   "/publications",
   "/live",

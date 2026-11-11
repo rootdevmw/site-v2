@@ -558,7 +558,7 @@ test("journey events redact dynamic records, personal values and query strings a
 });
 test("production sitemap and crawler metadata use the confirmed domain and exclude account and portal pages", () => {
   const entries = load("app/sitemap.ts").default();
-  assert.equal(entries.length, 13);
+  assert.equal(entries.length, 14);
   assert.ok(
     entries.every((item) => item.url.startsWith("https://churchofchrist.mw/")),
   );

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import {
   FiArrowRight,
   FiArrowUpRight,
+  FiCalendar,
   FiClock,
   FiMapPin,
 } from "react-icons/fi";
@@ -11,6 +12,7 @@ import worshipPhoto from "@/public/images/worship.webp";
 import welcomePhoto from "@/public/images/welcome.webp";
 import communityPhoto from "@/public/DSC_0056.jpg";
 import { church, combinedService, sundayServices } from "@/config/church";
+import { sail2027 } from "@/config/sail-2027";
 import { getPublishedContent } from "@/lib/public-api/content";
 import { getPublicEvents } from "@/lib/public-api/events";
 import { getPublicMinistries } from "@/lib/public-api/ministries";
@@ -21,6 +23,50 @@ import { churchContent } from "@/config/church-content";
 export function HomePage() {
   return (
     <>
+      <section
+        aria-labelledby="home-sail-heading"
+        className="border-b border-[var(--public-line)] bg-[var(--brand-soft)]"
+      >
+        <div className="public-container">
+          <Link
+            href="/sail-2027"
+            aria-labelledby="home-sail-heading home-sail-action"
+            aria-describedby="home-sail-dates"
+            className="group flex min-h-16 items-center gap-3 rounded-lg py-3 sm:gap-4"
+          >
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[var(--brand-line)] bg-white/70 text-[var(--public-accent)]">
+              <FiCalendar aria-hidden="true" className="size-4.5" />
+            </span>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                <h2
+                  id="home-sail-heading"
+                  className="text-sm font-semibold sm:text-base"
+                >
+                  SAIL 2027 · Malawi
+                </h2>
+                <span
+                  id="home-sail-action"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--public-accent)] underline-offset-4 group-hover:underline"
+                >
+                  Details &amp; registration
+                  <FiArrowRight
+                    aria-hidden="true"
+                    className="size-3.5 transition-transform group-hover:translate-x-0.5 motion-reduce:transform-none motion-reduce:transition-none"
+                  />
+                </span>
+              </div>
+              <p
+                id="home-sail-dates"
+                className="mt-0.5 text-xs leading-6 text-[var(--public-muted)]"
+              >
+                {sail2027.dates} · Register by {sail2027.deadline}
+              </p>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       <section className="public-container grid items-center gap-8 public-section-tight lg:grid-cols-[1fr_1.05fr] lg:gap-10">
         <div className="min-w-0">
           <p className="public-eyebrow">

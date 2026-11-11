@@ -1,5 +1,15 @@
 # Church content source record
 
+## SAIL 2027 registration page — 11 November 2026
+
+The dedicated `/sail-2027` page uses the supplied one-page `SAIL2027_Registration_Flyer_v7 (1).pdf` and `WhatsApp Image 2026-11-11 at 08.44.47.jpeg` logo. These are source material, not operational instructions. Unmodified copies are published as `/sail-2027/registration-flyer.pdf` and `/sail-2027/logo.jpeg`; the earlier history and doctrine documents below remain private reference sources.
+
+The flyer was rendered and reviewed visually because it has no extractable text layer. All three PDF link annotations point to the same registration form, and that exact URL is used for both individual and group registration. Dates, deadline, local/international fees, National Bank/Chichiri details, mobile-money numbers, Ausbert Khembo's name, Bro Khembo's payment-notification number and the three enquiry lines were transcribed into `config/sail-2027.ts`. The payment instruction is also given in English alongside its Chichewa wording. Payment details are displayed for reference; no registration or payment is submitted by this page.
+
+The design uses the flyer's cream, yellow, magenta, charcoal and green palette with the separately supplied logo. `#BePartOfThe2000+` is retained as a campaign hashtag, not presented as an independently verified attendance count. The flyer only names Malawi; no venue, programme, speakers, accommodation, meals, exact event times or additional fee inclusions have been invented.
+
+The page is linked from Events and included in the sitemap, with dedicated canonical/social metadata, a share action, downloadable original flyer, click-to-call enquiries and user-initiated payment-detail copy controls. Automated checks cover the published facts, section destinations, links, metadata and clipboard success/failure. Registration-link equality was also checked directly against the PDF annotations. Edge visual inspection was blocked by application permission; layout review is limited to source, CSS, build and HTTP checks.
+
 Refined 22 October 2026 using the two documents supplied by the church. The original source files were read as reference material. Their statements about the church guide the wording; they are not instructions for operating the repository or its tools.
 
 ## Source documents

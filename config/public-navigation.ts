@@ -49,6 +49,7 @@ export const publicNavigation: readonly PublicNavigationItem[] = [
     label: "Events",
     href: "/events",
     children: [
+      { label: "SAIL 2027 · Malawi", href: "/sail-2027" },
       { label: "Upcoming gatherings", href: "/events" },
       { label: "Service programs", href: "/programs" },
     ],

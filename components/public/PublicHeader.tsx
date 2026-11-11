@@ -171,9 +171,13 @@ export function PublicHeader({ watchLink }: { watchLink: ReactNode }) {
           <div className="hidden min-w-30 md:block">{watchLink}</div>
           <Link
             href="/plan-visit"
-            className="public-button public-button-primary !min-h-11 !px-3 sm:!px-5"
+            className="public-button public-button-primary !min-h-11 !rounded-full !px-3 sm:!px-5"
           >
             Plan a visit
+            <FiArrowUpRight
+              aria-hidden="true"
+              className="hidden size-3.5 sm:block"
+            />
           </Link>
           <button
             type="button"
