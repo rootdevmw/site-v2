@@ -10,7 +10,7 @@ export const sail2027 = {
   deadlineDate: "2026-12-31",
   registrationUrl:
     "https://script.google.com/macros/s/AKfycbzunhpPLTb0eeS9SEbKinFOhgF8V_oE_48ueH0qzq-yo2glc_h2eyKAltvOZDGIyp_u/exec",
-  logo: "/sail-2027/logo.jpeg",
+  logo: "/sail-2027/SAIL-2027-FULL-LOGO.png",
   flyer: "/sail-2027/registration-flyer.pdf",
   fees: [
     {
@@ -36,8 +36,8 @@ export const sail2027 = {
     swiftCode: "NBMAMWMW",
   },
   mobileMoney: [
-    { name: "Mpamba", number: "440282" },
-    { name: "Airtel Money", number: "427549" },
+    { name: "Mpamba", number: "427549" },
+    { name: "Airtel Money", number: "440282" },
   ],
   mobileMoneyName: "Ausbert Khembo",
   paymentContact: {
